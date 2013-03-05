@@ -229,7 +229,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
 ![wxEventDS](/assets/image/wxeventds.png)
 
-
+好长，未完，之后再加吧
 
 
 
