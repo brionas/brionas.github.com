@@ -5,19 +5,44 @@
 <div class="row">
   <div class="span8">
     <div class="v-entry">{{ content }}</div>
+    
+    <br><br>
+    <!-- JiaThis Button BEGIN -->
+						<div id="ckepop" class="meta">
+							<a class="jiathis_button_tsina"></a>
+							<a class="jiathis_button_tqq"></a>
+							<a class="jiathis_button_tsohu"></a>
+							<a class="jiathis_button_t163"></a>
+							<a class="jiathis_button_douban"></a>
+							<a class="jiathis_button_renren"></a>
+                            <a class="jiathis_button_fanfou"></a>
+                            <a class="jiathis_button_twitter"></a>
+                            <a class="jiathis_button_fb"></a>
+                            <a class="jiathis_button_gmail"></a>
+                            <a class="jiathis_button_linkedin"></a>
+                            <a class="jiathis_button_frendfeed"></a>
+							<a class="jiathis_button_print"></a>
+							<a href="http://www.jiathis.com/share?uid=1597059" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+							<a class="jiathis_counter_style"></a>
+						</div>
+						<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+						<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1597059" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+    <br>
+                        
     <hr>
     <div class="pagination">
       <ul>
       {% if page.previous %}
-        <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; Previous</a></li>
+        <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; 前一篇</a></li>
       {% else %}
-        <li class="prev disabled"><a>&larr; Previous</a></li>
+        <li class="prev disabled"><a>&larr; 前一篇</a></li>
       {% endif %}
-        <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
+        <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">归档</a></li>
       {% if page.next %}
-        <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &rarr;</a></li>
+        <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">后一篇 &rarr;</a></li>
       {% else %}
-        <li class="next disabled"><a>Next &rarr;</a>
+        <li class="next disabled"><a>后一篇 &rarr;</a>
       {% endif %}
       </ul>
     </div>
