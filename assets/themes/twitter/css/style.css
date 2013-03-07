@@ -42,19 +42,18 @@ html, body {
 .tag_box {
 	list-style:none;
 	margin:0;
+	padding:5px 0 ;
 	overflow:hidden;
 }
 .tag_box li {
-	/*line-height:28px;*/
-	float:left;
-	margin:0 10px 6px 0;
+	line-height:28px;
 }
 .tag_box.inline li {
 	float:left;
 }
 .tag_box a {
-	display: block;float: left;
-	padding: 2px 8px;
+	padding: 3px 6px;
+	margin: 2px;
 	background: #eee;
 	color:#005F6B;
 	border-radius: 3px;
@@ -64,9 +63,28 @@ html, body {
 	vertical-align:super;
 	font-size:0.8em;
 }
+.tag_box a:link {/* 默认时 */
+	background:#999;
+	color:#FFF;
+}
+.tag_box a:visited {/* 点过后 */
+	background:#999;
+	color:#FFF;
+}
+.tag_box a:hover {/* 经过时 */
+	background:#F95B1F;
+	color:#FFF;
+}
 .tag_box a.active {
 	background:#57A957;
 	border:1px solid #4C964D;
 	color:#FFF;
 }
-	
+
+
+/*去掉多说下面的版权*/
+#ds-thread #ds-reset .ds-powered-by {
+	display: none; 
+ }
+ 
+ 
