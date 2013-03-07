@@ -51,15 +51,34 @@
   </div>
   
   <div class="span4">
-    <h4>Published</h4>
+    <h4>发布日期</h4>
     <div class="date"><span>{{ page.date | date_to_long_string }}</span></div>
 
   {% unless page.tags == empty %}
-    <h4>Tags</h4>
+    <h4>标签</h4>
     <ul class="tag_box">
     {% assign tags_list = page.tags %}
     {% include JB/tags_list %}
     </ul>
   {% endunless %}  
+  
+  
+  
+	<h4>最近发表</h4>
+    <ul id="recent_posts">
+    {% for rpost in site.posts limit: 10 %}
+      <li class="post">
+        <a href="{{ BASE_PATH }}{{ rpost.url }}">{{ rpost.title }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+	{% unless site.categories == empty %}
+    <h4>分类</h4>
+    <ul class="tag_box">
+      {% assign categories_list = site.categories %}
+      {% include JB/categories_list %}
+    </ul>
+  {% endunless %}
+  
   </div>
 </div>
