@@ -1,4 +1,5 @@
-			    <div class="violet-attent">
+
+                <div class="violet-attent">
                     <h4 class="v-section-tit">Follow Us</h4>
                     <article class="violet-attent-det fn-clear">
                         <ul class="fn-right">
@@ -9,4 +10,13 @@
                             <li><a href="mailto:brionas@gmail.com" target="_blank" class="v-rss" rel="nofollow"><span>Email</span></a></li>
                         </ul>
                     </article>
+    <br>
+    {% unless site.categories == empty %}
+    <h4 class="v-section-tit">文章分类</h4>
+    <ul class="tag_box">
+      {% assign categories_list = site.categories %}
+      {% include JB/categories_list %}
+    </ul>
+    {% endunless %}
+                
                 </div>

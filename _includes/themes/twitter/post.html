@@ -28,19 +28,19 @@
 						<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
 						<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1597059" charset="utf-8"></script>
 	<!-- JiaThis Button END -->
-    <br>
+    <br><br><br>
                         
-    <hr>
+    <!--<hr>-->
     <div class="pagination">
       <ul>
       {% if page.previous %}
-        <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; 前一篇</a></li>
+        <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; 前一篇：{{ page.previous.title }}</a></li>
       {% else %}
         <li class="prev disabled"><a>&larr; 前一篇</a></li>
       {% endif %}
         <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">归档</a></li>
       {% if page.next %}
-        <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">后一篇 &rarr;</a></li>
+        <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">{{ page.next.title }} :后一篇 &rarr;</a></li>
       {% else %}
         <li class="next disabled"><a>后一篇 &rarr;</a>
       {% endif %}
@@ -73,7 +73,7 @@
     {% endfor %}
     </ul>
 	{% unless site.categories == empty %}
-    <h4>分类</h4>
+    <h4>文章分类</h4>
     <ul class="tag_box">
       {% assign categories_list = site.categories %}
       {% include JB/categories_list %}
