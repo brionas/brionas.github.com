@@ -7,7 +7,7 @@ tags: [cpp, design pattern]
 ---
 {% include JB/setup %}
 
-# Introduction 
+# Introduction   test header
 
 在C++里面, 经常出现的情况就是头文件里面的类定义太庞大了，而这个类的成员变量涉及了很多
 其他文件里面的类，从而导致了其他引用这个类的文件也依赖于这些成员变量的定义。
