@@ -1,505 +1,239 @@
 ---
 layout: post
-title : wxWidgets源码分析-事件机制（下）
+title : wxWidgets源码分析-事件机制（上）
 description : wxWidgets是一款开源的跨平台图形程序开发库，其中事件机制是GUI程序开发的一个重中之重，通过阅读源代码分析wx中事件机制的实现。具体包括到事件的定义、分发、处理以及跨平台的实现
 category : wxWidgets
 tags : [wxWidgets, 源码分析]
 ---
 {% include JB/setup %}
 
-##1、事件哈希表的实现
-在`wxEventHashTable`构造函数里面，并没有构建哈希表，而是用一个布尔变量标识哈希表尚未重建，采用这种延迟重建的方式来实现哈希表，
-哈希表真正建立，发生发生在第一次查找事件表时，重建以后，设置布尔变量，以后只要对哈希表查找即可，从而加速了事件表的查找。
-哈希函数采用除以size取余的方法。
+##前言
+wxWidgets是一款开源的跨平台图形程序开发库，其中事件机制是GUI程序开发的一个重中之重，通过阅读源代码分析wx中事件机制的实现。
+具体包括到事件的定义、分发、处理以及跨平台环境中的实现。
 
-以下是`wxEventTable` -> `wxEventHashTable`的过程
+项目中wxWidgets用的比较多，带着对`wxevent`如下疑问， 分析下源代码吧
 
-1. 取当前事件表table
-2. table为空结束
-3. 遍历table中所有事件表条目，把事件表条目加入哈希表
-4. table = table->base,转1继续对父类事件表哈希
+* Q1：为什么wx中有的事件能像上传递有的则不能,为啥呢？
+* Q2：怎么使用事件处理机制，如果一个窗口类要处理事件应该做些什么？
+* Q3：wx中事件机制怎么实现，wx是怎样处理事件，怎么使用事件表？
+* Q4:  wx程序中消息是怎么分发的？
+* Q5:  MS windows中消息是怎么样转换成`wxevent`？
+* Q6:  各种的`wxEvent`从何而来， 是哪路神仙发送的呢？
 
-<pre><code>
-void wxEventHashTable::InitHashTable()
-{
-    // Loop over the event tables and all its base tables.
-    const wxEventTable *table = &m_table;
-    while (table)
+
+##1、wx中的事件类
+wxEvent是wx所有事件类的基类，wx中所有的事件都直接或间接继续于它。它的构造函数如下
+
+
+    wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL )
+
+它是一个抽象类， 有一个纯虚函数（虚clone函数，相当于工厂方法，有子类分别生成相应的对象）
+所有的可用事件类（包括自定义事件）必须手动实现这个函数，否这`wxEvent`子类对象没法复制一份
+传递给`wxPostEvent`
+
+    // this function is used to create a copy of the event polymorphically and
+    // all derived classes must implement it because otherwise wxPostEvent()
+    // for them wouldn't work (it needs to do a copy of the event)
+    virtual wxEvent *Clone() const = 0;
+
+`wxEvent`有个保护成员
+
+    protected:
+        // the propagation level: while it is positive, we propagate the event to
+        // the parent window (if any)
+        //
+        // this one doesn't have to be public, we don't have to worry about
+        // backwards compatibility as it is new
+        int               m_propagationLevel;
+
+`m_propagationLevel`实际上是个整形，其取值系统定义两个常量
+
+    // the predefined constants for the number of times we propagate event
+    // upwards window child-parent chain
+    enum Propagation_state
     {
-        // Retrieve all valid event handler entries
-        const wxEventTableEntry *entry = table->entries;
-        while (entry->m_fn != 0)
-        {
-            // Add the event entry in the Hash.
-            AddEntry(*entry);
+        // don't propagate it at all
+        wxEVENT_PROPAGATE_NONE = 0,
 
-            entry++;
+        // propagate it until it is processed
+        wxEVENT_PROPAGATE_MAX = INT_MAX
+    };
+
+根据这个值，wx系统中所有事件可以分为两类：可传递的，和不可传递的。可传递的事件继承于`wxCommandEvent`，不可传递的事件直接继承于`wxEvent`，不可传递事件不会传给事件源窗口的父窗口，即只对当前窗口有效。如：
+`wxActivate`, `wxCloseEvent`, `wxEraseEvent`, `wxFocusEvent`, `wxKeyEvent`, `wxIdleEvent`, `wxInitDialogEvent`, `wxJoystickEvent`, `wxMenuEvent`, `wxMouseEvent`, `wxMoveEvent`, `wxPaintEvent`, `wxQueryLayoutInfoEvent`, `wxSizeEvent`, `wxScrollWinEvent`, `wxSysColourChangedEvent` 。
+那`wxCommandEvent`到底有啥不同呢，接着看
+
+    wxEvent::wxEvent(int theId, wxEventType commandType )
+    {
+        // ......
+        m_propagationLevel = wxEVENT_PROPAGATE_NONE;
+    }
+
+    wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
+                  : wxEvent(theId, commandType)
+    {
+         // ......
+        // the command events are propagated upwards by default
+        m_propagationLevel = wxEVENT_PROPAGATE_MAX;
+    }
+
+
+##2、事件处理流程
+wx事件机制采用事件表机制实现，事件表的实现稍后再分析。这里只要把事件表理解为事件到事件处理函数的的映射关系即可。事件发生时，会在事件表里查找事件处理函数，
+事件表查找一般流程是：  
+**    当前窗口事件表--->父类事件表-->父类的父类事件表--> ，，，，-->父窗口事件表**  
+一旦查找成功，匹配结束，调用事件处理函数,返回一个true，不再继续向上查找事件
+
+    //common/event.cpp
+    bool wxEvtHandler::ProcessEvent(wxEvent& event)
+    {
+         // ....
+            // 事件哈希表查找处理（这里会搜索父类）
+            if ( GetEventHashTable().HandleEvent(event, this) )
+                return true;
+
+
+         // ....
+        // EvtHandler类组成一个栈，搜索下一个
+        if ( GetNextHandler() )
+        {
+            if ( GetNextHandler()->ProcessEvent(event) )
+                return true;
         }
 
-        table = table->baseTable;
-    }
- //....
-}
-
-void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
-{
-     //..
-    EventTypeTablePointer *peTTnode = &m_eventTypeTable[entry.m_eventType % m_size];
-    EventTypeTablePointer  eTTnode = *peTTnode;
-
-    if (eTTnode)
-    {
-        if (eTTnode->eventType != entry.m_eventType)
-        {
-            // Resize the table!
-            GrowEventTypeTable();
-            // Try again to add it.
-            AddEntry(entry);
-            return;
-        }
-    }
-    else
-    {
-        eTTnode = new EventTypeTable;
-        eTTnode->eventType = entry.m_eventType;
-        *peTTnode = eTTnode;
+        // .....
+        // 继续上传递，这是个虚函数，对于wxWindow向父窗口传递 
+        return TryParent(event);
     }
 
-    // Fill all hash entries between entry.m_id and entry.m_lastId...
-    eTTnode->eventEntryTable.Add(&entry);
-}
-</code></pre>
+
+##3、程序中使用事件处理机制
+对于用wx编程，要使一个类具备事件处理能力，需要  
+1. 定义一个类直接或间接继承`wxEvtHandle`（一般wxWindow的窗口或控件子类、wxApp都继承了wxEvtHandler）
+2. 在类的声明中，前加入事件表声明宏 `DECLARE_EVENT_TABLE()`
+3. 类的实现中，加入事件表实现，以`BEGIN_EVENT_TABLE(MyWin, BaseWin)`开始 ，以`END_EVENT_TABLE()`结束，中间填入要处理的事件映射宏
+
+        BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+            EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
+            EVT_MENU(Minimal_About, MyFrame::OnAbout)
+        END_EVENT_TABLE()
+
+一堆像模像样的宏，那么这背后wx到底做了什么呢 ？接着分析事件表的具体实现
 
 
-对于上面的弟3步，把事件条目加入哈希表，`wxEventTableEntry -> wxEventHashTable`的过程
+##4、事件表的实现
+先说说事件表机制的相关的数据结构
 
-1. 由事件表表条中事件类型对哈希表长度取模得到i&nbsp;
-2. 根据i的值，得到事件类型表地址数组m_eventTypeTable的下标&nbsp;
-3. `m_eventTypeTable[i] = 0`,说明该事件类型事件类型表尚未填入哈希表，转4 ，否则转5&nbsp;
-4. 新建一个事件类型表,将表地址填入哈希表，转6&nbsp;
-5. 该事件类型表已经存在，冲突，扩容哈希表，重新回到1&nbsp;
-6. 将事件表条目的地址填入事件类型表的`eventEntryTable`，结束&nbsp;
+**事件类型**(wxEventType)  
+wx中事件类型（`wxEventType`）和事件类(`wxEvent`）是两个不同概念,上面分析事件类是一序列继承于`wxEvent`的类,`wxCommandEvent`事件类可传递，其他不可传递。一个事件类有多个事件类型，比如同是`wxCommandEvent`事件，有下列事件类型
+* `wxEVT_COMMAND_BUTTON_CLICKED`
+* `wxEVT_COMMAND_CHECKBOX_CLICKED`
+* `wxEVT_COMMAND_CHOICE_SELECTED`
+* `wxEVT_COMMAND_LISTBOX_SELECTED`
+* `wxEVT_COMMAND_LISTBOX_DOUBLECLICKED`
+* `wxEVT_COMMAND_TEXT_UPDATED`
+* `wxEVT_COMMAND_TEXT_ENTER`
+* `wxEVT_COMMAND_MENU_SELECTED`  
+这些实际是一些枚举常量，说白了都是一些代表事件类型整形值。
+wx中事件类型就是一系列的整型值，这些值在事件系统中唯一的用于标识事件
 
+        //event.h
+        typedef int wxEventType;
+        //wxEvent构造函数参数有两个成员winid commmandType
+        wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL )
 
+**事件表项**（wxEventTableEntry）  
+程序要处理事件时，在类实现文件中`BEGIN_EVENT_TABLE END_EVENT_TABLE`宏之间添加一条一条事件映射宏。
+可以际上是往事件表里一条一条添加事件表项，一个事件表有一系列事件表项组成，事件表项记录了事件到
+事件处理函数的对应关系。下面是事件表项的实现
 
-##2、事件表有关宏的背后
-`wxEvtHandler`中有三个静态成员，`sm_eventTable` `sm_eventHashTable`分别代表当前事件处理类事件表和事件哈希表,
-要被子类连接事件表所有为protected。所有要处理事件的类继承`wxEvtHandler`,需要重新定义这个两个静态成员。
-因此两个虚函数分别返回当前类中事件表和事件哈希表。另一个私有的静态成员`sm_eventTableEntries`表示当前类的
-事件条目数组，用于构成事件表。
-
-{% highlight cpp linenos %}
-class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
-{
-//..
-private:
-    static const wxEventTableEntry sm_eventTableEntries[];
-protected:
- static const wxEventTable sm_eventTable;
-    virtual const wxEventTable *GetEventTable() const;
-
-    static wxEventHashTable   sm_eventTable;
-    virtual wxEventHashTable& GetEventHashTable() const;
-//..
-}{% endhighlight %}
-
-在类的声明中使用`DECLARE_EVENT_TABLE()`，实际上市覆盖`wxEvtHandler`中的事件表和事件哈希表，并重写返回当前
-类事件表和事件哈希表的虚函数
-
-{% highlight cpp linenos %}
-#define DECLARE_EVENT_TABLE() \
-    private: \
-        static const wxEventTableEntry sm_eventTableEntries[]; \
-    protected: \
-        static const wxEventTable        sm_eventTable; \
-        virtual const wxEventTable*      GetEventTable() const; \
-        static wxEventHashTable          sm_eventHashTable; \
-        virtual wxEventHashTable&        GetEventHashTable() const;
-{% endhighlight %}
-
-在类的实现中使用`BEGIN_EVENT_TABLE`和`END_EVENT_TABLE()`实际上初始化当前类的事件表（一个静态成员），
-事件表父指针指向父类事件表，事件表的条目指针事件等于事件条目数组首地址。事件哈希表有事件表生成，
-这里还没有构造，值是分配了31个为0的空间。中间的一堆事件映射宏实际上是用一堆5元组初始化当前类的事件条目表。
-
-{% highlight cpp linenos %}
-#define BEGIN_EVENT_TABLE(theClass, baseClass) \
-    const wxEventTable theClass::sm_eventTable = \
-        { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
-    const wxEventTable *theClass::GetEventTable() const \
-        { return &theClass::sm_eventTable; } \
-    wxEventHashTable theClass::sm_eventHashTable(theClass::sm_eventTable); \
-    wxEventHashTable &theClass::GetEventHashTable() const \
-        { return theClass::sm_eventHashTable; } \
-    const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
-
- EVT_MENU(Minimal_About, MyFrame::OnAbout)
- DECLARE_EVENT_TABLE_ENTRY(evt, id1, id2, fn, NULL),
-
-#define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( wxEVT_NULL, 0, 0, 0, 0 ) };
-{% endhighlight %}
-
-这样每个事件处理的类会用事件映射宏的5元组，构造事件条目表，事件条目表首地址，
-放在事件表中，同时事件表会记录父类的事件表地址。哈希表初始化为一堆0地址，搜索一次后，
-会把当前事件表和父类所有的事件表哈希到当前事件哈希表中，这样以后该类的对象，
-事件表查找，只要查找已经构建好的事件哈希表， 事件复杂度近似o(1)。
-
-
-
-##3、引发处理事件的方式
-上面已经分析过事件处理的流程，那么什么情况会触发一个事件被处理呢？有以下几种方式
-* 窗口或控件感应到操作（来自用户的操作引发事件处理流程）&nbsp;
-* 调用`wxTheApp->ProcessPendingEvents()`
-* 调用`wxEvtHandler::ProcessEvent(wxEvent &event)`（应用程序自己调用）
-
-wx保存了一个全局的指针链表，里面保存当前应用程序所有事件处理类`wxEvtHandler`对象的指针
-
-{% highlight cpp linenos %}
-/* code: common/event.cpp:144  */
-wxList *wxPendingEvents = (wxList *)NULL;
-{% endhighlight %}
-
-对于所有事件类的基类`wxEvtHandler`,有个成员`m_pendingEvents`保存当前`wxEvtHandler`对象的未决事件
-
-{% highlight cpp linenos %}
-class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
-{
-     //..
-     wxList*             m_pendingEvents;
-     //..
-}
-{% endhighlight %}
-
-遍历全局链表未决事件链表`wxPendingEvents`，取出所有的`wxEvtHandler`，然后调用每个`wxEvtHandler`上的`ProcessPendingEvents()`方法
-
-{% highlight cpp linenos %}
-* code: src/common/Appbase.cpp:267 */
-void wxAppConsole::ProcessPendingEvents()
-{
-
-    // ...
-  
-   // iterate until the list becomes empty
-    wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
-    while (node)
+    struct WXDLLIMPEXP_BASE wxEventTableEntry
     {
-        wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
-        wxPendingEvents->Erase(node);
+        // For some reason, this can't be wxEventType, or VC++ complains.
+        int m_eventType;            // main event type
+        int m_id;                   // control/menu/toolbar id
+        int m_lastId;               // used for ranges of ids
+        wxObjectEventFunction m_fn; // function to call: not wxEventFunction,
+                                    // because of dependency problems
 
-        // In ProcessPendingEvents(), new handlers might be add
-        // and we can safely leave the critical section here.
-        wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+        wxObject* m_callbackUserData;
+    };
 
-        handler->ProcessPendingEvents();
+可以看出，事件表就是个一个结构体，是一个5元祖（事件类型、id, lastid,事件处理函数,用户数据指针)，
+一个类要处理多少事件，就要往事件表里记录多少个事件表项，当事件发生时，查找事件表中的时间表项，
+根据事件类型以及控件id匹配一条事件表项，然后调用事件处理函数，完成事件处理。
 
-        wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+![wxEventTableEntry](/assets/image/wxeventtableentry.png)
 
-        node = wxPendingEvents->GetFirst();
-    }
-    
-     // ...
-}
-{% endhighlight %}
 
-`wxEvtHandler`上的`ProcessPendingEvents()`方法中`wxEvtHandler`遍历处理自己未决链表`m_pendingEvents`的事件
+**事件表**(wxEventTable)  
+事件表，是有事件表项组成的数组。实现为一个结构体，记录了事件表条目数组的首地址，
+不记录长度，事件表条目数组以一个{0, 0, 0, 0, 0}五元组结束， 此外还记录了一个指
+向自身类型的指针，用于保存父窗口的事件表地址
 
-{% highlight cpp linenos %}
-void wxEvtHandler::ProcessPendingEvents()
-{
-     //..
-    size_t n = m_pendingEvents->size();
-    for ( wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
-          node;
-          node = m_pendingEvents->GetFirst() )
+    struct WXDLLIMPEXP_BASE wxEventTable
     {
-        wxEventPtr event(wx_static_cast(wxEvent *, node->GetData()));
+        const wxEventTable *baseTable;    // base event table (next in chain)
+        const wxEventTableEntry *entries; // bottom of entry array
+    };
 
-        // It's important we remove event from list before processing it.
-        // Else a nested event loop, for example from a modal dialog, might
-        // process the same event again.
+看下图吧，更直观点。
 
-        m_pendingEvents->Erase(node);
+![wxEventTable](/assets/image/wxeventtable.png)
 
-        wxLEAVE_CRIT_SECT( Lock() );
+**事件哈希表**(wxEventHashTable)  
+事件哈希表主要用于加速事件表的查找，那么又事件表怎么来构造事件哈希表呢？
+事件哈希表，会对事件表中的条目进行分类，同种事件类型的事件表归为一类.因
+此事件哈希表实现时，在内部定义了一个事件类型表
 
-        ProcessEvent(*event);
-
-        wxENTER_CRIT_SECT( Lock() );
-
-        if ( --n == 0 )
-            break;
-    }
-     //..
-}
-{% endhighlight %}
-
-`wxEvtHandler`提供了向自己接未决链表加入事件的方法，`wxEvtHandler:AddPendingEvent`，
-注意这里只是把event clone一份，然后加入未决链表， 并不处理就返回。
-
-{% highlight cpp linenos %}
-void wxEvtHandler:AddPendingEvent(wxEvent& event)
-{% endhighlight %}
-
-wxEvtHandler::ProcessEvent用于立即处理这个事件。
-{% highlight cpp linenos %}
-bool wxEvtHandler::ProcessEvent(wxEvent& event)
-{% endhighlight %}
-
-
-
-##3、消息分发机制
-上述所有`wxEvent`相关的东西都是跨平台的，wxEvent是wx定义出来的一个wx事件类，
-wx程序中处理的都是wxEvent，并不设计到具体平台上的消息处理。然后实际上，
-对于GUI程序设计每个平台都有消息循环、消息分发机制，wx为了跨平台提供了一个抽象层，
-屏蔽了平台相关的消息处理部分。在include/wx下的头文件提供了wx对外公共的接口，
-利用里面的接口我们可以编写平台无关的GUI的程序，然而include/wx中头文件接口的实现却依赖于具体的平台，
-实际上上平台相关的接口位于/include/wx/gtk /include/wx/msw等，但用户不必关心这里平台相关的细节，
-只要利用提供的公共接口编程即可。下面分析wx中消息分发以及在不同平台的实现。
-
-wx程序启动流程如下：
-* 建立个wxApp子类MyApp的实例
-* 调用MyApp中重写的虚函数wxApp::OnInit完成初始化（主要是创建顶层窗口）,返回false结束
-* 调用AppBase::OnRun->wxAppBase::MainLoop进入消息循环
-
-{% highlight cpp linenos %}
-/* src/common/appcmn.cpp::357 */
-int wxAppBase::OnRun()
-{
-    // see the comment in ctor: if the initial value hasn't been changed, use
-    // the default Yes from now on
-    if ( m_exitOnFrameDelete == Later )
+    class WXDLLIMPEXP_BASE wxEventHashTable
     {
-        m_exitOnFrameDelete = Yes;
-    }
-    //else: it has been changed, assume the user knows what he is doing
-
-    return MainLoop();
-}
-
-// .....
-
-int wxAppBase::MainLoop()
-{
-    wxEventLoopTiedPtr mainLoop(&m_mainLoop, new wxEventLoop);
-
-    return m_mainLoop->Run();
-}
-
-/* inclucde/wx/app.h:329 */
-class WXDLLIMPEXP_CORE wxAppBase : public wxAppConsole
-{
-     //..
-     wxEventLoop *m_mainLoop;
-     //..
-}
-{% endhighlight %}
-
-`m_mainLoop`是个事件循环类`wxEventLoop`的对象指针,`wxEventLoop`是个平台相关的事件循环类，从此进入不同平台的消息循环
-
-
-
-##4、MSW版本中消息分发机制
-WinMain->wxEntry->wxEntryReal->wxAppBase::OnRun->wxAppBase::MainLoop->
-wxEventLoopManual::Run->wxEventLoop::Dispatch->wxEventLoop::ProcessMessage
-
-{% highlight cpp linenos %}
-/* src/common.Evtloopcmn.cpp:65 */
-int wxEventLoopManual::Run()
-{ 
-                while ( !Pending() && (wxTheApp && wxTheApp->ProcessIdle()) )
-                    ;
-
-                if ( m_shouldExit )
-                {
-                    while ( Pending() )
-                        Dispatch();
-
-                    break;
-                }
-}
-{% endhighlight %}
-
-程序进入一个无限的循环，果没消息处理，就处理idle消息，有消息就分发消息
-
-{% highlight cpp linenos %}
-bool wxEventLoop::Dispatch()
-{
-     // ..
-
-    MSG msg;
-    BOOL rc = ::GetMessage(&msg, (HWND) NULL, 0, 0);
-
-    ProcessMessage(&msg);
-
-
-     
-     //..
-}
-{% endhighlight %}
-
-取消息处理消息，这里的消息是`WXMSG *msg`
-`typedef struct tagMSG   WXMSG;`
-在Windows程序中，消息是由`MSG`结构体来表示的。MSG结构体的定义如下（参见MSDN）：
-
-{% highlight cpp linenos %}
-typedef struct tagMSG {     // msg 
-   HWND hwnd;               //标识窗口过程接收消息的窗口
-   UINT message;          //指定消息号
-   WPARAM wParam;          //指定有关消息的附加信息。 确切含义取决于 message 成员的值
-   LPARAM lParam;          //指定有关消息的附加信息。 确切含义取决于 message 成员的值。
-   DWORD time;               //指定消息已传递的时间
-   POINT pt;               //当消息已传递了，指定光标位置，在屏幕坐标
-} MSG;
-{% endhighlight %}
-
-这里的消息就是windows中的消息了
-
-{% highlight cpp linenos %}
-void wxEventLoop::ProcessMessage(WXMSG *msg)
-{
-    // give us the chance to preprocess the message first
-    if ( !PreProcessMessage(msg) )
+    //...
+    struct EventTypeTable
     {
-        // if it wasn't done, dispatch it to the corresponding window
-        ::TranslateMessage(msg);
-        ::DispatchMessage(msg);
-    }
-}
-{% endhighlight %}
+            wxEventType                   eventType; //事件类型
+            wxEventTableEntryPointerArray eventEntryTable;  //事件条目指针数组
+    };
 
-这里就是win32 SDK中的消息循环了，说白了wx中的事件处理，最终还是用了平台上的消息机制，
-wx只是完成了跨平台的封装，对用户屏蔽了平台相关的是实现细节，抽象出一个用户直接利用的抽象层。
+    //...
+    protected:
+        const wxEventTable    &m_table;   //事件表的应用，这里没有必要重建一份
+        bool                   m_rebuildHash;  //开始时候哈希表并不建立，建立的时机发生了第一向上搜素时间表
+        size_t                 m_size;//哈希表长度
+        EventTypeTablePointer *m_eventTypeTable;//事件类型表指针数组
 
-*windows中的消息`WXMSG`怎么转换成`wxEvent*`
-
-wxEntryReal->wxEntryStart->wxApp::Initialize()-> wxApp:: RegisterWindowClasses()
-注册一个窗口类，这个窗口类绑定了窗口处理过程
-
-{% highlight cpp linenos %}
-/* src/msw/app.cpp */
-bool wxApp::RegisterWindowClasses()
-{
-    WNDCLASS wndclass;
-    wxZeroMemory(wndclass);
-
-    // for each class we register one with CS_(V|H)REDRAW style and one
-    // without for windows created with wxNO_FULL_REDRAW_ON_REPAINT flag
-    static const long styleNormal = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-    static const long styleNoRedraw = CS_DBLCLKS;
-
-    // the fields which are common to all classes
-    wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass.hInstance     = wxhInstance;
-    wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
-
-    // register the class for all normal windows
-    wndclass.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
-    wndclass.lpszClassName = wxCanvasClassName;
-    wndclass.style         = styleNormal;
-
-    if ( !RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(frame)"));
     }
 
-     //..
-}
-{% endhighlight %}
+看的累，上个图吧
 
-然后里创建窗口
+![wxEventHashTable](/assets/image/wxeventhashtable.png)
 
-{% highlight cpp linenos %}
-* src/msw/window.cpp*/
-bool wxWindowMSW::MSWCreate(const wxChar *wclass,
-                            const wxChar *title,
-                            const wxPoint& pos,
-                            const wxSize& size,
-                            WXDWORD style,
-                            WXDWORD extendedStyle)
-{
-     wxString className(wclass);
-    if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) )
+构造函数中预先分配大小为31的指针数组`m_eventTypeTable`，用于保存事件类型表的地址，
+事件类型表的地址根据事件类型的值哈希存到`m_eventTypeTable`,哈希函数
+
+    static const int EVENT_TYPE_TABLE_INIT_SIZE = 31; // Not too big not too small.
+
+    wxEventHashTable::wxEventHashTable(const wxEventTable &table)
+                    : m_table(table),
+                      m_rebuildHash(true)
     {
-        className += wxT("NR");
+        AllocEventTypeTable(EVENT_TYPE_TABLE_INIT_SIZE);
+
+        m_next = sm_first;
+        if (m_next)
+            m_next->m_previous = this;
+        sm_first = this;
     }
 
-    // do create the window
-    wxWindowCreationHook hook(this);
-
-    m_hWnd = (WXHWND)::CreateWindowEx
-                       (
-                        extendedStyle,
-                        className,
-                        title ? title : m_windowName.c_str(),
-                        style,
-                        x, y, w, h,
-                        (HWND)MSWGetParent(),
-                        (HMENU)controlId,
-                        wxGetInstance(),
-                        NULL                        // no extra data
-                       );
-
-    if ( !m_hWnd )
+    void wxEventHashTable::AllocEventTypeTable(size_t size)
     {
-        wxLogSysError(_("Can't create window of class %s"), className.c_str());
-
-        return false;
+        m_eventTypeTable = new EventTypeTablePointer[size];
+        memset((void *)m_eventTypeTable, 0, sizeof(EventTypeTablePointer)*size);
+        m_size = size;
     }
 
-    SubclassWin(m_hWnd);
-}
-{% endhighlight %}
+画下wx事件数据结构整体的图，对事件组织的认识更清晰了
 
-其中，void wxWindowMSW::SubclassWin(WXHWND hWnd) 用于设置新窗口的窗口处理过程 
+![wxEventDS](/assets/image/wxeventds.png)
 
-{% highlight cpp linenos %}
-WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-     //...
-     switch ( message )
-    {
-        case WM_CREATE:
-
-         case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_LBUTTONDBLCLK:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-        case WM_RBUTTONDBLCLK:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_MBUTTONDBLCLK:
-}
-{% endhighlight %}
-
-可见MSW 版本中的事件wxEvent由windows中消息WN_XX而来
-
-
-
-##5、GTK版本中消息分发机制
-程序启动后，GTK版本进入的gtk的wxEventLoop事件循环类,GTK是一种事件驱动工具包，这意味着它将在gtk_ main函数
-中一直等待，直到事件发生和控制权被传递给相应的函数。gtk_main ( )是在每个GTK应用程序都要调用的函数。
-当程序运行到这里时, Gtk将进入等待态，等候X事件(比如点击按钮或按下键盘的某个按键)、Timeout 或文件输入/输出发生。
-
-{% highlight cpp linenos %}
-/* src/gtk/evtloop.cpp */
-int wxEventLoop::Run()
-{
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
-
-    wxEventLoopActivator activate(this);
-
-    m_impl = new wxEventLoopImpl;
-
-    gtk_main();
-
-    OnExit();
-
-    int exitcode = m_impl->GetExitCode();
-    delete m_impl;
-    m_impl = NULL;
-
-    return exitcode;
-}
-{% endhighlight %}
-
+通过这些应该对wx中事件机制所涉及的数据结构有个清晰的认识了。有了这个基础可以接着分析事件机制的实现了。
