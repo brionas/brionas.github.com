@@ -7,6 +7,8 @@ tags: [cpp, design pattern]
 ---
 {% include JB/setup %}
 
+__感谢[airekans](http://airekans.github.com)的投递，原文地址在[这里](http://airekans.github.com/cpp/2012/10/20/pimpl-idiom-in-c/)。__
+
 # Introduction
 
 在C++里面, 经常出现的情况就是头文件里面的类定义太庞大了，而这个类的成员变量涉及了很多

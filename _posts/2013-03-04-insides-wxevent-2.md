@@ -17,9 +17,9 @@ tags : [wxWidgets, 源码分析]
 1. 取当前事件表table
 2. table为空结束
 3. 遍历table中所有事件表条目，把事件表条目加入哈希表
-4. table = table->base,转1继续对父类事件表哈希
+4. `table = table->base`,转1继续对父类事件表哈希
 
-<pre><code>
+{% highlight cpp linenos %}
 void wxEventHashTable::InitHashTable()
 {
     // Loop over the event tables and all its base tables.
@@ -67,14 +67,13 @@ void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
 
     // Fill all hash entries between entry.m_id and entry.m_lastId...
     eTTnode->eventEntryTable.Add(&entry);
-}
-</code></pre>
+}{% endhighlight %}
 
 
 对于上面的弟3步，把事件条目加入哈希表，`wxEventTableEntry -> wxEventHashTable`的过程
 
 1. 由事件表表条中事件类型对哈希表长度取模得到i&nbsp;
-2. 根据i的值，得到事件类型表地址数组m_eventTypeTable的下标&nbsp;
+2. 根据i的值，得到事件类型表地址数组`m_eventTypeTable`的下标&nbsp;
 3. `m_eventTypeTable[i] = 0`,说明该事件类型事件类型表尚未填入哈希表，转4 ，否则转5&nbsp;
 4. 新建一个事件类型表,将表地址填入哈希表，转6&nbsp;
 5. 该事件类型表已经存在，冲突，扩容哈希表，重新回到1&nbsp;
@@ -141,8 +140,7 @@ protected:
 这样每个事件处理的类会用事件映射宏的5元组，构造事件条目表，事件条目表首地址，
 放在事件表中，同时事件表会记录父类的事件表地址。哈希表初始化为一堆0地址，搜索一次后，
 会把当前事件表和父类所有的事件表哈希到当前事件哈希表中，这样以后该类的对象，
-事件表查找，只要查找已经构建好的事件哈希表， 事件复杂度近似o(1)。
-
+事件表查找，只要查找已经构建好的事件哈希表， 事件复杂度近似O(1)。
 
 
 ##3、引发处理事件的方式
@@ -172,7 +170,7 @@ class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
 遍历全局链表未决事件链表`wxPendingEvents`，取出所有的`wxEvtHandler`，然后调用每个`wxEvtHandler`上的`ProcessPendingEvents()`方法
 
 {% highlight cpp linenos %}
-* code: src/common/Appbase.cpp:267 */
+/* code: src/common/Appbase.cpp:267 */
 void wxAppConsole::ProcessPendingEvents()
 {
 
@@ -257,8 +255,8 @@ wx程序中处理的都是wxEvent，并不设计到具体平台上的消息处�
 
 wx程序启动流程如下：
 * 建立个wxApp子类MyApp的实例
-* 调用MyApp中重写的虚函数wxApp::OnInit完成初始化（主要是创建顶层窗口）,返回false结束
-* 调用AppBase::OnRun->wxAppBase::MainLoop进入消息循环
+* 调用MyApp中重写的虚函数`wxApp::OnInit`完成初始化（主要是创建顶层窗口）,返回false结束
+* 调用`AppBase::OnRun->wxAppBase::MainLoop`进入消息循环
 
 {% highlight cpp linenos %}
 /* src/common/appcmn.cpp::357 */
@@ -296,10 +294,10 @@ class WXDLLIMPEXP_CORE wxAppBase : public wxAppConsole
 `m_mainLoop`是个事件循环类`wxEventLoop`的对象指针,`wxEventLoop`是个平台相关的事件循环类，从此进入不同平台的消息循环
 
 
-
 ##4、MSW版本中消息分发机制
-WinMain->wxEntry->wxEntryReal->wxAppBase::OnRun->wxAppBase::MainLoop->
-wxEventLoopManual::Run->wxEventLoop::Dispatch->wxEventLoop::ProcessMessage
+
+    WinMain -> wxEntry -> wxEntryReal -> wxAppBase::OnRun -> wxAppBase::MainLoop ->
+    wxEventLoopManual::Run -> wxEventLoop::Dispatch -> wxEventLoop::ProcessMessage
 
 {% highlight cpp linenos %}
 /* src/common.Evtloopcmn.cpp:65 */
@@ -369,9 +367,10 @@ void wxEventLoop::ProcessMessage(WXMSG *msg)
 这里就是win32 SDK中的消息循环了，说白了wx中的事件处理，最终还是用了平台上的消息机制，
 wx只是完成了跨平台的封装，对用户屏蔽了平台相关的是实现细节，抽象出一个用户直接利用的抽象层。
 
-*windows中的消息`WXMSG`怎么转换成`wxEvent*`
+* windows中的消息`WXMSG`怎么转换成`wxEvent*`
 
-wxEntryReal->wxEntryStart->wxApp::Initialize()-> wxApp:: RegisterWindowClasses()
+    wxEntryReal -> wxEntryStart -> wxApp::Initialize() -> wxApp:: RegisterWindowClasses()
+
 注册一个窗口类，这个窗口类绑定了窗口处理过程
 
 {% highlight cpp linenos %}
@@ -408,7 +407,7 @@ bool wxApp::RegisterWindowClasses()
 然后里创建窗口
 
 {% highlight cpp linenos %}
-* src/msw/window.cpp*/
+/* src/msw/window.cpp */
 bool wxWindowMSW::MSWCreate(const wxChar *wclass,
                             const wxChar *title,
                             const wxPoint& pos,
@@ -449,7 +448,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 }
 {% endhighlight %}
 
-其中，void wxWindowMSW::SubclassWin(WXHWND hWnd) 用于设置新窗口的窗口处理过程 
+其中，`void wxWindowMSW::SubclassWin(WXHWND hWnd)`用于设置新窗口的窗口处理过程 
 
 {% highlight cpp linenos %}
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
@@ -471,13 +470,12 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 }
 {% endhighlight %}
 
-可见MSW 版本中的事件wxEvent由windows中消息WN_XX而来
-
+可见MSW 版本中的事件wxEvent由windows中消息`WN_XX`而来
 
 
 ##5、GTK版本中消息分发机制
-程序启动后，GTK版本进入的gtk的wxEventLoop事件循环类,GTK是一种事件驱动工具包，这意味着它将在gtk_ main函数
-中一直等待，直到事件发生和控制权被传递给相应的函数。gtk_main ( )是在每个GTK应用程序都要调用的函数。
+程序启动后，GTK版本进入的gtk的wxEventLoop事件循环类,GTK是一种事件驱动工具包，这意味着它将在`gtk_main`函数
+中一直等待，直到事件发生和控制权被传递给相应的函数。`gtk_main()`是在每个GTK应用程序都要调用的函数。
 当程序运行到这里时, Gtk将进入等待态，等候X事件(比如点击按钮或按下键盘的某个按键)、Timeout 或文件输入/输出发生。
 
 {% highlight cpp linenos %}
