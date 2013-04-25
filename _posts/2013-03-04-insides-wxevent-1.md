@@ -7,7 +7,7 @@ tags : [wxWidgets, 源码分析]
 ---
 {% include JB/setup %}
 
-##前言
+##写在前面
 wxWidgets是一款开源的跨平台图形程序开发库，其中事件机制是GUI程序开发的一个重中之重，通过阅读源代码分析wx中事件机制的实现。
 具体包括到事件的定义、分发、处理以及跨平台环境中的实现。
 
@@ -17,7 +17,7 @@ wxWidgets是一款开源的跨平台图形程序开发库，其中事件机制�
 * Q2：怎么使用事件处理机制，如果一个窗口类要处理事件应该做些什么？
 * Q3：wx中事件机制怎么实现，wx是怎样处理事件，怎么使用事件表？
 * Q4:  wx程序中消息是怎么分发的？
-* Q5:  MS windows中消息是怎么样转换成`wxevent`？
+* Q5:  MS Windows中消息是怎么样转换成`wxevent`？
 * Q6:  各种的`wxEvent`从何而来， 是哪路神仙发送的呢？
 
 
@@ -139,7 +139,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
         //event.h
         typedef int wxEventType;
-        //wxEvent构造函数参数有两个成员winid commmandType
+        //wxEvent构造函数参数有两个成员winid(用于标识事件所关联的窗口) commmandType
         wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL )
 
 **事件表项**（wxEventTableEntry）  
@@ -167,7 +167,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
 
 **事件表**(wxEventTable)  
-事件表，是有事件表项组成的数组。实现为一个结构体，记录了事件表条目数组的首地址，
+事件表，是由事件表项组成的数组。实现为一个结构体，记录了事件表条目数组的首地址，
 不记录长度，事件表条目数组以一个{0, 0, 0, 0, 0}五元组结束， 此外还记录了一个指
 向自身类型的指针，用于保存父窗口的事件表地址
 
@@ -182,7 +182,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 ![wxEventTable](/assets/image/wxeventtable.png)
 
 **事件哈希表**(wxEventHashTable)  
-事件哈希表主要用于加速事件表的查找，那么又事件表怎么来构造事件哈希表呢？
+事件哈希表主要用于加速事件表的查找，那么由事件表怎么来构造事件哈希表呢？
 事件哈希表，会对事件表中的条目进行分类，同种事件类型的事件表归为一类.因
 此事件哈希表实现时，在内部定义了一个事件类型表
 
@@ -197,7 +197,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
     //...
     protected:
-        const wxEventTable    &m_table;   //事件表的应用，这里没有必要重建一份
+        const wxEventTable    &m_table;   //事件表的引用，这里没有必要重建一份
         bool                   m_rebuildHash;  //开始时候哈希表并不建立，建立的时机发生了第一向上搜素时间表
         size_t                 m_size;//哈希表长度
         EventTypeTablePointer *m_eventTypeTable;//事件类型表指针数组
