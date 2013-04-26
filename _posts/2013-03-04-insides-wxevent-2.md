@@ -73,7 +73,7 @@ void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
 }{% endhighlight %}
 
 
-对于上面的弟3步，把事件条目加入哈希表，`wxEventTableEntry -> wxEventHashTable`的过程
+对于上面的第3步，把事件条目加入哈希表，`wxEventTableEntry -> wxEventHashTable`的过程
 
 1. 由事件表表条中事件类型对哈希表长度取模得到i&nbsp;
 2. 根据i的值，得到事件类型表地址数组`m_eventTypeTable`的下标&nbsp;
@@ -319,7 +319,7 @@ int wxEventLoopManual::Run()
 }
 {% endhighlight %}
 
-程序进入一个无限的循环，果没消息处理，就处理idle消息，有消息就分发消息
+程序进入一个无限的循环，如果没消息处理，就处理idle消息，有消息就分发消息
 
 {% highlight cpp linenos %}
 bool wxEventLoop::Dispatch()
