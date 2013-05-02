@@ -1,23 +1,27 @@
 ---
 layout: post
-title : Wxwidget源码分析-事件机制
-description : 通过结合源代码分析Wx事件分发、事件响应实现细节，并分析wx实现跨平台
-category : Wxwidgets库
-tags : [Wxwidgets库, 源码学习]
+title : wxWidgets源码分析-事件机制（上）
+description : wxWidgets是一款开源的跨平台图形程序开发库，其中事件机制是GUI程序开发的一个重中之重，通过阅读源代码分析wx中事件机制的实现。具体包括到事件的定义、分发、处理以及跨平台的实现
+category : wxWidgets
+tags : [wxWidgets, 源码分析]
 ---
 {% include JB/setup %}
 
-##前言
-事件机制是进行GUI编程的一个重点，带着对`wxevent`如下疑问， 分析下源代码吧
+##写在前面
+wxWidgets是一款开源的跨平台图形程序开发库，其中事件机制是GUI程序开发的一个重中之重，通过阅读源代码分析wx中事件机制的实现。
+具体包括到事件的定义、分发、处理以及跨平台环境中的实现。
 
-* Q1：为什么wx中有的事件能像上传递有的则不能？
-* Q2：编程时候怎么使用事件处理机制，如果一个窗口类要处理事件应该做什么？
+项目中wxWidgets用的比较多，带着对`wxevent`如下疑问， 分析下源代码吧
+
+* Q1：为什么wx中有的事件能像上传递有的则不能,为啥呢？
+* Q2：怎么使用事件处理机制，如果一个窗口类要处理事件应该做些什么？
 * Q3：wx中事件机制怎么实现，wx是怎样处理事件，怎么使用事件表？
 * Q4:  wx程序中消息是怎么分发的？
-* Q5:  MS windows中消息是怎么样转换成wxevent
-* Q6:  各种的`wxEvent`来自哪， 由谁发送而来？
+* Q5:  MS Windows中消息是怎么样转换成`wxevent`？
+* Q6:  各种的`wxEvent`从何而来， 是哪路神仙发送的呢？
 
-##wx中的事件类
+
+##1、wx中的事件类
 wxEvent是wx所有事件类的基类，wx中所有的事件都直接或间接继续于它。它的构造函数如下
 
 
@@ -55,9 +59,9 @@ wxEvent是wx所有事件类的基类，wx中所有的事件都直接或间接继
         wxEVENT_PROPAGATE_MAX = INT_MAX
     };
 
-根据这个值，wx系统中所有事件可以分为两类：可传递的，和不可传递的。可传递的事件继承于`wxCommandEvent`，不可传递的事件直接继承于wxEvent，不可传递事件不会传给事件源窗口的父窗口，即只对当前窗口有效
-wxActivate, wxCloseEvent, wxEraseEvent, wxFocusEvent, wxKeyEvent, wxIdleEvent, wxInitDialogEvent, wxJoystickEvent, wxMenuEvent, wxMouseEvent, wxMoveEvent, wxPaintEvent, wxQueryLayoutInfoEvent, wxSizeEvent, wxScrollWinEvent, wxSysColourChangedEvent 。
-那wxCommandEvent到底有啥不同呢，接着看
+根据这个值，wx系统中所有事件可以分为两类：可传递的，和不可传递的。可传递的事件继承于`wxCommandEvent`，不可传递的事件直接继承于`wxEvent`，不可传递事件不会传给事件源窗口的父窗口，即只对当前窗口有效。如：
+`wxActivate`, `wxCloseEvent`, `wxEraseEvent`, `wxFocusEvent`, `wxKeyEvent`, `wxIdleEvent`, `wxInitDialogEvent`, `wxJoystickEvent`, `wxMenuEvent`, `wxMouseEvent`, `wxMoveEvent`, `wxPaintEvent`, `wxQueryLayoutInfoEvent`, `wxSizeEvent`, `wxScrollWinEvent`, `wxSysColourChangedEvent` 。
+那`wxCommandEvent`到底有啥不同呢，接着看
 
     wxEvent::wxEvent(int theId, wxEventType commandType )
     {
@@ -73,7 +77,8 @@ wxActivate, wxCloseEvent, wxEraseEvent, wxFocusEvent, wxKeyEvent, wxIdleEvent, w
         m_propagationLevel = wxEVENT_PROPAGATE_MAX;
     }
 
-##事件处理流程
+
+##2、事件处理流程
 wx事件机制采用事件表机制实现，事件表的实现稍后再分析。这里只要把事件表理解为事件到事件处理函数的的映射关系即可。事件发生时，会在事件表里查找事件处理函数，
 事件表查找一般流程是：  
 **    当前窗口事件表--->父类事件表-->父类的父类事件表--> ，，，，-->父窗口事件表**  
@@ -101,11 +106,12 @@ wx事件机制采用事件表机制实现，事件表的实现稍后再分析。
         return TryParent(event);
     }
 
-##程序中使用事件处理机制
+
+##3、程序中使用事件处理机制
 对于用wx编程，要使一个类具备事件处理能力，需要  
-1. 定义一个类直接或间接继承wxEvtHandle（一般wxWindow的窗口或控件子类、wxApp都继承了wxEvtHandler）
-2. 在类的声明中，前加入事件表声明宏 DECLARE_EVENT_TABLE()
-3. 类的实现中，加入事件表实现，以BEGIN_EVENT_TABLE(MyWin, BaseWin)开始 ，以END_EVENT_TABLE()结束，中间填入要处理的事件映射宏
+1. 定义一个类直接或间接继承`wxEvtHandle`（一般wxWindow的窗口或控件子类、wxApp都继承了wxEvtHandler）
+2. 在类的声明中，前加入事件表声明宏 `DECLARE_EVENT_TABLE()`
+3. 类的实现中，加入事件表实现，以`BEGIN_EVENT_TABLE(MyWin, BaseWin)`开始 ，以`END_EVENT_TABLE()`结束，中间填入要处理的事件映射宏
 
         BEGIN_EVENT_TABLE(MyFrame, wxFrame)
             EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
@@ -114,11 +120,12 @@ wx事件机制采用事件表机制实现，事件表的实现稍后再分析。
 
 一堆像模像样的宏，那么这背后wx到底做了什么呢 ？接着分析事件表的具体实现
 
-##事件表的实现
+
+##4、事件表的实现
 先说说事件表机制的相关的数据结构
 
 **事件类型**(wxEventType)  
-wx中事件类型（wxEventType）和事件类(wxEvent）是两个不同概念,上面分析事件类是一序列继承于wxEvent的类,wxCommandEvent事件类可传递，其他不可传递。一个事件类有多个事件类型，比如同是wxCommandEvent事件，有下列事件类型
+wx中事件类型（`wxEventType`）和事件类(`wxEvent`）是两个不同概念,上面分析事件类是一序列继承于`wxEvent`的类,`wxCommandEvent`事件类可传递，其他不可传递。一个事件类有多个事件类型，比如同是`wxCommandEvent`事件，有下列事件类型
 * `wxEVT_COMMAND_BUTTON_CLICKED`
 * `wxEVT_COMMAND_CHECKBOX_CLICKED`
 * `wxEVT_COMMAND_CHOICE_SELECTED`
@@ -132,11 +139,11 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
         //event.h
         typedef int wxEventType;
-        //wxEvent构造函数参数有两个成员winid commmandType
+        //wxEvent构造函数参数有两个成员winid(用于标识事件所关联的窗口) commmandType
         wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL )
 
 **事件表项**（wxEventTableEntry）  
-程序要处理事件时，在类实现文件中BEGIN_EVENT_TABLE END_EVENT_TABLE宏之间添加一条一条事件映射宏。
+程序要处理事件时，在类实现文件中`BEGIN_EVENT_TABLE END_EVENT_TABLE`宏之间添加一条一条事件映射宏。
 可以际上是往事件表里一条一条添加事件表项，一个事件表有一系列事件表项组成，事件表项记录了事件到
 事件处理函数的对应关系。下面是事件表项的实现
 
@@ -160,7 +167,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
 
 **事件表**(wxEventTable)  
-事件表，是有事件表项组成的数组。实现为一个结构体，记录了事件表条目数组的首地址，
+事件表，是由事件表项组成的数组。实现为一个结构体，记录了事件表条目数组的首地址，
 不记录长度，事件表条目数组以一个{0, 0, 0, 0, 0}五元组结束， 此外还记录了一个指
 向自身类型的指针，用于保存父窗口的事件表地址
 
@@ -175,7 +182,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 ![wxEventTable](/assets/image/wxeventtable.png)
 
 **事件哈希表**(wxEventHashTable)  
-事件哈希表主要用于加速事件表的查找，那么又事件表怎么来构造事件哈希表呢？
+事件哈希表主要用于加速事件表的查找，那么由事件表怎么来构造事件哈希表呢？
 事件哈希表，会对事件表中的条目进行分类，同种事件类型的事件表归为一类.因
 此事件哈希表实现时，在内部定义了一个事件类型表
 
@@ -190,7 +197,7 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
     //...
     protected:
-        const wxEventTable    &m_table;   //事件表的应用，这里没有必要重建一份
+        const wxEventTable    &m_table;   //事件表的引用，这里没有必要重建一份
         bool                   m_rebuildHash;  //开始时候哈希表并不建立，建立的时机发生了第一向上搜素时间表
         size_t                 m_size;//哈希表长度
         EventTypeTablePointer *m_eventTypeTable;//事件类型表指针数组
@@ -201,8 +208,8 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
 ![wxEventHashTable](/assets/image/wxeventhashtable.png)
 
-构造函数中预先分配大小为31的指针数组m_eventTypeTable，用于保存事件类型表的地址，
-事件类型表的地址根据事件类型的值哈希存到m_eventTypeTable,哈希函数
+构造函数中预先分配大小为31的指针数组`m_eventTypeTable`，用于保存事件类型表的地址，
+事件类型表的地址根据事件类型的值哈希存到`m_eventTypeTable`,哈希函数
 
     static const int EVENT_TYPE_TABLE_INIT_SIZE = 31; // Not too big not too small.
 
@@ -229,8 +236,4 @@ wx中事件类型就是一系列的整型值，这些值在事件系统中唯一
 
 ![wxEventDS](/assets/image/wxeventds.png)
 
-好长，未完，之后再加吧
-
-
-
-
+通过这些应该对wx中事件机制所涉及的数据结构有个清晰的认识了。有了这个基础可以接着分析事件机制的实现了。
