@@ -4,10 +4,11 @@ title: "Pimpl Idiom in C++"
 description: 在C++里面, 经常出现的情况就是头文件里面的类定义太庞大了，而这个类的成员变量涉及了很多其他文件里面的类，从而导致了其他引用这个类的文件也依赖于这些成员变量的定义。在这种情况下，就出现了在C++里面特有的一个idiom，叫做Pimpl idiom。
 category: cpp
 tags: [cpp, design pattern]
+refer_author: airekans
+refer_blog_addr: http://airekans.github.com
+refer_post_addr: http://airekans.github.com/cpp/2012/10/20/pimpl-idiom-in-c/
 ---
 {% include JB/setup %}
-
-__感谢[airekans](http://airekans.github.com)的投递，原文地址在[这里](http://airekans.github.com/cpp/2012/10/20/pimpl-idiom-in-c/)。__
 
 # Introduction
 

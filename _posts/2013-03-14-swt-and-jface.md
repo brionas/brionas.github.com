@@ -4,10 +4,11 @@ title : 从组合框控件看SWT与JFace的区别
 description : Combo是SWT的组合框，ComboViewer是JFace的组合框，都是组合框，ComboViewer其实就是在Combo上面加上MVC的封装。记住下面的公式
 category : SWT/JFace
 tags : [SWT,Java]
+refer_author: Wenzhe
+refer_blog_addr: http://blog.csdn.net/liuwenzhe2008
+refer_post_addr: http://blog.csdn.net/liuwenzhe2008/article/details/8670757
 ---
 {% include JB/setup %}
-
-**【感谢 wenzhe 投稿,原文[链接](http://blog.csdn.net/liuwenzhe2008/article/details/8670757)】**
 
 Combo是SWT的组合框，ComboViewer是JFace的组合框，都是组合框，ComboViewer其实就
 是在Combo上面加上MVC的封装。记住下面的公式：
