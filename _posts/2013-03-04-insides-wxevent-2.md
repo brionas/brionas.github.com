@@ -7,9 +7,12 @@ tags : [wxWidgets, 源码分析]
 ---
 {% include JB/setup %}
 
+上一部分分析了wxWidgets事件机制实现时一些基本概念，和所涉及到的数据结构。基于此继续讨论事件哈希表的建立，事件表相关宏处理的背后，
+触发事件处理的方式，以及事件在不同平台的分发过程。
+
 ##1、事件哈希表的实现
 在`wxEventHashTable`构造函数里面，并没有构建哈希表，而是用一个布尔变量标识哈希表尚未重建，采用这种延迟重建的方式来实现哈希表，
-哈希表真正建立，发生发生在第一次查找事件表时，重建以后，设置布尔变量，以后只要对哈希表查找即可，从而加速了事件表的查找。
+哈希表真正建立，发生在第一次查找事件表时，重建以后，设置布尔变量，以后只要对哈希表查找即可，从而加速了事件表的查找。
 哈希函数采用除以size取余的方法。
 
 以下是`wxEventTable` -> `wxEventHashTable`的过程
@@ -70,7 +73,7 @@ void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
 }{% endhighlight %}
 
 
-对于上面的弟3步，把事件条目加入哈希表，`wxEventTableEntry -> wxEventHashTable`的过程
+对于上面的第3步，把事件条目加入哈希表，`wxEventTableEntry -> wxEventHashTable`的过程
 
 1. 由事件表表条中事件类型对哈希表长度取模得到i&nbsp;
 2. 根据i的值，得到事件类型表地址数组`m_eventTypeTable`的下标&nbsp;
@@ -244,7 +247,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
 
 
-##3、消息分发机制
+##4、消息分发机制
 上述所有`wxEvent`相关的东西都是跨平台的，wxEvent是wx定义出来的一个wx事件类，
 wx程序中处理的都是wxEvent，并不设计到具体平台上的消息处理。然后实际上，
 对于GUI程序设计每个平台都有消息循环、消息分发机制，wx为了跨平台提供了一个抽象层，
@@ -294,7 +297,7 @@ class WXDLLIMPEXP_CORE wxAppBase : public wxAppConsole
 `m_mainLoop`是个事件循环类`wxEventLoop`的对象指针,`wxEventLoop`是个平台相关的事件循环类，从此进入不同平台的消息循环
 
 
-##4、MSW版本中消息分发机制
+##5、MSW版本中消息分发机制
 
     WinMain -> wxEntry -> wxEntryReal -> wxAppBase::OnRun -> wxAppBase::MainLoop ->
     wxEventLoopManual::Run -> wxEventLoop::Dispatch -> wxEventLoop::ProcessMessage
@@ -316,7 +319,7 @@ int wxEventLoopManual::Run()
 }
 {% endhighlight %}
 
-程序进入一个无限的循环，果没消息处理，就处理idle消息，有消息就分发消息
+程序进入一个无限的循环，如果没消息处理，就处理idle消息，有消息就分发消息
 
 {% highlight cpp linenos %}
 bool wxEventLoop::Dispatch()
@@ -473,7 +476,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 可见MSW 版本中的事件wxEvent由windows中消息`WN_XX`而来
 
 
-##5、GTK版本中消息分发机制
+##6、GTK版本中消息分发机制
 程序启动后，GTK版本进入的gtk的wxEventLoop事件循环类,GTK是一种事件驱动工具包，这意味着它将在`gtk_main`函数
 中一直等待，直到事件发生和控制权被传递给相应的函数。`gtk_main()`是在每个GTK应用程序都要调用的函数。
 当程序运行到这里时, Gtk将进入等待态，等候X事件(比如点击按钮或按下键盘的某个按键)、Timeout 或文件输入/输出发生。
