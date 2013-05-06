@@ -4,8 +4,20 @@
 
 <div class="row">
   <div class="span8">
-    <div class="v-entry">{{ content }}</div>
-    
+    <div class="v-entry">
+      {% if page.refer_author %}
+      <p>
+	<strong>
+	  原作者
+	  <a href="{{ page.refer_blog_addr }}" target="_blank">{{ page.refer_author }}</a>
+	  ，原文地址在
+	  <a href="{{ page.refer_post_addr }}" target="_blank">这里</a>。
+	</strong>
+      </p>
+      {% endif %}
+
+      {{ content }}</div>
+
     <br><br>
     <!-- JiaThis Button BEGIN -->
 						<div id="ckepop" class="meta">
