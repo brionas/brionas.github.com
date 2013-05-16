@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "[Chrome源码阅读]Chrome启动代码流程2"
-description: ""
+description: TAB URL 启动和navigation初始化
 category: "chrome"
 tags: [chrome, 源码分析]
 refer_author: Zero
