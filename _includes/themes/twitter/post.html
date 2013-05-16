@@ -5,14 +5,15 @@
 <div class="row">
   <div class="span8">
     <div class="v-entry">
+    
       {% if page.refer_author %}
       <p>
 	<strong>
-	  Post by : 
+	  Posted by : 
 	  <a href="{{ page.refer_blog_addr }}" target="_blank">{{ page.refer_author }}</a>
 	</strong>
-      </p>
       <br>
+      </p>
       {% endif %}
 
       {{ content }}</div>
