@@ -29,7 +29,7 @@ guint n_allocated;
 SlabInfo *next, *prev;
 };
 {% endhighlight %}
-![](/assets/image/1345812003_5463.png)
+![](http://zeroli.github.io/assets/image/1345812003_5463.png)
 
 从结构体可以知道，每个slab维护着前面slab的link prev和后面的slab的link prev，可知它们链接起来就是一个双向环形链表(slab ring)。除此之外，还维护着一个chunk指针，用来指向free chunk的单向链表。
 
