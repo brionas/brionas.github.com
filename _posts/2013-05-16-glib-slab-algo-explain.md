@@ -1,23 +1,23 @@
 ---
 layout: post
-title: "glibµÄslabËã·¨ÊµÏÖÑ§Ï°"
-description: slabÌá³öÀ´ÊÇÎªÁË½â¾öÄÚ²¿ÄÚ´æËéÆ¬µÄÎÊÌâ£¬ÔÚlinuxÄÚºËÖĞÓëbuddy systemÒ»ÆğÀ´½â¾öÄÚºËÄÚ´æ¹ÜÀí¡£µ«ÊÇÒª¿´¶®slabÔÚlinuxÄÚºËÖĞµÄÊµÏÖµ±Ç°ÓĞĞ©À§ÄÑ£¬ÎÒÃÇ²»ÈçÄÃĞ©ÈİÒ×ÔÄ¶ÁµÄ´úÂëÀ´ÁË½âslabËã·¨µÄÔË×÷¹ı³Ì¡£GLIB¿âÊµÏÖ·Ç³£clear£¬¿ÉÒÔ×öÎªslabËã·¨µÄÊµÏÖÑ§Ï°µÄÈëÃÅ¡£
+title: "glibçš„slabç®—æ³•å®ç°å­¦ä¹ "
+description: slabæå‡ºæ¥æ˜¯ä¸ºäº†è§£å†³å†…éƒ¨å†…å­˜ç¢ç‰‡çš„é—®é¢˜ï¼Œåœ¨linuxå†…æ ¸ä¸­ä¸buddy systemä¸€èµ·æ¥è§£å†³å†…æ ¸å†…å­˜ç®¡ç†ã€‚ä½†æ˜¯è¦çœ‹æ‡‚slabåœ¨linuxå†…æ ¸ä¸­çš„å®ç°å½“å‰æœ‰äº›å›°éš¾ï¼Œæˆ‘ä»¬ä¸å¦‚æ‹¿äº›å®¹æ˜“é˜…è¯»çš„ä»£ç æ¥äº†è§£slabç®—æ³•çš„è¿ä½œè¿‡ç¨‹ã€‚GLIBåº“å®ç°éå¸¸clearï¼Œå¯ä»¥åšä¸ºslabç®—æ³•çš„å®ç°å­¦ä¹ çš„å…¥é—¨ã€‚
 category: "memory_management"
-tags: [slab, glib, Ô´ÂëÔÄ¶Á]
+tags: [slab, glib, æºç é˜…è¯»]
 refer_author: Zero
 refer_blog_addr: http://zeroli.github.io/categories.html
 refer_post_addr: http://zeroli.github.io/memory_management/2013/03/24/glib-slab-algo-explain/
 ---
 {% include JB/setup %}
 
-slabÌá³öÀ´ÊÇÎªÁË½â¾öÄÚ²¿ÄÚ´æËéÆ¬µÄÎÊÌâ£¬ÔÚlinuxÄÚºËÖĞÓëbuddy systemÒ»ÆğÀ´½â¾öÄÚºËÄÚ´æ¹ÜÀí¡£µ«ÊÇÒª¿´¶®slabÔÚlinuxÄÚºËÖĞµÄÊµÏÖµ±Ç°ÓĞĞ©À§ÄÑ£¬ÎÒÃÇ²»ÈçÄÃĞ©ÈİÒ×ÔÄ¶ÁµÄ´úÂëÀ´ÁË½âslabËã·¨µÄÔË×÷¹ı³Ì¡£GLIB¿âÊµÏÖ·Ç³£clear£¬¿ÉÒÔ×öÎªslabËã·¨µÄÊµÏÖÑ§Ï°µÄÈëÃÅ¡£  
-slabÔÚGLIBÖĞµÄÊµÏÖÏà¹ØÎÄ¼şÊÇgslice.h/c£¬µ«ÊÇÔÚÕâ¸öÊµÏÖÎÄ¼şÖĞ£¬ÓĞ¸ü¸´ÔÓµÄ£¬Ö§³Ö¶àÏß³Ì¸ü¶àµÄmagazine cachingËã·¨¡£
+slabæå‡ºæ¥æ˜¯ä¸ºäº†è§£å†³å†…éƒ¨å†…å­˜ç¢ç‰‡çš„é—®é¢˜ï¼Œåœ¨linuxå†…æ ¸ä¸­ä¸buddy systemä¸€èµ·æ¥è§£å†³å†…æ ¸å†…å­˜ç®¡ç†ã€‚ä½†æ˜¯è¦çœ‹æ‡‚slabåœ¨linuxå†…æ ¸ä¸­çš„å®ç°å½“å‰æœ‰äº›å›°éš¾ï¼Œæˆ‘ä»¬ä¸å¦‚æ‹¿äº›å®¹æ˜“é˜…è¯»çš„ä»£ç æ¥äº†è§£slabç®—æ³•çš„è¿ä½œè¿‡ç¨‹ã€‚GLIBåº“å®ç°éå¸¸clearï¼Œå¯ä»¥åšä¸ºslabç®—æ³•çš„å®ç°å­¦ä¹ çš„å…¥é—¨ã€‚  
+slabåœ¨GLIBä¸­çš„å®ç°ç›¸å…³æ–‡ä»¶æ˜¯gslice.h/cï¼Œä½†æ˜¯åœ¨è¿™ä¸ªå®ç°æ–‡ä»¶ä¸­ï¼Œæœ‰æ›´å¤æ‚çš„ï¼Œæ”¯æŒå¤šçº¿ç¨‹æ›´å¤šçš„magazine cachingç®—æ³•ã€‚
 
-##0. slabËã·¨µÄÔË×÷»úÀí
-¹ØÓÚslabËã·¨µÄÔË×÷»úÀí£¬¿ÉÒÔ²é¿´[wiki](http://en.wikipedia.org/wiki/Slab_allocation%22%3Ehttp://en.wikipedia.org/wiki/Slab_allocation)
+##0. slabç®—æ³•çš„è¿ä½œæœºç†
+å…³äºslabç®—æ³•çš„è¿ä½œæœºç†ï¼Œå¯ä»¥æŸ¥çœ‹[wiki](http://en.wikipedia.org/wiki/Slab_allocation%22%3Ehttp://en.wikipedia.org/wiki/Slab_allocation)
 
 
-###slab½á¹¹Ìå¶¨Òå
+###slabç»“æ„ä½“å®šä¹‰
 {% highlight cpp %}
 struct _ChunkLink {
 ChunkLink *next;
@@ -31,9 +31,9 @@ SlabInfo *next, *prev;
 {% endhighlight %}
 ![](/assets/image/1345812003_5463.png)
 
-´Ó½á¹¹Ìå¿ÉÒÔÖªµÀ£¬Ã¿¸öslabÎ¬»¤×ÅÇ°ÃæslabµÄlink prevºÍºóÃæµÄslabµÄlink prev£¬¿ÉÖªËüÃÇÁ´½ÓÆğÀ´¾ÍÊÇÒ»¸öË«Ïò»·ĞÎÁ´±í(slab ring)¡£³ı´ËÖ®Íâ£¬»¹Î¬»¤×ÅÒ»¸öchunkÖ¸Õë£¬ÓÃÀ´Ö¸Ïòfree chunkµÄµ¥ÏòÁ´±í¡£
+ä»ç»“æ„ä½“å¯ä»¥çŸ¥é“ï¼Œæ¯ä¸ªslabç»´æŠ¤ç€å‰é¢slabçš„link prevå’Œåé¢çš„slabçš„link prevï¼Œå¯çŸ¥å®ƒä»¬é“¾æ¥èµ·æ¥å°±æ˜¯ä¸€ä¸ªåŒå‘ç¯å½¢é“¾è¡¨(slab ring)ã€‚é™¤æ­¤ä¹‹å¤–ï¼Œè¿˜ç»´æŠ¤ç€ä¸€ä¸ªchunkæŒ‡é’ˆï¼Œç”¨æ¥æŒ‡å‘free chunkçš„å•å‘é“¾è¡¨ã€‚
 
-###allocator½á¹¹Ìå¶¨Òå
+###allocatorç»“æ„ä½“å®šä¹‰
 {% highlight cpp %}
 ...
 /* slab allocator */
@@ -42,34 +42,34 @@ SlabInfo **slab_stack; /* array of MAX_SLAB_INDEX (allocator) */
 guint color_accu;
 } Allocator;
 {% endhighlight %}
-´ÓÊı¾İ½á¹¹¿ÉÖª£¬È«¾Ö±äÁ¿allocator»áÎ¬»¤×ÅÒ»¸öÖ¸ÕëÊı×é£¬³ÉÔ±ÎªSlabInfo*Ö¸Õë£¬Ö¸ÏòÒ»¸ö»·ĞÎslabË«ÏòÁ´±í£¬Ò²¼´Ç°Ãæ½éÉÜµÄslab ring¡£Ã¿¸ö³ÉÔ±µÄslabinfo*Ö¸ÏòµÄslab ringËù¹ÜÀíµÄchunks£¬size¶¼±ØĞëÊÇÏàÍ¬µÄ£¬ÀıÈçµÚÒ»¸öslab ringÀïÃæµÄchunkÈ«²¿¶¼ÊÇ8 (bytes)£¬µÚ¶ş¸öslab ringÀïÈ«²¿¶¼ÊÇ8\*2 (bytes)£¬ÒÔ´ËÀàÍÆ£¬Ò»Ö±µ½×î´óµÄchunk size¡£³õÊ¼»¯Ê±£¬ËùÓĞµÄ³ÉÔ±¶¼»á³õÊ¼»¯Îªnull£¬´ú±íµ±Ç°slab systemÃ»ÓĞfree list¡£
+ä»æ•°æ®ç»“æ„å¯çŸ¥ï¼Œå…¨å±€å˜é‡allocatorä¼šç»´æŠ¤ç€ä¸€ä¸ªæŒ‡é’ˆæ•°ç»„ï¼Œæˆå‘˜ä¸ºSlabInfo*æŒ‡é’ˆï¼ŒæŒ‡å‘ä¸€ä¸ªç¯å½¢slabåŒå‘é“¾è¡¨ï¼Œä¹Ÿå³å‰é¢ä»‹ç»çš„slab ringã€‚æ¯ä¸ªæˆå‘˜çš„slabinfo*æŒ‡å‘çš„slab ringæ‰€ç®¡ç†çš„chunksï¼Œsizeéƒ½å¿…é¡»æ˜¯ç›¸åŒçš„ï¼Œä¾‹å¦‚ç¬¬ä¸€ä¸ªslab ringé‡Œé¢çš„chunkå…¨éƒ¨éƒ½æ˜¯8 (bytes)ï¼Œç¬¬äºŒä¸ªslab ringé‡Œå…¨éƒ¨éƒ½æ˜¯8\*2 (bytes)ï¼Œä»¥æ­¤ç±»æ¨ï¼Œä¸€ç›´åˆ°æœ€å¤§çš„chunk sizeã€‚åˆå§‹åŒ–æ—¶ï¼Œæ‰€æœ‰çš„æˆå‘˜éƒ½ä¼šåˆå§‹åŒ–ä¸ºnullï¼Œä»£è¡¨å½“å‰slab systemæ²¡æœ‰free listã€‚
 
-###slabÄÚ´æÇëÇó²Ù×÷µÄ¹ı³Ì
+###slabå†…å­˜è¯·æ±‚æ“ä½œçš„è¿‡ç¨‹
 {% highlight cpp %}
 static gpointer
 slab_allocator_alloc_chunk (gsize chunk_size)
 {
 ChunkLink *chunk;
-guint ix = SLAB_INDEX (allocator, chunk_size); // ÕÒµ½chunk_sizeËù¶ÔÓ¦µÄslab slot
+guint ix = SLAB_INDEX (allocator, chunk_size); // æ‰¾åˆ°chunk_sizeæ‰€å¯¹åº”çš„slab slot
 /* ensure non-empty slab */
-// Èç¹ûÃ»ÓĞfree list£¬ÔòÔ¤ÏÈ·ÖÅäÒ»Ò³À´Ìî³ä´Ëslot£¨Ò»Ò³¿ÉÄÜ»áÓĞºÜ¶àchunks£©
+// å¦‚æœæ²¡æœ‰free listï¼Œåˆ™é¢„å…ˆåˆ†é…ä¸€é¡µæ¥å¡«å……æ­¤slotï¼ˆä¸€é¡µå¯èƒ½ä¼šæœ‰å¾ˆå¤šchunksï¼‰
 if (!allocator->slab_stack[ix] || !allocator->slab_stack[ix]->chunks)
 allocator_add_slab (allocator, ix, chunk_size);
 /* allocate chunk */
-// ·ÖÅäµÚÒ»¸öchunk¸øclient£¬ºóÃæµÄchunks¹Ò½Óµ½µ±Ç°slabÉÏ
+// åˆ†é…ç¬¬ä¸€ä¸ªchunkç»™clientï¼Œåé¢çš„chunksæŒ‚æ¥åˆ°å½“å‰slabä¸Š
 chunk = allocator->slab_stack[ix]->chunks;
 allocator->slab_stack[ix]->chunks = chunk->next;
 allocator->slab_stack[ix]->n_allocated++;
 /* rotate empty slabs */
-// Èç¹ûµ±Ç°ËùÓĞµÄchunksÓÃÍê£¬Ğı×ªslab ring£¬¶¨Î»µ½ÏÂÒ»¸öslab
+// å¦‚æœå½“å‰æ‰€æœ‰çš„chunksç”¨å®Œï¼Œæ—‹è½¬slab ringï¼Œå®šä½åˆ°ä¸‹ä¸€ä¸ªslab
 if (!allocator->slab_stack[ix]->chunks)
 allocator->slab_stack[ix] = allocator->slab_stack[ix]->next;
 return chunk;
 }
 {% endhighlight %}
-µ±clientÊ×´ÎÇëÇóÒ»¶¨Á¿µÄµÄÄÚ´æÊ±£¬slab systemÊ×ÏÈ»á½«ÇëÇóµÄsize up align to 8µÄ±¶Êı£¬×÷Îªchunk size£¬È»ºóÔÙ·ÖÅäÒ»Ò³ÄÚ´æ¡£È¥³ıslab info ½á¹¹ÌåºÍcolor(padding)£¬Ö®ºóÄÇÒ»Ò³ÄÚÊ£ÏÂµÄ¹²ÓĞn¸öchunk size¡£ÄÃ³ö1¸öchunk·µ»Ø¸øclient,Ê£ÏÂµÄ(n-1)¸öchunk size¹Ò½Óµ½µ±Ç°µÄslab½ÚµãÉÏ¡£
+å½“clienté¦–æ¬¡è¯·æ±‚ä¸€å®šé‡çš„çš„å†…å­˜æ—¶ï¼Œslab systemé¦–å…ˆä¼šå°†è¯·æ±‚çš„size up align to 8çš„å€æ•°ï¼Œä½œä¸ºchunk sizeï¼Œç„¶åå†åˆ†é…ä¸€é¡µå†…å­˜ã€‚å»é™¤slab info ç»“æ„ä½“å’Œcolor(padding)ï¼Œä¹‹åé‚£ä¸€é¡µå†…å‰©ä¸‹çš„å…±æœ‰nä¸ªchunk sizeã€‚æ‹¿å‡º1ä¸ªchunkè¿”å›ç»™client,å‰©ä¸‹çš„(n-1)ä¸ªchunk sizeæŒ‚æ¥åˆ°å½“å‰çš„slabèŠ‚ç‚¹ä¸Šã€‚
 
-**allocator_add_slabº¯Êı**
+**allocator_add_slabå‡½æ•°**
 {% highlight cpp %}
 static void
 allocator_add_slab (Allocator *allocator,
@@ -79,11 +79,11 @@ gsize chunk_size)
 ChunkLink *chunk;
 SlabInfo *sinfo;
 gsize addr, padding, n_chunks, color = 0;
-// ¼ÆËã³öµ±Ç°ÏµÍ³Ò»Ò³µÄÄÚ´æ´óĞ¡
+// è®¡ç®—å‡ºå½“å‰ç³»ç»Ÿä¸€é¡µçš„å†…å­˜å¤§å°
 gsize page_size = allocator_aligned_page_size (allocator, SLAB_BPAGE_SIZE (allocator, chunk_size));
 /* allocate 1 page for the chunks and the slab */
 gpointer aligned_memory = allocator_memalign (page_size, page_size - NATIVE_MALLOC_PADDING);
-guint8 *mem = aligned_memory; // ¶ÔÆëµ½page µÄĞéÄâÄÚ´æµØÖ·
+guint8 *mem = aligned_memory; // å¯¹é½åˆ°page çš„è™šæ‹Ÿå†…å­˜åœ°å€
 guint i;
 if (!mem)
 {
@@ -99,7 +99,7 @@ addr = ((gsize) mem / page_size) * page_size;
 /* assert alignment */
 mem_assert (aligned_memory == (gpointer) addr);
 /* basic slab info setup */
-// ´ÓÏÂÃæÖªµÀÃ¿´Î·ÖÅäÒ»Ò³Ê±£¬slab_info×ÜÊÇÔÚÄÇ¸öÄÚ´æÒ³µÄÄ©Î²
+// ä»ä¸‹é¢çŸ¥é“æ¯æ¬¡åˆ†é…ä¸€é¡µæ—¶ï¼Œslab_infoæ€»æ˜¯åœ¨é‚£ä¸ªå†…å­˜é¡µçš„æœ«å°¾
 sinfo = (SlabInfo*) (mem + page_size - SLAB_INFO_SIZE);
 sinfo->n_allocated = 0;
 sinfo->chunks = NULL;
@@ -112,10 +112,10 @@ color = (allocator->color_accu * P2ALIGNMENT) % padding;
 allocator->color_accu += allocator->config.color_increment;
 }
 /* add chunks to free list */
-// ½«µÚÒ»¸öfree chunkµÄÄÚ´æµØÖ·¶¨ÎªÌø¹ımemÖ®ºócolor (padding)µÄµØÖ·
+// å°†ç¬¬ä¸€ä¸ªfree chunkçš„å†…å­˜åœ°å€å®šä¸ºè·³è¿‡memä¹‹åcolor (padding)çš„åœ°å€
 chunk = (ChunkLink*) (mem + color);
 sinfo->chunks = chunk;
-// ½«Á¬ĞøÄÚ´æ¿Õ¼ä£¬ÓÃµ¥ÏòÁ´±íÁ´½ÓÆğÀ´
+// å°†è¿ç»­å†…å­˜ç©ºé—´ï¼Œç”¨å•å‘é“¾è¡¨é“¾æ¥èµ·æ¥
 for (i = 0; i < n_chunks - 1; i++)
 {
 chunk->next = (ChunkLink*) ((guint8*) chunk + chunk_size);
@@ -128,7 +128,7 @@ allocator_slab_stack_push (allocator, ix, sinfo);
 }
 {% endhighlight %}
 
-**Ò»Ğ©ÓĞÒâË¼µÄMACRO¶¨Òå£º**
+**ä¸€äº›æœ‰æ„æ€çš„MACROå®šä¹‰ï¼š**
 {% highlight cpp %}
 /* optimized version of ALIGN (size, P2ALIGNMENT) */
 #if     GLIB_SIZEOF_SIZE_T * 2 == 8  /* P2ALIGNMENT */
@@ -144,7 +144,7 @@ allocator_slab_stack_push (allocator, ix, sinfo);
 #define SLAB_INFO_SIZE          P2ALIGN (sizeof (SlabInfo) + NATIVE_MALLOC_PADDING)
 #define SLAB_BPAGE_SIZE(al,csz) (8 * (csz) + SLAB_INFO_SIZE)
 {% endhighlight %}
-Èç¹ûÒªÇó·ÖÅä8¸ö×Ö½ÚµÄÄÚ´æ£¬csz=8£¬ËùÒÔÃ¿´Î¼ÓÔØchunks£¬·ÖÅäµÄÄÚ´æ±ØĞëÄÜ¹»°üº¬8¸öchunks£¬¼ÓÉÏSLAB_INFO_SIZEµÄ´óĞ¡¡£
+å¦‚æœè¦æ±‚åˆ†é…8ä¸ªå­—èŠ‚çš„å†…å­˜ï¼Œcsz=8ï¼Œæ‰€ä»¥æ¯æ¬¡åŠ è½½chunksï¼Œåˆ†é…çš„å†…å­˜å¿…é¡»èƒ½å¤ŸåŒ…å«8ä¸ªchunksï¼ŒåŠ ä¸ŠSLAB_INFO_SIZEçš„å¤§å°ã€‚
 {% highlight cpp %}
 static void
 allocator_slab_stack_push (Allocator *allocator,
@@ -177,15 +177,15 @@ allocator_aligned_page_size (Allocator *allocator,
   return val;
 }
 {% endhighlight %}
-`gsize val = 1 << g_bit_storage (n_bytes - 1);`ÓÃÀ´½«n_bytes±íÊ¾µÄÊı×Öup alignµ½2µÄn´ÎÃİµÄ±¶Êı¡£Èç¹ûup alignÖ®ºóµÄÊı±Èmin_page_size(4k=2^12)Òª´ó£¬ÄÇÃ´º¯Êı·µ»ØµÄÖµ¾ÍÊÇval¡£Ò²¾ÍÊÇËµallocator_aligned_page_size²¢²»Ò»¶¨·µ»Ø4k page size£¬»òÕßËµÖ»Òªchunk size´óÓÚµÈÓÚ512£¬8 * 512 + 16 + 8 > 4096 (order >= 64)¡£
-È»¶ø´ÓÒÔÏÂµÄMACRO¶¨Òå¿ÉÖª£º
+`gsize val = 1 << g_bit_storage (n_bytes - 1);`ç”¨æ¥å°†n_bytesè¡¨ç¤ºçš„æ•°å­—up alignåˆ°2çš„næ¬¡å¹‚çš„å€æ•°ã€‚å¦‚æœup alignä¹‹åçš„æ•°æ¯”min_page_size(4k=2^12)è¦å¤§ï¼Œé‚£ä¹ˆå‡½æ•°è¿”å›çš„å€¼å°±æ˜¯valã€‚ä¹Ÿå°±æ˜¯è¯´allocator_aligned_page_sizeå¹¶ä¸ä¸€å®šè¿”å›4k page sizeï¼Œæˆ–è€…è¯´åªè¦chunk sizeå¤§äºç­‰äº512ï¼Œ8 * 512 + 16 + 8 > 4096 (order >= 64)ã€‚
+ç„¶è€Œä»ä»¥ä¸‹çš„MACROå®šä¹‰å¯çŸ¥ï¼š
 {% highlight cpp %}
 #define MAX_SLAB_CHUNK_SIZE(al) (((al)->max_page_size - SLAB_INFO_SIZE) /8 )
 #define MAX_SLAB_INDEX(al)      (SLAB_INDEX (al, MAX_SLAB_CHUNK_SIZE (al)) + 1)
 {% endhighlight %}
-allocatorÖĞµÄslabinfo slot¸öÊıÊÇ²»»á³¬¹ı64µÄ(Ö»ÓĞ63£¬¶øÇÒchunk size=504)¡£Ò²¾ÍÊÇËµ`allocator_aligned_page_size`·µ»ØµÄÓÀÔ¶»áÊÇÒ»¸öpageµÄsize(4k)£¬¶øÇÒÒ»¸öpageÀï×îÉÙ»áÓĞ8¸öchunks¡£
+allocatorä¸­çš„slabinfo slotä¸ªæ•°æ˜¯ä¸ä¼šè¶…è¿‡64çš„(åªæœ‰63ï¼Œè€Œä¸”chunk size=504)ã€‚ä¹Ÿå°±æ˜¯è¯´`allocator_aligned_page_size`è¿”å›çš„æ°¸è¿œä¼šæ˜¯ä¸€ä¸ªpageçš„size(4k)ï¼Œè€Œä¸”ä¸€ä¸ªpageé‡Œæœ€å°‘ä¼šæœ‰8ä¸ªchunksã€‚
 
-µ«ÊÇÈçºÎ·ÖÅäÄÇÒ»Ò³ÄÚ´æÄØ£¿
+ä½†æ˜¯å¦‚ä½•åˆ†é…é‚£ä¸€é¡µå†…å­˜å‘¢ï¼Ÿ
 {% highlight cpp %}
 static gpointer
 allocator_memalign (gsize alignment,
@@ -229,11 +229,11 @@ allocator_memalign (gsize alignment,
   return aligned_memory;
 }
 {% endhighlight %}
-¼ÙÈç³ÌĞò×ßµ½×îºóÒ»¸öelseÓï¾ä£¬ÄÇÃ´Õâ¸öslabÏµÍ³¾ÍÓĞµã¸´ÔÓÁË¡£compat_valloc_trashÊÇÒ»¸öÈ«¾ÖµÄ¾²Ì¬Ö¸Õë`static GTrashStack *compat_valloc_trash = NULL; `Õâ¸öº¯ÊıÊ×ÏÈ»áÏòÏµÍ³Ò»´ÎĞÔÇëÇó·ÖÅä16 \* page_size(4k)´óĞ¡µÄÁ¬ĞøÄÚ´æ¿Õ¼ä£¬È»ºó½«ÕâĞ©ÄÚ´æÓÃGTrashStack´®ÁªÆğÀ´£¬£¨ÒªÖªµÀGTrashStack½á¹¹ÖªµÀÒ»¸önextÓòÖ¸ÏòÏÂÒ»¸öÇøÓò£¬±¾Éí²¢²»ÏûºÄÄÚ´æ£©£¬´®ÁªµÄµ¥Ôª¾ÍÊÇÒ»¸öÒ³¡£Õâ¸ö¾ÍÊÇ`g_trash_stack_push`¸ÉµÄÊÂÇé¡£  
-Ö®ºóµ÷ÓÃg\_trash\_stack\_pop½«µÚÒ»¸öÒ³µÄÄÚ´æ·ÖÅä³öÈ¥¡£
+å‡å¦‚ç¨‹åºèµ°åˆ°æœ€åä¸€ä¸ªelseè¯­å¥ï¼Œé‚£ä¹ˆè¿™ä¸ªslabç³»ç»Ÿå°±æœ‰ç‚¹å¤æ‚äº†ã€‚compat_valloc_trashæ˜¯ä¸€ä¸ªå…¨å±€çš„é™æ€æŒ‡é’ˆ`static GTrashStack *compat_valloc_trash = NULL; `è¿™ä¸ªå‡½æ•°é¦–å…ˆä¼šå‘ç³»ç»Ÿä¸€æ¬¡æ€§è¯·æ±‚åˆ†é…16 \* page_size(4k)å¤§å°çš„è¿ç»­å†…å­˜ç©ºé—´ï¼Œç„¶åå°†è¿™äº›å†…å­˜ç”¨GTrashStackä¸²è”èµ·æ¥ï¼Œï¼ˆè¦çŸ¥é“GTrashStackç»“æ„çŸ¥é“ä¸€ä¸ªnextåŸŸæŒ‡å‘ä¸‹ä¸€ä¸ªåŒºåŸŸï¼Œæœ¬èº«å¹¶ä¸æ¶ˆè€—å†…å­˜ï¼‰ï¼Œä¸²è”çš„å•å…ƒå°±æ˜¯ä¸€ä¸ªé¡µã€‚è¿™ä¸ªå°±æ˜¯`g_trash_stack_push`å¹²çš„äº‹æƒ…ã€‚  
+ä¹‹åè°ƒç”¨g\_trash\_stack\_popå°†ç¬¬ä¸€ä¸ªé¡µçš„å†…å­˜åˆ†é…å‡ºå»ã€‚
 
-###slabÄÚ´æÊÍ·ÅµÄ²Ù×÷
-slabÄÚ´æÊÍ·ÅµÄ²Ù×÷ÓÉslab_allocator_free_chunkÀ´Íê³É£¬chunk_sizeÊÇup allignµ½8µÄ±¶ÊıµÄÄÚ´æ´óĞ¡¡£
+###slabå†…å­˜é‡Šæ”¾çš„æ“ä½œ
+slabå†…å­˜é‡Šæ”¾çš„æ“ä½œç”±slab_allocator_free_chunkæ¥å®Œæˆï¼Œchunk_sizeæ˜¯up allignåˆ°8çš„å€æ•°çš„å†…å­˜å¤§å°ã€‚
 {% highlight cpp %}
 static void
 slab_allocator_free_chunk (gsize    chunk_size,
@@ -241,27 +241,27 @@ slab_allocator_free_chunk (gsize    chunk_size,
 {
   ChunkLink *chunk;
   gboolean was_empty;
-  guint ix = SLAB_INDEX (allocator, chunk_size); // ÕÒµ½chunk sizeËùÊôµÄslab slotĞòºÅ
-  // ¼ÆËãchunk sizeËù¾ö¶¨µÄpageµÄ´óĞ¡(´Óslab·ÖÅä³öÈ¥µÄchunk¶¼ÓĞËùÊôµÄpage)
+  guint ix = SLAB_INDEX (allocator, chunk_size); // æ‰¾åˆ°chunk sizeæ‰€å±çš„slab slotåºå·
+  // è®¡ç®—chunk sizeæ‰€å†³å®šçš„pageçš„å¤§å°(ä»slabåˆ†é…å‡ºå»çš„chunkéƒ½æœ‰æ‰€å±çš„page)
   gsize page_size = allocator_aligned_page_size (allocator, SLAB_BPAGE_SIZE (allocator, chunk_size));
-  // ¼ÆËãÊÍ·ÅchunkµÄµØÖ·ËùÔÚpageµÄÄÚ´æÊ×µØÖ·
+  // è®¡ç®—é‡Šæ”¾chunkçš„åœ°å€æ‰€åœ¨pageçš„å†…å­˜é¦–åœ°å€
   gsize addr = ((gsize) mem / page_size) * page_size;
   /* mask page address */
   guint8 *page = (guint8*) addr;
-  // slab info½á¹¹ÌåÔÚÒ»¸öpageµÄ×îºó24×Ö½Ú
+  // slab infoç»“æ„ä½“åœ¨ä¸€ä¸ªpageçš„æœ€å24å­—èŠ‚
   SlabInfo *sinfo = (SlabInfo*) (page + page_size - SLAB_INFO_SIZE);
   /* assert valid chunk count */
-  // Õâ¸öslabÓ¦¸ÃÓĞchunks±»·ÖÅä³öÈ¥£¬²»È»Õâ¸öslabÓ¦¸Ã±»»ØÊÕ¸øÏµÍ³£¬ÉÔºóÖªµÀÎªÊ²Ã´¡£
+  // è¿™ä¸ªslabåº”è¯¥æœ‰chunksè¢«åˆ†é…å‡ºå»ï¼Œä¸ç„¶è¿™ä¸ªslabåº”è¯¥è¢«å›æ”¶ç»™ç³»ç»Ÿï¼Œç¨åçŸ¥é“ä¸ºä»€ä¹ˆã€‚
   mem_assert (sinfo->n_allocated > 0);
   /* add chunk to free list */
   was_empty = sinfo->chunks == NULL;
-  // °ÑÕâ¸öchunk²åÈëµ½free chunk listÍ·
+  // æŠŠè¿™ä¸ªchunkæ’å…¥åˆ°free chunk listå¤´
   chunk = (ChunkLink*) mem;
   chunk->next = sinfo->chunks;
   sinfo->chunks = chunk;
   sinfo->n_allocated--;
   /* keep slab ring partially sorted, empty slabs at end */
-  // Èç¹ûÖ®Ç°ËùÓĞµÄchunks¶¼·ÖÅä³öÈ¥ÁË£¬ÕâÊ±ÓĞÁËfree chunk£¬¾ÍÓ¦¸ÃÈÃslab slotÖªµÀ
+  // å¦‚æœä¹‹å‰æ‰€æœ‰çš„chunkséƒ½åˆ†é…å‡ºå»äº†ï¼Œè¿™æ—¶æœ‰äº†free chunkï¼Œå°±åº”è¯¥è®©slab slotçŸ¥é“
   if (was_empty)
     {
       /* unlink slab */
@@ -271,12 +271,12 @@ slab_allocator_free_chunk (gsize    chunk_size,
       if (allocator->slab_stack[ix] == sinfo)
         allocator->slab_stack[ix] = next == sinfo ? NULL : next;
       /* insert slab at head */
-      // ÈÃslab slotÖ±½ÓÖ¸ÏòÕâ¸öÓĞfree chunkµÄslab£¬ÒÔ·½±ãÏÂ´Î·ÖÅäÕâÑùµÄchunkÊ±£¬Ö±½Ó»ñÈ¡¡£
+      // è®©slab slotç›´æ¥æŒ‡å‘è¿™ä¸ªæœ‰free chunkçš„slabï¼Œä»¥æ–¹ä¾¿ä¸‹æ¬¡åˆ†é…è¿™æ ·çš„chunkæ—¶ï¼Œç›´æ¥è·å–ã€‚
       allocator_slab_stack_push (allocator, ix, sinfo);
     }
   /* eagerly free complete unused slabs */
-  // ÒÔÏÂ²Ù×÷¾ÍÊÇÎªÊ²Ã´Òª×ömem_assert (sinfo->n_allocated > 0);Ô­Òò
-  // µ±Õâ¸öslabËùÓĞµÄchunk¶¼freeÊ±£¬¾Í¿ÉÒÔ½«Õâ¸öslabËùÔÚÒ³Ãæ·µ»Ø¸øÏµÍ³£¬»òÕßTrashStackÄÚ´æ³Ø¡£
+  // ä»¥ä¸‹æ“ä½œå°±æ˜¯ä¸ºä»€ä¹ˆè¦åšmem_assert (sinfo->n_allocated > 0);åŸå› 
+  // å½“è¿™ä¸ªslabæ‰€æœ‰çš„chunkéƒ½freeæ—¶ï¼Œå°±å¯ä»¥å°†è¿™ä¸ªslabæ‰€åœ¨é¡µé¢è¿”å›ç»™ç³»ç»Ÿï¼Œæˆ–è€…TrashStackå†…å­˜æ± ã€‚
   if (!sinfo->n_allocated)
     {
       /* unlink slab */
@@ -286,11 +286,11 @@ slab_allocator_free_chunk (gsize    chunk_size,
       if (allocator->slab_stack[ix] == sinfo)
         allocator->slab_stack[ix] = next == sinfo ? NULL : next;
       /* free slab */
-      allocator_memfree (page_size, page);  // ·µ»Ø¸øÏµÍ³»òÕßÄÚ´æ³Ø
+      allocator_memfree (page_size, page);  // è¿”å›ç»™ç³»ç»Ÿæˆ–è€…å†…å­˜æ± 
     }
 }
 {% endhighlight %}
-½«ËùÓĞchunk¶¼freeµÄslab·µ»Ø¸øÏµÍ³»òÕßÄÚ´æ³Ø£º
+å°†æ‰€æœ‰chunkéƒ½freeçš„slabè¿”å›ç»™ç³»ç»Ÿæˆ–è€…å†…å­˜æ± ï¼š
 {% highlight cpp %}
 static void
 allocator_memfree (gsize    memsize,
