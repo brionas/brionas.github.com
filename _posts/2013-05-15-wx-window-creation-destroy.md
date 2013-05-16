@@ -4,6 +4,9 @@ title: "[wxWidget源码阅读] 理解wxWindow中增加和去除/销毁子窗口的过程"
 description: wxWidgets是一款开源的跨平台图形程序开发库，能够自动的管理各种窗口，通过阅读源代码分析wxWidgets中窗口的增加和销毁过程。 
 category: "wxWidgets"
 tags: [wxWidgets, 源码分析]
+refer_author: Zero
+refer_blog_addr: http://zeroli.github.io/categories.html
+refer_post_addr: http://zeroli.github.io/wx/2013/03/25/wx-window-creation-destroy/
 ---
 {% include JB/setup %}
 
