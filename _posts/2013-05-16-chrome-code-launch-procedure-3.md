@@ -1,26 +1,26 @@
 ---
 layout: post
-title: "[ChromeÔ´ÂëÔÄ¶Á]ChromeÆô¶¯´úÂëÁ÷³Ì3"
-description: ´ÓURL barÖĞ½øĞĞURLµÄµ¼º½¹ı³Ì
+title: "[Chromeæºç é˜…è¯»]Chromeå¯åŠ¨ä»£ç æµç¨‹3"
+description: ä»URL barä¸­è¿›è¡ŒURLçš„å¯¼èˆªè¿‡ç¨‹
 category: "chrome"
-tags: [chromeÔ´ÂëÔÄ¶Á, C++]
+tags: [chromeæºç é˜…è¯», C++]
 refer_author: Zero
 refer_blog_addr: http://zeroli.github.io/categories.html
 refer_post_addr: http://zeroli.github.io/chrome/2013/03/25/chrome-code-launch-procedure3/
 ---
 {% include JB/setup %}
 
-**ChromeÆô¶¯´úÂëÁ÷³Ì3£º(v2.0°æ£¬WindowsÆ½Ì¨)**
+**Chromeå¯åŠ¨ä»£ç æµç¨‹3ï¼š(v2.0ç‰ˆï¼ŒWindowså¹³å°)**
 
-##´ÓURL barÖĞ½øĞĞURLµÄµ¼º½¹ı³Ì
+##ä»URL barä¸­è¿›è¡ŒURLçš„å¯¼èˆªè¿‡ç¨‹
 
-½Ó×ÅÉÏÒ»Æª£¬²»¹ÜÊÇ½ÓÊÜÓÃ»§ÊäÈëµÄÒ»¸öÓĞĞ§µÄURLµØÖ·£¬»¹ÊÇÆô¶¯ChromeÊ±×Ô¶¯loadÒ»¸öURLµØÖ·£¬the navigation controller¶¼»á½øÈëµ½NavigationController::LoadURLº¯Êı¡£LoadURL×îÖÕµ÷ÓÃLoadEntryº¯Êı¡£
+æ¥ç€ä¸Šä¸€ç¯‡ï¼Œä¸ç®¡æ˜¯æ¥å—ç”¨æˆ·è¾“å…¥çš„ä¸€ä¸ªæœ‰æ•ˆçš„URLåœ°å€ï¼Œè¿˜æ˜¯å¯åŠ¨Chromeæ—¶è‡ªåŠ¨loadä¸€ä¸ªURLåœ°å€ï¼Œthe navigation controlleréƒ½ä¼šè¿›å…¥åˆ°NavigationController::LoadURLå‡½æ•°ã€‚LoadURLæœ€ç»ˆè°ƒç”¨LoadEntryå‡½æ•°ã€‚
 {% highlight cpp %}
 void NavigationController ::LoadEntry( NavigationEntry* entry ) {
   // Handle non-navigational URLs that popup dialogs and such, these should not
   // actually navigate.
   if ( HandleNonNavigationAboutURL(entry ->url()))
-    return;   // ÕâÀïÊÇ·ñÓĞÄÚ´æĞ¹Â©£¬ÒòÎªentryÊÇnew³öÀ´µÄ£¬Ö®ºó²¢Ã»ÓĞ±»É¾³ı?
+    return;   // è¿™é‡Œæ˜¯å¦æœ‰å†…å­˜æ³„æ¼ï¼Œå› ä¸ºentryæ˜¯newå‡ºæ¥çš„ï¼Œä¹‹åå¹¶æ²¡æœ‰è¢«åˆ é™¤?
 
   // When navigating to a new page, we don't know for sure if we will actually
   // end up leaving the current page.  The new page load could for example
@@ -35,11 +35,11 @@ void NavigationController ::LoadEntry( NavigationEntry* entry ) {
 }
 {% endhighlight %}
 
-NavigateToPendingEntry¸ÉµÄÊÂÇé¾ÍÊÇ»ñÈ¡TabContents£¬È»ºóµ÷ÓÃËüµÄNavigateToPendingEntryº¯Êı¡£×¢Òâ£¬TabContentsµÄNavigateToPendingEntryº¯ÊıÊÇĞéº¯Êı£¬WebContentsÖØĞÂÊµÏÖÁËËü¡£
+NavigateToPendingEntryå¹²çš„äº‹æƒ…å°±æ˜¯è·å–TabContentsï¼Œç„¶åè°ƒç”¨å®ƒçš„NavigateToPendingEntryå‡½æ•°ã€‚æ³¨æ„ï¼ŒTabContentsçš„NavigateToPendingEntryå‡½æ•°æ˜¯è™šå‡½æ•°ï¼ŒWebContentsé‡æ–°å®ç°äº†å®ƒã€‚
 {% highlight cpp %}
 bool WebContents ::NavigateToPendingEntry( bool reload ) {
   NavigationEntry* entry = controller ()->GetPendingEntry();
-  // ¸ù¾İNavigationEntryÀ´¸üĞÂ¶ÔÓ¦µÄrender view host¶ÔÏó¡£
+  // æ ¹æ®NavigationEntryæ¥æ›´æ–°å¯¹åº”çš„render view hostå¯¹è±¡ã€‚
   RenderViewHost* dest_render_view_host = render_manager_.Navigate (*entry);
   if (! dest_render_view_host)
     return false;  // Unable to create the desired render view host.
@@ -75,10 +75,10 @@ bool WebContents ::NavigateToPendingEntry( bool reload ) {
   return true;
 }
 {% endhighlight %}
-render_manager_.Navigateº¯Êıµ÷ÓÃ½«»á´´½¨Ò»¸öĞÂµÄrender viewÀ´ÓëÕâ¸örender view host¶ÔÓ¦¡£
-Ê×ÏÈ¸üĞÂrender view host£¬È»ºóÓÃrender view hostÀ´´´½¨render view¶ÔÏó£¬Õâ¸ö¶ÔÏó´¦ÓÚÁíÒ»¸ö½ø³ÌÖĞrender process.
-WebContent¼Ì³ĞÁËRenderViewHostManager::DelegateÀà£¬Í¬ÊÇÒ²¼Ì³ĞÁËRenderViewHost::DelegateÀà¡£
-ËùÒÔÔÚRenderViewHostManager::NavigateÖĞµ÷ÓÃdelegate_::CreateRenderViewForRenderManager¾ÍÊÇµ÷ÓÃWebContentsµÄº¯Êı¡£
+render_manager_.Navigateå‡½æ•°è°ƒç”¨å°†ä¼šåˆ›å»ºä¸€ä¸ªæ–°çš„render viewæ¥ä¸è¿™ä¸ªrender view hostå¯¹åº”ã€‚
+é¦–å…ˆæ›´æ–°render view hostï¼Œç„¶åç”¨render view hostæ¥åˆ›å»ºrender viewå¯¹è±¡ï¼Œè¿™ä¸ªå¯¹è±¡å¤„äºå¦ä¸€ä¸ªè¿›ç¨‹ä¸­render process.
+WebContentç»§æ‰¿äº†RenderViewHostManager::Delegateç±»ï¼ŒåŒæ˜¯ä¹Ÿç»§æ‰¿äº†RenderViewHost::Delegateç±»ã€‚
+æ‰€ä»¥åœ¨RenderViewHostManager::Navigateä¸­è°ƒç”¨delegate_::CreateRenderViewForRenderManagerå°±æ˜¯è°ƒç”¨WebContentsçš„å‡½æ•°ã€‚
 
 ![](/assets/image/1345024986_9162.PNG)
 {% highlight cpp %}
@@ -96,7 +96,7 @@ bool WebContents :: CreateRenderViewForRenderManager(
   return true ;
 }
 {% endhighlight %}
-// NavigateToEntry½«»áÊµÀı»¯Ò»¸öViewMsg_Nagivate_Params½á¹¹Ìå£¬È»ºó´«¸øDoNavigateº¯Êı¡£
+// NavigateToEntryå°†ä¼šå®ä¾‹åŒ–ä¸€ä¸ªViewMsg_Nagivate_Paramsç»“æ„ä½“ï¼Œç„¶åä¼ ç»™DoNavigateå‡½æ•°ã€‚
 {% highlight cpp %}
 void RenderViewHost ::NavigateToEntry( const NavigationEntry & entry,
                                      bool is_reload ) {
@@ -109,7 +109,7 @@ void RenderViewHost ::NavigateToEntry( const NavigationEntry & entry,
   DoNavigate( new ViewMsg_Navigate (routing_id(), params));
 }
 {% endhighlight %}
-// Ö±½Ó·¢ËÍ¸øRenderProcess½ø³Ì
+// ç›´æ¥å‘é€ç»™RenderProcessè¿›ç¨‹
 {% highlight cpp %}
 void RenderViewHost ::DoNavigate( ViewMsg_Navigate* nav_message ) {
   // Only send the message if we aren't suspended at the start of a cross-site
@@ -128,9 +128,9 @@ void RenderViewHost ::DoNavigate( ViewMsg_Navigate* nav_message ) {
 {% endhighlight %}
 
 ##FAQ:
-###1. Ê²Ã´Ê±ºò´´½¨RenderViewHostºÍRenderProcessHost£¬ÔõÃ´´´½¨µÄ£¿
-Ò»¸öWebContentsÎ¬»¤Ò»¸öRenderViewHostManager render\_manager\_ ;
-Ò²¾ÍÊÇËµ´´½¨ÈÎºÎÒ»¸öWebContents£¬¾Í»áÊµÀı»¯Ò»¸öRenderViewHostManager£¬RenderViewHostManagerÎ¬»¤×ÅRenderViewHostDelegate, RenderViewHostManager::Delegate, RenderViewHost£¬Ç°2ÕßÓÃTabContentsÀ´³õÊ¼»¯¡£µ÷ÓÃRenderViewHostManager::initº¯ÊıÀ´´´½¨Ò»¸öĞÂµÄRenderViewHost¶ÔÏó£¬Õë¶Ô´ËÊ±µÄSiteInstance¡£¾ÍÊÇËµÃ¿¸öSiteInstance¶¼»á¶ÔÓ¦×ÅÒ»¸öRenderViewHostÊµÀı¡£
+###1. ä»€ä¹ˆæ—¶å€™åˆ›å»ºRenderViewHostå’ŒRenderProcessHostï¼Œæ€ä¹ˆåˆ›å»ºçš„ï¼Ÿ
+ä¸€ä¸ªWebContentsç»´æŠ¤ä¸€ä¸ªRenderViewHostManager render\_manager\_ ;
+ä¹Ÿå°±æ˜¯è¯´åˆ›å»ºä»»ä½•ä¸€ä¸ªWebContentsï¼Œå°±ä¼šå®ä¾‹åŒ–ä¸€ä¸ªRenderViewHostManagerï¼ŒRenderViewHostManagerç»´æŠ¤ç€RenderViewHostDelegate, RenderViewHostManager::Delegate, RenderViewHostï¼Œå‰2è€…ç”¨TabContentsæ¥åˆå§‹åŒ–ã€‚è°ƒç”¨RenderViewHostManager::initå‡½æ•°æ¥åˆ›å»ºä¸€ä¸ªæ–°çš„RenderViewHostå¯¹è±¡ï¼Œé’ˆå¯¹æ­¤æ—¶çš„SiteInstanceã€‚å°±æ˜¯è¯´æ¯ä¸ªSiteInstanceéƒ½ä¼šå¯¹åº”ç€ä¸€ä¸ªRenderViewHostå®ä¾‹ã€‚
 
 {% highlight cpp %}
 void RenderViewHostManager :: Init( Profile * profile ,
@@ -158,7 +158,7 @@ RenderViewHost * RenderViewHostManager :: CreateRenderViewHost(
   }
 }
 {% endhighlight %}
-ÔÚÊµÀı»¯Ò»¸öRenderViewHostÊ±£¬¸¸ÀàRenderWidgetHostĞèÒªÒ»¸öRenderProcessHost£¬Í¨¹ıµ÷ÓÃSiteInstance::GetProcess´«Èë£º
+åœ¨å®ä¾‹åŒ–ä¸€ä¸ªRenderViewHostæ—¶ï¼Œçˆ¶ç±»RenderWidgetHostéœ€è¦ä¸€ä¸ªRenderProcessHostï¼Œé€šè¿‡è°ƒç”¨SiteInstance::GetProcessä¼ å…¥ï¼š
 {% highlight cpp %}
 RenderViewHost::RenderViewHost(SiteInstance* instance,
                                RenderViewHostDelegate* delegate,
@@ -167,7 +167,7 @@ RenderViewHost::RenderViewHost(SiteInstance* instance,
     : RenderWidgetHost(instance->GetProcess(), routing_id),
       instance_(instance),
 {% endhighlight %}
-SiteInstance::GetProcess£¬ÓÃÀ´»ñÈ¡»òÕß´´½¨Ò»¸öRenderProcessHost¡£Ëü¸ù¾İSiteInstanceÀàĞÍÓëµ±Ç°µÄÆô¶¯½ø³ÌÄ£Ê½À´¾ö¶¨ÊÇÖØÓÃ£¬»¹ÊÇ´´½¨¡£
+SiteInstance::GetProcessï¼Œç”¨æ¥è·å–æˆ–è€…åˆ›å»ºä¸€ä¸ªRenderProcessHostã€‚å®ƒæ ¹æ®SiteInstanceç±»å‹ä¸å½“å‰çš„å¯åŠ¨è¿›ç¨‹æ¨¡å¼æ¥å†³å®šæ˜¯é‡ç”¨ï¼Œè¿˜æ˜¯åˆ›å»ºã€‚
 {% highlight cpp %}
 RenderProcessHost * SiteInstance :: GetProcess() {
   RenderProcessHost* process = NULL ;
@@ -203,11 +203,11 @@ RenderProcessHost * SiteInstance :: GetProcess() {
   return process ;
 }
 {% endhighlight %}
-µ±´´½¨Ò»¸öRenderProcessHostÊ±£¬²¢Ã»ÓĞÍ¬Ê±´´½¨Ò»¸öRenderProcessÓëÆä¶ÔÓ¦¡£
+å½“åˆ›å»ºä¸€ä¸ªRenderProcessHostæ—¶ï¼Œå¹¶æ²¡æœ‰åŒæ—¶åˆ›å»ºä¸€ä¸ªRenderProcessä¸å…¶å¯¹åº”ã€‚
 
-###2. Ê²Ã´Ê±ºò´´½¨Render½ø³Ì£¬RenderProcess¶ÔÏó£¬ºÍRenderView¶ÔÏó£¿
-delegate_::CreateRenderViewForRenderManager»òÕßËµÊÇWebContentsÀàµÄÕâ¸öº¯Êı£¨ÒòÎªWebContentsÊÇÒ»ÖÖRenderViewHostManager::delegate£©»áµ÷ÓÃRenderViewHost::CreateRenderViewº¯Êı£¬´´½¨Ò»¸öRender½ø³Ì£¬Èç¹û»¹²»´æÔÚµÄ»°¡£
-½ø¶ø½èÓÃ½ø³Ì¼äÍ¨ĞÅ£¬À´´´½¨RenderView¶ÔÏó¡£
+###2. ä»€ä¹ˆæ—¶å€™åˆ›å»ºRenderè¿›ç¨‹ï¼ŒRenderProcesså¯¹è±¡ï¼Œå’ŒRenderViewå¯¹è±¡ï¼Ÿ
+delegate_::CreateRenderViewForRenderManageræˆ–è€…è¯´æ˜¯WebContentsç±»çš„è¿™ä¸ªå‡½æ•°ï¼ˆå› ä¸ºWebContentsæ˜¯ä¸€ç§RenderViewHostManager::delegateï¼‰ä¼šè°ƒç”¨RenderViewHost::CreateRenderViewå‡½æ•°ï¼Œåˆ›å»ºä¸€ä¸ªRenderè¿›ç¨‹ï¼Œå¦‚æœè¿˜ä¸å­˜åœ¨çš„è¯ã€‚
+è¿›è€Œå€Ÿç”¨è¿›ç¨‹é—´é€šä¿¡ï¼Œæ¥åˆ›å»ºRenderViewå¯¹è±¡ã€‚
 {% highlight cpp %}
 bool RenderViewHost :: CreateRenderView() {
   DCHECK(! IsRenderViewLive ()) << "Creating view twice" ;
@@ -228,7 +228,7 @@ bool RenderViewHost :: CreateRenderView() {
   HANDLE renderer_process_handle = process ()-> process(). handle ();
   if ( renderer_process_handle == NULL )
     renderer_process_handle = GetCurrentProcess ();
- // Õâ¸öÊÇduplicateµ±Ç°½ø³ÌµÄÊ²Ã´¾ä±ú£¿£¿£¿
+ // è¿™ä¸ªæ˜¯duplicateå½“å‰è¿›ç¨‹çš„ä»€ä¹ˆå¥æŸ„ï¼Ÿï¼Ÿï¼Ÿ
   BOOL result = DuplicateHandle ( GetCurrentProcess(),
       modal_dialog_event_ ->handle (),
       renderer_process_handle ,
@@ -246,7 +246,7 @@ bool RenderViewHost :: CreateRenderView() {
 #if defined ( OS_WIN)
   modal_dialog_event. event = modal_dialog_event_handle ;
 #endif
-  // ·¢ËÍÏûÏ¢ÒªÇó´´½¨ĞÂµÄRenderview
+  // å‘é€æ¶ˆæ¯è¦æ±‚åˆ›å»ºæ–°çš„Renderview
   Send( new ViewMsg_New (gfx :: IdFromNativeView( view ()->GetPluginNativeView ()),
                        modal_dialog_event ,
                        delegate_ ->GetWebkitPrefs (),
@@ -266,9 +266,9 @@ bool RenderViewHost :: CreateRenderView() {
   return true ;
 }
 {% endhighlight %}
-ÉÏÃæµÄprocess ()->Init×öÁËÒ»Ğ©ÊÂÇé¡£process()º¯Êı·µ»ØÒ»¸öRenderProcessHostÊµÀı£¬Æ©ÈçBrowserRenderProcessHost¡£ËüµÄInitº¯Êı»áÊ×ÏÈÅĞ¶ÏchannelÊÇ·ñ½¨Á¢ºÃÁË£¬Èç¹û½¨Á¢ºÃÁË£¬´ú±íRenderProcessÒÑ¾­´´½¨£¬ÎÒÃÇÖ»ÒªshareÒ»ÏÂ¾Í¿ÉÒÔÁË£¬º¯ÊıÖ±½Ó·µ»Øtrue¡£·ñÔò¾ÍĞèÒªÊµ´òÊµµÄ´´½¨Ò»¸öRenderProcess¡£  
-RenderProcessÊÇÔÚsanboxÖĞ´´½¨µÄ£¬ÒâË¼¾ÍÊÇËµchromeÏŞÖÆÕâ¸örender½ø³ÌÖ»¸ºÔğrendering£¬·ÃÎÊnetworkºÍfilesystem£¬È«²¿½»¸øbrowser½ø³ÌÀ´×ö¡£ChromeµÄdesignÎÄµµÖĞÕâÑùĞ´µÀ£º  
+ä¸Šé¢çš„process ()->Initåšäº†ä¸€äº›äº‹æƒ…ã€‚process()å‡½æ•°è¿”å›ä¸€ä¸ªRenderProcessHostå®ä¾‹ï¼Œè­¬å¦‚BrowserRenderProcessHostã€‚å®ƒçš„Initå‡½æ•°ä¼šé¦–å…ˆåˆ¤æ–­channelæ˜¯å¦å»ºç«‹å¥½äº†ï¼Œå¦‚æœå»ºç«‹å¥½äº†ï¼Œä»£è¡¨RenderProcesså·²ç»åˆ›å»ºï¼Œæˆ‘ä»¬åªè¦shareä¸€ä¸‹å°±å¯ä»¥äº†ï¼Œå‡½æ•°ç›´æ¥è¿”å›trueã€‚å¦åˆ™å°±éœ€è¦å®æ‰“å®çš„åˆ›å»ºä¸€ä¸ªRenderProcessã€‚  
+RenderProcessæ˜¯åœ¨sanboxä¸­åˆ›å»ºçš„ï¼Œæ„æ€å°±æ˜¯è¯´chromeé™åˆ¶è¿™ä¸ªrenderè¿›ç¨‹åªè´Ÿè´£renderingï¼Œè®¿é—®networkå’Œfilesystemï¼Œå…¨éƒ¨äº¤ç»™browserè¿›ç¨‹æ¥åšã€‚Chromeçš„designæ–‡æ¡£ä¸­è¿™æ ·å†™é“ï¼š  
 > In addition to restricting the renderer's access to the filesystem and network, we can also place limitations on its access to the user's display and related objects. We run each render process on a separate Windows "Desktop" which is not visible to the user. This prevents a compromised renderer from opening new windows or capturing keystrokes.
 
-ÔÚsanboxÖĞ´´½¨render processµÄ¹ı³ÌÏàµ±¸´ÔÓ£¬Î»ÓÚBrowserRenderProcessHost::Init()º¯ÊıÖĞ¡£Èç¹û²»ÊÇÔÚsandboxÖĞ´´½¨½ø³Ì£¬ÔòÖ»ĞèÒª¼òµ¥µÄµ÷ÓÃwin32API CreateProcess£¬È»ºó¼ÇÂ¼ËüµÄ½ø³ÌHandle¾Í¿ÉÒÔÁË¡£
+åœ¨sanboxä¸­åˆ›å»ºrender processçš„è¿‡ç¨‹ç›¸å½“å¤æ‚ï¼Œä½äºBrowserRenderProcessHost::Init()å‡½æ•°ä¸­ã€‚å¦‚æœä¸æ˜¯åœ¨sandboxä¸­åˆ›å»ºè¿›ç¨‹ï¼Œåˆ™åªéœ€è¦ç®€å•çš„è°ƒç”¨win32API CreateProcessï¼Œç„¶åè®°å½•å®ƒçš„è¿›ç¨‹Handleå°±å¯ä»¥äº†ã€‚
 

@@ -1,21 +1,21 @@
 ---
 layout: post
-title: "[ChromeÔ´ÂëÔÄ¶Á]ChromeÆô¶¯´úÂëÁ÷³Ì2"
-description: TAB URL Æô¶¯ºÍnavigation³õÊ¼»¯
+title: "[Chromeæºç é˜…è¯»]Chromeå¯åŠ¨ä»£ç æµç¨‹2"
+description: TAB URL å¯åŠ¨å’Œnavigationåˆå§‹åŒ–
 category: "chrome"
-tags: [chrome, Ô´Âë·ÖÎö]
+tags: [chrome, æºç åˆ†æ]
 refer_author: Zero
 refer_blog_addr: http://zeroli.github.io/categories.html
 refer_post_addr: http://zeroli.github.io/chrome/2013/03/25/chrome-code-launch-procedure2/
 ---
 {% include JB/setup %}
 
-**ChromeÆô¶¯´úÂëÁ÷³Ì2£º(v2.0°æ£¬WindowsÆ½Ì¨)**
+**Chromeå¯åŠ¨ä»£ç æµç¨‹2ï¼š(v2.0ç‰ˆï¼ŒWindowså¹³å°)**
 
-TAB URL Æô¶¯ºÍnavigation³õÊ¼»¯
+TAB URL å¯åŠ¨å’Œnavigationåˆå§‹åŒ–
 
-½Ó×ÅÉÏÒ»Æª£¬¹ØÓÚAddTabWithURLº¯Êı¡£Õâ¸öº¯ÊıÊÇÔÚÆô¶¯Chrome BrowserÓ¦ÓÃ³ÌĞòÊ±µ÷ÓÃµÄ£¬»á×Ô¶¯´ò¿ªÒ»Ğ©tabs£¬ÓÃÀ´µ¼º½Óû¼ÓÔØµÄURLs¡£Æ©ÈçÉÏ´ÎÔËĞĞChromeÊ±´ò¿ª²¢¼ÇÂ¼µÄURLs¡£
-Õâ¸öº¯Êı¶¨ÒåÔÚBrowserÀàÖĞ£º
+æ¥ç€ä¸Šä¸€ç¯‡ï¼Œå…³äºAddTabWithURLå‡½æ•°ã€‚è¿™ä¸ªå‡½æ•°æ˜¯åœ¨å¯åŠ¨Chrome Browseråº”ç”¨ç¨‹åºæ—¶è°ƒç”¨çš„ï¼Œä¼šè‡ªåŠ¨æ‰“å¼€ä¸€äº›tabsï¼Œç”¨æ¥å¯¼èˆªæ¬²åŠ è½½çš„URLsã€‚è­¬å¦‚ä¸Šæ¬¡è¿è¡ŒChromeæ—¶æ‰“å¼€å¹¶è®°å½•çš„URLsã€‚
+è¿™ä¸ªå‡½æ•°å®šä¹‰åœ¨Browserç±»ä¸­ï¼š
 {% highlight cpp %}
 TabContents* Browser ::AddTabWithURL(
     const GURL& url , const GURL& referrer , PageTransition:: Type transition ,
@@ -35,7 +35,7 @@ TabContents* Browser ::AddTabWithURL(
   return contents;
 }
 {% endhighlight %}
-Êµ¼Ê¸É»îµÄÊÇCreateTabeContentsForURLº¯Êı£¬Õâ¸öº¯Êı¸ù¾İURLÀ´È·¶¨URLµÄÀàĞÍ£¬È»ºóÊµÀı»¯¾ßÌåµÄTabContents£¬ÓĞ¿ÉÄÜÊÇWebContents(Õâ¸ö×î³£¼û£©£¬»òÕßHmtlDialogContents£¬ÓÖ»òÕßÊÇDOMUIContents¡£
+å®é™…å¹²æ´»çš„æ˜¯CreateTabeContentsForURLå‡½æ•°ï¼Œè¿™ä¸ªå‡½æ•°æ ¹æ®URLæ¥ç¡®å®šURLçš„ç±»å‹ï¼Œç„¶åå®ä¾‹åŒ–å…·ä½“çš„TabContentsï¼Œæœ‰å¯èƒ½æ˜¯WebContents(è¿™ä¸ªæœ€å¸¸è§ï¼‰ï¼Œæˆ–è€…HmtlDialogContentsï¼Œåˆæˆ–è€…æ˜¯DOMUIContentsã€‚
 {% highlight cpp %}
 TabContents* Browser ::CreateTabContentsForURL(
     const GURL& url , const GURL& referrer , Profile* profile,
@@ -58,14 +58,14 @@ TabContents* Browser ::CreateTabContentsForURL(
   return contents;
 }
 {% endhighlight %}
-ÔÚÊµÀı»¯¾ßÌåµÄTabContentsµÄ¹ı³ÌÖĞ£¬»áÍ¨¹ıRenderViewHostManager¶ÔÏóÀ´´´½¨Ò»¸öRenderViewHost£¬Õâ¸öRenderViewHostÒªÃ´´´½¨Ò»¸öĞÂµÄrenderer process£¬ÒªÃ´ÖØÓÃÒ»¸ö´æÔÚµÄrenderer process£¬È¡¾öÓÚSiteInstance\*Õâ¸ö²ÎÊı:   
-1) Ã¿¸öTABÒ»¸ö½ø³Ì;  
-2) Ã¿¸öÓòÃûÒ»¸ö½ø³Ì;  
-3) Ã¿¸öÍøÒ³Ò»¸ö½ø³Ì;  
-4) Ã¿¸öÍøÒ³ÒÔ¼°´ÓÕâ¸öÍøÒ³Ëµ´ò¿ªµÄÆäËûÁ¬½ÓÒ»¸ö½ø³Ì¡£  
-µ±È»Èç¹ûSiteInstance\*Îª¿Õ£¬ÔòÖ±½Ó´´½¨Ò»¸öĞÂµÄrender process¡£¼´Ê¹ÊÇÖØÓÃÒ»¸örender process£¬ÔÚÄÇ¸örender processÀïÖ®ºóÈÔÈ»»á´´½¨Ò»¸öĞÂµÄrender view ¶ÔÏóÀ´¶ÔÓ¦Õâ¸öĞÂµÄrender view host¡£
+åœ¨å®ä¾‹åŒ–å…·ä½“çš„TabContentsçš„è¿‡ç¨‹ä¸­ï¼Œä¼šé€šè¿‡RenderViewHostManagerå¯¹è±¡æ¥åˆ›å»ºä¸€ä¸ªRenderViewHostï¼Œè¿™ä¸ªRenderViewHostè¦ä¹ˆåˆ›å»ºä¸€ä¸ªæ–°çš„renderer processï¼Œè¦ä¹ˆé‡ç”¨ä¸€ä¸ªå­˜åœ¨çš„renderer processï¼Œå–å†³äºSiteInstance\*è¿™ä¸ªå‚æ•°:   
+1) æ¯ä¸ªTABä¸€ä¸ªè¿›ç¨‹;  
+2) æ¯ä¸ªåŸŸåä¸€ä¸ªè¿›ç¨‹;  
+3) æ¯ä¸ªç½‘é¡µä¸€ä¸ªè¿›ç¨‹;  
+4) æ¯ä¸ªç½‘é¡µä»¥åŠä»è¿™ä¸ªç½‘é¡µè¯´æ‰“å¼€çš„å…¶ä»–è¿æ¥ä¸€ä¸ªè¿›ç¨‹ã€‚  
+å½“ç„¶å¦‚æœSiteInstance\*ä¸ºç©ºï¼Œåˆ™ç›´æ¥åˆ›å»ºä¸€ä¸ªæ–°çš„render processã€‚å³ä½¿æ˜¯é‡ç”¨ä¸€ä¸ªrender processï¼Œåœ¨é‚£ä¸ªrender processé‡Œä¹‹åä»ç„¶ä¼šåˆ›å»ºä¸€ä¸ªæ–°çš„render view å¯¹è±¡æ¥å¯¹åº”è¿™ä¸ªæ–°çš„render view hostã€‚
 
-SetupControllerº¯Êı½«»áSetupÒ»¸öĞÂµÄNavigationControllerÊµÀı(\src\chrome\browser\tab_contents\navigation_controller.h)£¬ÓÃÀ´Ö®ºóµÄLoadURLµ÷ÓÃ¡£ÕâÊ±TabContents¾ÍºÍNavigationController½¨Á¢ÁË¹ØÏµ¡£µÃ×¢ÒâµÄÊÇÒ»¸öNavigationController¿ÉÒÔ°ó¶¨¶à¸öTabs¡£
+SetupControllerå‡½æ•°å°†ä¼šSetupä¸€ä¸ªæ–°çš„NavigationControllerå®ä¾‹(\src\chrome\browser\tab_contents\navigation_controller.h)ï¼Œç”¨æ¥ä¹‹åçš„LoadURLè°ƒç”¨ã€‚è¿™æ—¶TabContentså°±å’ŒNavigationControllerå»ºç«‹äº†å…³ç³»ã€‚å¾—æ³¨æ„çš„æ˜¯ä¸€ä¸ªNavigationControllerå¯ä»¥ç»‘å®šå¤šä¸ªTabsã€‚
 {% highlight cpp %}
 void NavigationController :: LoadURL( const GURL & url, const GURL & referrer,
                                    PageTransition ::Type transition) {
@@ -77,12 +77,12 @@ void NavigationController :: LoadURL( const GURL & url, const GURL & referrer,
   LoadEntry( entry );
 }
 {% endhighlight %}
-´´½¨Ò»¸öNavigationEntry£¬È»ºóload¡£
+åˆ›å»ºä¸€ä¸ªNavigationEntryï¼Œç„¶åloadã€‚
 
-Í¨¹ıTabContentsµÄcontroller()º¯Êı¿ÉÒÔÄÃµ½NavigationControllerÊµÀı£¬ÕâÑùº¯Êıµ÷ÓÃ½«TabContentsÌí¼Óµ½TabStripModelÖĞ½øĞĞ¹ÜÀí¡£
+é€šè¿‡TabContentsçš„controller()å‡½æ•°å¯ä»¥æ‹¿åˆ°NavigationControllerå®ä¾‹ï¼Œè¿™æ ·å‡½æ•°è°ƒç”¨å°†TabContentsæ·»åŠ åˆ°TabStripModelä¸­è¿›è¡Œç®¡ç†ã€‚
 {% highlight cpp %}
 tabstrip_model_. AddTabContents(contents , -1, transition, foreground);
 {% endhighlight %}
-TabContentsºÍNavigationController×éºÏ³ÉTabContentsData£¬±»TabStripModel¹ÜÀí¡£TabStripModelÀïÓĞÒ»¸övector±äÁ¿Î¬»¤Ò»¸öTabContentsDataÁĞ±í¡£
+TabContentså’ŒNavigationControllerç»„åˆæˆTabContentsDataï¼Œè¢«TabStripModelç®¡ç†ã€‚TabStripModelé‡Œæœ‰ä¸€ä¸ªvectorå˜é‡ç»´æŠ¤ä¸€ä¸ªTabContentsDataåˆ—è¡¨ã€‚
 
 ![](/assets/image/1345622242_9385.png)

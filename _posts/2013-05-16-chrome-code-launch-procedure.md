@@ -1,21 +1,21 @@
 ---
 layout: post
-title: "[ChromeÔ´ÂëÔÄ¶Á]ChromeÆô¶¯´úÂëÁ÷³Ì1"
-description: ChromeÆô¶¯´úÂëÁ÷³Ì£º(v2.0°æ£¬WindowsÆ½Ì¨)
+title: "[Chromeæºç é˜…è¯»]Chromeå¯åŠ¨ä»£ç æµç¨‹1"
+description: Chromeå¯åŠ¨ä»£ç æµç¨‹ï¼š(v2.0ç‰ˆï¼ŒWindowså¹³å°)
 category: "chrome"
-tags: [chrome, Ô´Âë·ÖÎö]
+tags: [chrome, æºç åˆ†æ]
 refer_author: Zero
 refer_blog_addr: http://zeroli.github.io/categories.html
 refer_post_addr: http://zeroli.github.io/chrome/2013/03/25/chrome-code-launch-procedure/
 ---
 {% include JB/setup %}
 
-**ChromeÆô¶¯´úÂëÁ÷³Ì£º(v2.0°æ£¬WindowsÆ½Ì¨)**
+**Chromeå¯åŠ¨ä»£ç æµç¨‹ï¼š(v2.0ç‰ˆï¼ŒWindowså¹³å°)**
 
-Ó¦ÓÃ³ÌĞòÆô¶¯¹ı³Ì£º
-1) WinMainº¯ÊıÎªÈë¿Úµã£¬¶¨ÒåÔÚÎÄ¼ş\chrome\app\chrome_exe_main.ccÎÄ¼şÖĞ£¨Î»ÓÚchrome_exe¹¤³ÌÏîÄ¿ÖĞ£©  
-2) WinMain´Ó×¢²á±íÖĞÕÒµ½µ±Ç°°æ±¾µÄ×ÓÄ¿Â¼£¬È»ºó×°ÔØchrome.dllÎÄ¼ş¡£Èç¹ûÃ»ÕÒµ½£¬ÔòÖ±½Ó´Óµ±Ç°exeÄ¿Â¼²éÕÒdllÎÄ¼ş£¬²¢×°ÔØ¡£  
-3) Ö±½Ó´Óchrome.dllÖĞÕÒµ½º¯ÊıChromeMain£¬È»ºóµ÷ÓÃËü¡£ChromeMainº¯Êı¶¨ÒåÔÚ\chrome\app\chrome_dll_main.ccÎÄ¼şÖĞ£¬Î»ÓÚchrome_dll¹¤³ÌÏîÄ¿ÖĞ¡£
+åº”ç”¨ç¨‹åºå¯åŠ¨è¿‡ç¨‹ï¼š
+1) WinMainå‡½æ•°ä¸ºå…¥å£ç‚¹ï¼Œå®šä¹‰åœ¨æ–‡ä»¶\chrome\app\chrome_exe_main.ccæ–‡ä»¶ä¸­ï¼ˆä½äºchrome_exeå·¥ç¨‹é¡¹ç›®ä¸­ï¼‰  
+2) WinMainä»æ³¨å†Œè¡¨ä¸­æ‰¾åˆ°å½“å‰ç‰ˆæœ¬çš„å­ç›®å½•ï¼Œç„¶åè£…è½½chrome.dllæ–‡ä»¶ã€‚å¦‚æœæ²¡æ‰¾åˆ°ï¼Œåˆ™ç›´æ¥ä»å½“å‰exeç›®å½•æŸ¥æ‰¾dllæ–‡ä»¶ï¼Œå¹¶è£…è½½ã€‚  
+3) ç›´æ¥ä»chrome.dllä¸­æ‰¾åˆ°å‡½æ•°ChromeMainï¼Œç„¶åè°ƒç”¨å®ƒã€‚ChromeMainå‡½æ•°å®šä¹‰åœ¨\chrome\app\chrome_dll_main.ccæ–‡ä»¶ä¸­ï¼Œä½äºchrome_dllå·¥ç¨‹é¡¹ç›®ä¸­ã€‚
 {% highlight cpp %}
 HINSTANCE dll_handle = ::LoadLibraryEx (dll_name, NULL,
                                          LOAD_WITH_ALTERED_SEARCH_PATH);
@@ -40,7 +40,7 @@ HINSTANCE dll_handle = ::LoadLibraryEx (dll_name, NULL,
 
 {% endhighlight %}
 
-4) ChromeMainº¯Êı×öÒ»Ğ©Í¨ÓÃ×é¼şµÄ³õÊ¼»¯¹¤×÷£¬Ö®ºóÔò¸ù¾İÃüÁîĞĞÖĞµÄ²ÎÊıÑ¡Ïî£¬ÒªÃ´µ÷ÓÃRenderMain£¬ÒªÃ´µ÷ÓÃBrowserMainº¯Êı£¬»òÕßµ÷ÓÃWorkMain»òÕßPluginMainº¯Êı£º  
+4) ChromeMainå‡½æ•°åšä¸€äº›é€šç”¨ç»„ä»¶çš„åˆå§‹åŒ–å·¥ä½œï¼Œä¹‹ååˆ™æ ¹æ®å‘½ä»¤è¡Œä¸­çš„å‚æ•°é€‰é¡¹ï¼Œè¦ä¹ˆè°ƒç”¨RenderMainï¼Œè¦ä¹ˆè°ƒç”¨BrowserMainå‡½æ•°ï¼Œæˆ–è€…è°ƒç”¨WorkMainæˆ–è€…PluginMainå‡½æ•°ï¼š  
 {% highlight cpp %}
 int rv = -1;
   if ( process_type == switches ::kRendererProcess) {
@@ -66,8 +66,8 @@ int rv = -1;
   }
 {% endhighlight %}
 
-5) ÕâÀïÒÔBrowserMainº¯ÊıÈë¿ÚÎªÀı£¨Í¨³£ÎÒÃÇ»á½øÈëµ½ÕâÀï£¬±íÊ¾Æô¶¯Ò»¸öBrowser application)¡£BrowserMainº¯Êı»á×öÒ»Ğ©BrowserÏà¹ØµÄ³õÊ¼»¯¹¤×÷£¬È»ºó¸ù¾İÃüÁîĞĞ²ÎÊı£¬À´¾ö¶¨ÊÇÒÔÊ²Ã´·½Ê½À´Æô¶¯Browser Window¡£  
-a) ¸ù¾İÃüÁîĞĞ²ÎÊıÀ´³õÊ¼»¯BrowserProcess¶ÔÏó£º  
+5) è¿™é‡Œä»¥BrowserMainå‡½æ•°å…¥å£ä¸ºä¾‹ï¼ˆé€šå¸¸æˆ‘ä»¬ä¼šè¿›å…¥åˆ°è¿™é‡Œï¼Œè¡¨ç¤ºå¯åŠ¨ä¸€ä¸ªBrowser application)ã€‚BrowserMainå‡½æ•°ä¼šåšä¸€äº›Browserç›¸å…³çš„åˆå§‹åŒ–å·¥ä½œï¼Œç„¶åæ ¹æ®å‘½ä»¤è¡Œå‚æ•°ï¼Œæ¥å†³å®šæ˜¯ä»¥ä»€ä¹ˆæ–¹å¼æ¥å¯åŠ¨Browser Windowã€‚  
+a) æ ¹æ®å‘½ä»¤è¡Œå‚æ•°æ¥åˆå§‹åŒ–BrowserProcesså¯¹è±¡ï¼š  
 {% highlight cpp %}
   scoped_ptr< BrowserProcess> browser_process ;
   if ( parsed_command_line.HasSwitch (switches:: kImport)) {
@@ -80,15 +80,15 @@ a) ¸ù¾İÃüÁîĞĞ²ÎÊıÀ´³õÊ¼»¯BrowserProcess¶ÔÏó£º
     browser_process. reset(new BrowserProcessImpl( parsed_command_line));
   }
 {% endhighlight %}
-ÔÚBrowserProcessImplµÄ¹¹Ôìº¯ÊıÖĞ£¬»á½«Ò»¸öÈ«¾ÖµÄbrowserProcess\*Ö¸Õë½øĞĞ³õÊ¼»¯£º  
+åœ¨BrowserProcessImplçš„æ„é€ å‡½æ•°ä¸­ï¼Œä¼šå°†ä¸€ä¸ªå…¨å±€çš„browserProcess\*æŒ‡é’ˆè¿›è¡Œåˆå§‹åŒ–ï¼š  
 {% highlight cpp %}
   g_browser_process = this;  // line 112 of browser_process_impl.cc
 {% endhighlight %}
-BrowserProcessImpl¼Ì³ĞÓÚBrowserProcessºÍNonThreadSafe¡£  
-FirstRunBrowserProcess¼Ì³ĞÓÚBrowserProcessImpl.
+BrowserProcessImplç»§æ‰¿äºBrowserProcesså’ŒNonThreadSafeã€‚  
+FirstRunBrowserProcessç»§æ‰¿äºBrowserProcessImpl.
 
-b) µ÷ÓÃBrowserInit::ProcessCommandLine£¬Õâ¸öº¯Êıµ÷ÓÃLaunchBrowser£¨µ÷ÓÃLaunchBrowserImplº¯Êı£©È¥Æô¶¯£¬OpenURLsInBrowser £¨Õâ¸öº¯Êı½«»á³õÊ¼»¯Ò»¸öBrowserÊµÀı¶ÔÏó£¬È»ºóÔÚÆäÉÏµ÷ÓÃAddTabWithURLº¯ÊıÈ¥ÊµÀı»¯Ò»Ğ©TabContents¶ÔÏó¡£
-Ö®ºó±ãµ÷ÓÃbrowser->window()->Show()È¥ÏÔÊ¾browser window¡£×îºó±ã½øÈëÁËUIÊÂ¼şÑ­»·ÏµÍ³¡£
+b) è°ƒç”¨BrowserInit::ProcessCommandLineï¼Œè¿™ä¸ªå‡½æ•°è°ƒç”¨LaunchBrowserï¼ˆè°ƒç”¨LaunchBrowserImplå‡½æ•°ï¼‰å»å¯åŠ¨ï¼ŒOpenURLsInBrowser ï¼ˆè¿™ä¸ªå‡½æ•°å°†ä¼šåˆå§‹åŒ–ä¸€ä¸ªBrowserå®ä¾‹å¯¹è±¡ï¼Œç„¶ååœ¨å…¶ä¸Šè°ƒç”¨AddTabWithURLå‡½æ•°å»å®ä¾‹åŒ–ä¸€äº›TabContentså¯¹è±¡ã€‚
+ä¹‹åä¾¿è°ƒç”¨browser->window()->Show()å»æ˜¾ç¤ºbrowser windowã€‚æœ€åä¾¿è¿›å…¥äº†UIäº‹ä»¶å¾ªç¯ç³»ç»Ÿã€‚
 {% highlight cpp %}
   int result_code = ResultCodes ::NORMAL_EXIT;
   if ( parameters .ui_task ) {
@@ -102,12 +102,12 @@ b) µ÷ÓÃBrowserInit::ProcessCommandLine£¬Õâ¸öº¯Êıµ÷ÓÃLaunchBrowser£¨µ÷ÓÃLaunchBro
     RunUIMessageLoop( browser_process .get ());
   }
 {% endhighlight %}
-BrowserInit::LaunchBrowserImplÕâ¸öº¯Êı×öÒÔÏÂÊÂÇé£º
+BrowserInit::LaunchBrowserImplè¿™ä¸ªå‡½æ•°åšä»¥ä¸‹äº‹æƒ…ï¼š
 {% highlight cpp %}
   LaunchWithProfile lwp(cur_dir, command_line);
   bool launched = lwp.Launch(profile, process_startup);
 {% endhighlight %}
-BrowserInit::Launch() Õâ¸öº¯ÊıÊµ¼ÊÉÏ×öÒÔÏÂÊÂÇé£º
+BrowserInit::Launch() è¿™ä¸ªå‡½æ•°å®é™…ä¸Šåšä»¥ä¸‹äº‹æƒ…ï¼š
 {% highlight cpp %}
 // Open the required browser windows and tabs.
   // First, see if we're being run as a web application (thin frame window).
@@ -125,14 +125,14 @@ BrowserInit::Launch() Õâ¸öº¯ÊıÊµ¼ÊÉÏ×öÒÔÏÂÊÂÇé£º
       else
         browser = BrowserList::GetLastActive();
       OpenURLsInBrowser(browser, process_startup, urls_to_open);
-      // NOTE: Õâ¸öº¯Êı·µ»ØµÄbrowserÖ¸Õë²¢Ã»ÓĞ±»Ïú»Ù£¬ÄÚ´æĞ¹Â©£¿
-      // ÆäÊµ²¢Ã»ÓĞ£¬BrowserÉúÃüÆÚ½»¸øÁËBrowserViewÀ´¹ÜÀí
+      // NOTE: è¿™ä¸ªå‡½æ•°è¿”å›çš„browseræŒ‡é’ˆå¹¶æ²¡æœ‰è¢«é”€æ¯ï¼Œå†…å­˜æ³„æ¼ï¼Ÿ
+      // å…¶å®å¹¶æ²¡æœ‰ï¼ŒBrowserç”Ÿå‘½æœŸäº¤ç»™äº†BrowserViewæ¥ç®¡ç†
     }
   } else {
     RecordLaunchModeHistogram(LM_AS_WEBAPP);
   }
 {% endhighlight %}
-// OpenURLsInBrowser Ìí¼ÓTag with URLµ½browser windows£¬È»ºó·µ»ØÒ»¸öBrowserÊµÀı»¯¶ÔÏó¡£
+// OpenURLsInBrowser æ·»åŠ Tag with URLåˆ°browser windowsï¼Œç„¶åè¿”å›ä¸€ä¸ªBrowserå®ä¾‹åŒ–å¯¹è±¡ã€‚
 {% highlight cpp %}
    Browser * BrowserInit :: LaunchWithProfile::OpenURLsInBrowser (
     					Browser* browser ,
