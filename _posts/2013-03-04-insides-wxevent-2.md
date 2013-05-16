@@ -4,6 +4,9 @@ title : wxWidgets源码分析-事件机制（下）
 description : wxWidgets是一款开源的跨平台图形程序开发库，其中事件机制是GUI程序开发的一个重中之重，通过阅读源代码分析wx中事件机制的实现。具体包括到事件的定义、分发、处理以及跨平台的实现
 category : wxWidgets
 tags : [wxWidgets, 源码分析]
+refer_author: Tank
+refer_blog_addr: 
+refer_post_addr: 
 ---
 {% include JB/setup %}
 
