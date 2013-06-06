@@ -5,7 +5,7 @@ description: TAB URL 启动和navigation初始化
 category: "chrome"
 tags: [chrome, 源码分析]
 refer_author: Zero
-refer_blog_addr: http://zeroli.github.io/categories.html
+refer_blog_addr: http://zeroli.github.io/
 refer_post_addr: http://zeroli.github.io/chrome/2013/03/25/chrome-code-launch-procedure2/
 ---
 {% include JB/setup %}
@@ -21,18 +21,18 @@ TabContents* Browser ::AddTabWithURL(
     const GURL& url , const GURL& referrer , PageTransition:: Type transition ,
     bool foreground, SiteInstance * instance) 
 {
-  GURL url_to_load = url ;
-  if ( url_to_load.is_empty ())
-    url_to_load = GetHomePage();
-  TabContents* contents =
-      CreateTabContentsForURL(url_to_load , referrer, profile_, transition ,
-                              false, instance );
-  tabstrip_model_. AddTabContents(contents , -1, transition, foreground);
-  // By default, content believes it is not hidden.  When adding contents
-  // in the background, tell it that it's hidden.
-  if (! foreground)
-    contents-> WasHidden();
-  return contents;
+	GURL url_to_load = url ;
+	if ( url_to_load.is_empty ())
+	url_to_load = GetHomePage();
+	TabContents* contents =
+		CreateTabContentsForURL(url_to_load , referrer, profile_, transition ,
+								false, instance );
+	tabstrip_model_. AddTabContents(contents , -1, transition, foreground);
+	// By default, content believes it is not hidden.  When adding contents
+	// in the background, tell it that it's hidden.
+	if (! foreground)
+		contents-> WasHidden();
+	return contents;
 }
 {% endhighlight %}
 实际干活的是CreateTabeContentsForURL函数，这个函数根据URL来确定URL的类型，然后实例化具体的TabContents，有可能是WebContents(这个最常见），或者HmtlDialogContents，又或者是DOMUIContents。
@@ -42,20 +42,20 @@ TabContents* Browser ::CreateTabContentsForURL(
     PageTransition:: Type transition , bool defer_load,
     SiteInstance* instance) const {
   // Create an appropriate tab contents.
-  GURL real_url = url ;
-  TabContentsType type = TabContents ::TypeForURL(& real_url);
-  DCHECK( type != TAB_CONTENTS_UNKNOWN_TYPE );
+	GURL real_url = url ;
+	TabContentsType type = TabContents ::TypeForURL(& real_url);
+	DCHECK( type != TAB_CONTENTS_UNKNOWN_TYPE );
+	
+	TabContents* contents = TabContents ::CreateWithType( type, profile , instance);
+	contents-> SetupController(profile );
 
-  TabContents* contents = TabContents ::CreateWithType( type, profile , instance);
-  contents-> SetupController(profile );
+	if (! defer_load) {
+		// Load the initial URL before adding the new tab contents to the tab strip
+		// so that the tab contents has navigation state.
+		contents-> controller()->LoadURL (url, referrer, transition );
+	}
 
-  if (! defer_load) {
-    // Load the initial URL before adding the new tab contents to the tab strip
-    // so that the tab contents has navigation state.
-    contents-> controller()->LoadURL (url, referrer, transition );
-  }
-
-  return contents;
+    return contents;
 }
 {% endhighlight %}
 在实例化具体的TabContents的过程中，会通过RenderViewHostManager对象来创建一个RenderViewHost，这个RenderViewHost要么创建一个新的renderer process，要么重用一个存在的renderer process，取决于SiteInstance\*这个参数:   
@@ -69,12 +69,12 @@ SetupController函数将会Setup一个新的NavigationController实例(\src\chro
 {% highlight cpp %}
 void NavigationController :: LoadURL( const GURL & url, const GURL & referrer,
                                    PageTransition ::Type transition) {
-  // The user initiated a load, we don't need to reload anymore.
-  needs_reload_ = false ;
-
-  NavigationEntry* entry = CreateNavigationEntry ( url, referrer , transition );
-
-  LoadEntry( entry );
+	// The user initiated a load, we don't need to reload anymore.
+	needs_reload_ = false ;
+	
+	NavigationEntry* entry = CreateNavigationEntry ( url, referrer , transition );
+	
+	LoadEntry( entry );
 }
 {% endhighlight %}
 创建一个NavigationEntry，然后load。
