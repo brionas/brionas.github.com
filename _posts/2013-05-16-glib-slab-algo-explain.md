@@ -14,7 +14,7 @@ slab提出来是为了解决内部内存碎片的问题，在linux内核中与bu
 slab在GLIB中的实现相关文件是gslice.h/c，但是在这个实现文件中，有更复杂的，支持多线程更多的magazine caching算法。
 
 ##0. slab算法的运作机理
-关于slab算法的运作机理，可以查看[wiki](http://en.wikipedia.org/wiki/Slab_allocation%22%3Ehttp://en.wikipedia.org/wiki/Slab_allocation)
+关于slab算法的运作机理，可以查看[wiki](http://en.wikipedia.org/wiki/Slab_allocation)
 
 
 ###slab结构体定义
