@@ -1,4 +1,4 @@
-﻿layout: post
+layout: post
 title : "Pretty工具类：让软件开发调试与单元测试更happy!"
 description :pretty 工具
 category : "Java"
