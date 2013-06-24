@@ -1,6 +1,6 @@
 layout: post
-title : "Pretty¹¤¾ßÀà£ºÈÃÈí¼ş¿ª·¢µ÷ÊÔÓëµ¥Ôª²âÊÔ¸ühappy!"
-description :pretty ¹¤¾ß
+title : "Prettyå·¥å…·ç±»ï¼šè®©è½¯ä»¶å¼€å‘è°ƒè¯•ä¸å•å…ƒæµ‹è¯•æ›´happy!"
+description :pretty å·¥å…·
 category : "Java"
 tags : [Java]
 refer_author: Wenzhe
@@ -9,38 +9,70 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 
 {% include JB/setup %}
 
-    ÔÚÈí¼ş¿ª·¢µ÷ÊÔ¹ı³ÌÖĞ£¬¾­³£»áÈ¥²é¿´Ä³Ò»¶ÔÏóµÄÈ¡Öµ¡£µ«ÀàÖ®¼ä¸´ÔÓµÄ²ã´Î¹ØÏµ£¬ÔÙ¼ÓÉÏÊı×é£¨Á´±í£©¡¢Ó³Éä£¨×Öµä£©µÈ¶àÖÖÊı¾İ½á¹¹£¬ÈÃÎÒÃÇÄÑÒÔÒ»Ä¿ÁËÈ»¡£±¾ÎÄ½éÉÜµÄPretty¹¤¾ßÀà£¬ÒÔËõ½øµÄ·½Ê½Í»³öÀàÖ®¼äµÄ²ã´Î¹ØÏµ£¬²¢ÇÒ½«¶ÔÏóÒ»²ã²ãµÄÕû¸ö½á¹¹prettyµØ´òÓ¡³öÀ´£¡
+    åœ¨è½¯ä»¶å¼€å‘è°ƒè¯•è¿‡ç¨‹ä¸­ï¼Œç»å¸¸ä¼šå»æŸ¥çœ‹æŸä¸€å¯¹è±¡çš„å–å€¼ã€‚ä½†ç±»ä¹‹é—´å¤æ‚çš„å±‚æ¬¡å…³ç³»
 
-    ÔÚ±àĞ´µ¥Ôª²âÊÔÊ±£¬¾­³£»áÈ¥±È½ÏÄ³Ò»¶ÔÏóÊÇ·ñ·ûºÏÔ¤ÏÈµÄÆÚÍûÖµ¡£µ«¶ÔÓÚÒ»¸ö¸´ÔÓÀàµÄ¶ÔÏó£¬ÕâÖÖµ¥Ôª²âÊÔ²¢²»ºÃĞ´£¬ÈİÒ×Æ¬Ãæ»¯¡¢¸´ÔÓ»¯¡£Pretty¹¤¾ßÀà£¬¼ÈÄÜ¹»ÍêÕûµÄ¼ì²â¸´ÔÓÀàµÄ¶ÔÏó£¬¶øÇÒ¿É¶ÁĞÔºÃ£¬±ãÓÚÀí½â´úÂë¡£µ±¼ì²â³öÓëÆÚÍû½á¹¹²»Æ¥ÅäÊ±£¬²»½ö¿ÉÒÔÊä³öDiffĞÅÏ¢£¬»¹ÄÜÌáĞÑÓÃ»§ÊÇ·ñĞèÒª×Ô¶¯¸üĞÂcase£¬¼òµ¥Ò×ÓÃ¡£
+ï¼Œå†åŠ ä¸Šæ•°ç»„ï¼ˆé“¾è¡¨ï¼‰ã€æ˜ å°„ï¼ˆå­—å…¸ï¼‰ç­‰å¤šç§æ•°æ®ç»“æ„ï¼Œè®©æˆ‘ä»¬éš¾ä»¥ä¸€ç›®äº†ç„¶ã€‚æœ¬æ–‡ä»‹
 
-    ±¾ÎÄÊµÏÖÁË3ÖÖÓïÑÔ°æ±¾µÄPretty¹¤¾ßÀà£ºJava°æ£¬Python°æ£¬Groovy°æ¡£ÕâÀï¶ÔJava°æµÄPretty×öÁËÖØµã½éÉÜ£¬¶øÆäËü°æ±¾Ö»ÊÇ¼òµ¥´ø¹ı£¬ÒòÎªÊµÏÖµÄÔ­Àí¶¼ÊÇÒ»ÑùµÄ£¬Ö»ÊÇ»»³É²»Í¬ÓïÑÔ¶øÒÑ¡£×îºó£¬¶ÔÓÚÍ¬Ñù¹ã·ºÓ¦ÓÃµÄC++£¬±¾ÎÄËäÈ»Ã»ÓĞ¸ø³ö¾ßÌåÊµÏÖ£¬µ«Ò²Ìá¹©ÁËÒ»¸öÉè¼ÆË¼Â·£¬ÓĞĞËÈ¤µÄÅóÓÑ¿ÉÒÔÊÔÒ»ÊÔ¡£
+ç»çš„Prettyå·¥å…·ç±»ï¼Œä»¥ç¼©è¿›çš„æ–¹å¼çªå‡ºç±»ä¹‹é—´çš„å±‚æ¬¡å…³ç³»ï¼Œå¹¶ä¸”å°†å¯¹è±¡ä¸€å±‚å±‚çš„æ•´ä¸ªç»“
 
-##1. PrettyÖ®Java°æ
+æ„prettyåœ°æ‰“å°å‡ºæ¥ï¼
 
- ##1.1 µ÷ÊÔÖĞµÄÎÊÌâ
-    µ±ÎÒÃÇÔÚµ÷ÊÔ³ÌĞòµÄÊ±ºò£¬¾­³£»á²é¿´Ä³Ò»±äÁ¿µÄÖµ¡£Ò»°ãÀ´Ëµ£¬ÓĞÁ½ÖÖ·½·¨±»¾­³£ÓÃµ½£º
+    åœ¨ç¼–å†™å•å…ƒæµ‹è¯•æ—¶ï¼Œç»å¸¸ä¼šå»æ¯”è¾ƒæŸä¸€å¯¹è±¡æ˜¯å¦ç¬¦åˆé¢„å…ˆçš„æœŸæœ›å€¼ã€‚ä½†å¯¹äºä¸€ä¸ªå¤
 
-	1.     ÓÃµ÷ÊÔÆ÷£¬ÈçEclipse  Debug£¬»òÕßgdb/pdb¡£
+æ‚ç±»çš„å¯¹è±¡ï¼Œè¿™ç§å•å…ƒæµ‹è¯•å¹¶ä¸å¥½å†™ï¼Œå®¹æ˜“ç‰‡é¢åŒ–ã€å¤æ‚åŒ–ã€‚Prettyå·¥å…·ç±»ï¼Œæ—¢èƒ½å¤Ÿå®Œ
 
-	2.     ÓÃprintº¯Êı»òÕßlogger£¬Ö±½Ó½«±äÁ¿Öµ´òÓ¡³öÀ´¡£
+æ•´çš„æ£€æµ‹å¤æ‚ç±»çš„å¯¹è±¡ï¼Œè€Œä¸”å¯è¯»æ€§å¥½ï¼Œä¾¿äºç†è§£ä»£ç ã€‚å½“æ£€æµ‹å‡ºä¸æœŸæœ›ç»“æ„ä¸åŒ¹é…æ—¶
 
-    ÕâÁ½ÖÖ°ì·¨¶¼ÓĞÈ±µã£¬µ÷ÊÔÆ÷ĞèÒªÒ»²ã²ãÕ¹¿ª¿´£¬¶øÇÒÈç¹û±­¾ßÅöµ½Á´±í½á¹¹»òÕß¹şÏ£±íµÄÊ±ºò£¬¾Í²»Ì«ÈİÒ×¿´Ã÷°×ÁË¡£¶øprintº¯ÊıÆäÊµÖ»ÊÇtoString·½·¨µÄ·µ»ØÖµ£¬È¡¾öÓÚtoStringº¯ÊıµÄÊµÏÖ£¬ÆäÊµ²¢²»¿É¿¿¡£
+ï¼Œä¸ä»…å¯ä»¥è¾“å‡ºDiffä¿¡æ¯ï¼Œè¿˜èƒ½æé†’ç”¨æˆ·æ˜¯å¦éœ€è¦è‡ªåŠ¨æ›´æ–°caseï¼Œç®€å•æ˜“ç”¨ã€‚
 
-    ¿ÉÄÜÓĞ´ÏÃ÷µÄ¶ÁÕß»áÏëµ½£¬ÄÇÎÒÃÇÔÚ¶¨ÒåÀàµÄÊ±ºò£¬¶¼overrideÒ»ÏÂtoString·½·¨£¬ÈÃËü¿É¶Á£¬¶ø²»ÊÇObjectÀàµÄÈ±Ê¡ÊµÏÖ£¨JVMÖĞµÄµØÖ·£©¡£
+    æœ¬æ–‡å®ç°äº†3ç§è¯­è¨€ç‰ˆæœ¬çš„Prettyå·¥å…·ç±»ï¼šJavaç‰ˆï¼ŒPythonç‰ˆï¼ŒGroovyç‰ˆã€‚è¿™é‡Œå¯¹
 
-    ÕâÊÇÒ»¸öºÜÌìÕæµÄÏë·¨£º
+Javaç‰ˆçš„Prettyåšäº†é‡ç‚¹ä»‹ç»ï¼Œè€Œå…¶å®ƒç‰ˆæœ¬åªæ˜¯ç®€å•å¸¦è¿‡ï¼Œå› ä¸ºå®ç°çš„åŸç†éƒ½æ˜¯ä¸€æ ·çš„
 
-	1.     Ê×ÏÈ£¬²»ÊÇËùÓĞµÄÀà¶¼ÄÜ¹»ÓÉÎÒÃÇ¿ØÖÆ£¬ÈçJavaÀà¿â£¬µÚÈı·½¿â£¬ÆäËû¿ª·¢ÍÅ¶ÓµÄ´úÂë£¬µÈµÈ¡£
+ï¼Œåªæ˜¯æ¢æˆä¸åŒè¯­è¨€è€Œå·²ã€‚æœ€åï¼Œå¯¹äºåŒæ ·å¹¿æ³›åº”ç”¨çš„C++ï¼Œæœ¬æ–‡è™½ç„¶æ²¡æœ‰ç»™å‡ºå…·ä½“å®
 
-	2.     ÀàµÄtoString·½·¨¿ÉÄÜÓĞËüµÄÒµÎñ¼ÛÖµ£¬¶ø²»Ö»ÊÇÎªÁË·½±ãµ÷ÊÔ¡£
+ç°ï¼Œä½†ä¹Ÿæä¾›äº†ä¸€ä¸ªè®¾è®¡æ€è·¯ï¼Œæœ‰å…´è¶£çš„æœ‹å‹å¯ä»¥è¯•ä¸€è¯•ã€‚
 
-	3.     ¶îÍâ¹¤×÷Á¿£ºÕâ²»ÊÇ±ØĞëµÄ£¬ÈôÊÇÆäÖĞÒªÇóÃ¿¸öÀà¶¼È¥override toString·½·¨£¬»áÔö¼ÓºÜ¶àÃ»ÓĞ±ØÒªµÄ¹¤×÷Á¿£¬²úÉúºÜ¶à²»±ØÒªµÄ´úÂë£¬·´¶ø»áÔö´óÎ¬»¤´úÂëµÄ¹¤×÷Á¿£¬ÉõÖÁÒıÆğbug¡£¶øÇÒ£¬
+##1. Prettyä¹‹Javaç‰ˆ
+
+ ##1.1 è°ƒè¯•ä¸­çš„é—®é¢˜
+    å½“æˆ‘ä»¬åœ¨è°ƒè¯•ç¨‹åºçš„æ—¶å€™ï¼Œç»å¸¸ä¼šæŸ¥çœ‹æŸä¸€å˜é‡çš„å€¼ã€‚ä¸€èˆ¬æ¥è¯´ï¼Œæœ‰ä¸¤ç§æ–¹æ³•è¢«ç»å¸¸ç”¨åˆ°ï¼š
+
+	1.     ç”¨è°ƒè¯•å™¨ï¼Œå¦‚Eclipse  Debugï¼Œæˆ–è€…gdb/pdbã€‚
+
+	2.     ç”¨printå‡½æ•°æˆ–è€…loggerï¼Œç›´æ¥å°†å˜é‡å€¼æ‰“å°å‡ºæ¥ã€‚
+
+    è¿™ä¸¤ç§åŠæ³•éƒ½æœ‰ç¼ºç‚¹ï¼Œè°ƒè¯•å™¨éœ€è¦ä¸€å±‚å±‚å±•å¼€çœ‹ï¼Œè€Œä¸”å¦‚æœæ¯å…·ç¢°åˆ°é“¾è¡¨ç»“æ„æˆ–è€…
+
+å“ˆå¸Œè¡¨çš„æ—¶å€™ï¼Œå°±ä¸å¤ªå®¹æ˜“çœ‹æ˜ç™½äº†ã€‚è€Œprintå‡½æ•°å…¶å®åªæ˜¯toStringæ–¹æ³•çš„è¿”å›å€¼ï¼Œ
+
+å–å†³äºtoStringå‡½æ•°çš„å®ç°ï¼Œå…¶å®å¹¶ä¸å¯é ã€‚
+
+    å¯èƒ½æœ‰èªæ˜çš„è¯»è€…ä¼šæƒ³åˆ°ï¼Œé‚£æˆ‘ä»¬åœ¨å®šä¹‰ç±»çš„æ—¶å€™ï¼Œéƒ½overrideä¸€ä¸‹toStringæ–¹æ³•
+
+ï¼Œè®©å®ƒå¯è¯»ï¼Œè€Œä¸æ˜¯Objectç±»çš„ç¼ºçœå®ç°ï¼ˆJVMä¸­çš„åœ°å€ï¼‰ã€‚
+
+    è¿™æ˜¯ä¸€ä¸ªå¾ˆå¤©çœŸçš„æƒ³æ³•ï¼š
+
+	1.     é¦–å…ˆï¼Œä¸æ˜¯æ‰€æœ‰çš„ç±»éƒ½èƒ½å¤Ÿç”±æˆ‘ä»¬æ§åˆ¶ï¼Œå¦‚Javaç±»åº“ï¼Œç¬¬ä¸‰æ–¹åº“ï¼Œå…¶
+
+ä»–å¼€å‘å›¢é˜Ÿçš„ä»£ç ï¼Œç­‰ç­‰ã€‚
+
+	2.     ç±»çš„toStringæ–¹æ³•å¯èƒ½æœ‰å®ƒçš„ä¸šåŠ¡ä»·å€¼ï¼Œè€Œä¸åªæ˜¯ä¸ºäº†æ–¹ä¾¿è°ƒè¯•ã€‚
+
+	3.     é¢å¤–å·¥ä½œé‡ï¼šè¿™ä¸æ˜¯å¿…é¡»çš„ï¼Œè‹¥æ˜¯å…¶ä¸­è¦æ±‚æ¯ä¸ªç±»éƒ½å»override 
+
+toStringæ–¹æ³•ï¼Œä¼šå¢åŠ å¾ˆå¤šæ²¡æœ‰å¿…è¦çš„å·¥ä½œé‡ï¼Œäº§ç”Ÿå¾ˆå¤šä¸å¿…è¦çš„ä»£ç ï¼Œåè€Œä¼šå¢å¤§ç»´
+
+æŠ¤ä»£ç çš„å·¥ä½œé‡ï¼Œç”šè‡³å¼•èµ·bugã€‚è€Œä¸”ï¼Œ
     
-    µ±ÀàÃ¿´ÎÔö¼Ó/ĞŞ¸Ä/É¾³ı³ÉÔ±±äÁ¿Ê±£¬¶¼ÒªÈ¥ĞŞ¸ÄtoString·½·¨£¬·ñÔòprint³öÀ´µÄĞÅÏ¢Ò²¾Í²»¿É¿¿ÁË£¬µ«ÕâÊÇºÜÄÑ±£Ö¤µÄ¡£
+    å½“ç±»æ¯æ¬¡å¢åŠ /ä¿®æ”¹/åˆ é™¤æˆå‘˜å˜é‡æ—¶ï¼Œéƒ½è¦å»ä¿®æ”¹toStringæ–¹æ³•ï¼Œå¦åˆ™printå‡ºæ¥
 
-##1.2 µ¥Ôª²âÊÔÖĞµÄÎÊÌâ
+çš„ä¿¡æ¯ä¹Ÿå°±ä¸å¯é äº†ï¼Œä½†è¿™æ˜¯å¾ˆéš¾ä¿è¯çš„ã€‚
+
+##1.2 å•å…ƒæµ‹è¯•ä¸­çš„é—®é¢˜
  
-    ÓĞÏÂÃæÒ»¸öÀàA£¬¾ÛºÏÁËÀàB£¬¶øBÓÖ¾ÛºÏÀàC£¬ÈçÏÂ´úÂë£º
+    æœ‰ä¸‹é¢ä¸€ä¸ªç±»Aï¼Œèšåˆäº†ç±»Bï¼Œè€ŒBåˆèšåˆç±»Cï¼Œå¦‚ä¸‹ä»£ç ï¼š
  
  {% highlight cpp %}
 	
@@ -67,9 +99,11 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    
    {% endhighlight %}
 
-   ÏÖÔÚÎÒÃÇÏÈ²âÊÔÒ»ÏÂÀà A µÄ¶ÔÏó a ÊÇ²»ÊÇËùÆÚ´ıµÄ£¬Ò»°ãÈİÒ×Ïëµ½ÏÂÃæ¼¸¸ö·½·¨£º
+   ç°åœ¨æˆ‘ä»¬å…ˆæµ‹è¯•ä¸€ä¸‹ç±» A çš„å¯¹è±¡ a æ˜¯ä¸æ˜¯æ‰€æœŸå¾…çš„ï¼Œä¸€èˆ¬å®¹æ˜“æƒ³åˆ°ä¸‹é¢å‡ ä¸ªæ–¹æ³•
 
-   1. °ÑËùÓĞ³ÉÔ±±äÁ¿¶¼ get ³öÀ´±È½Ï£º
+ï¼š
+
+   1. æŠŠæ‰€æœ‰æˆå‘˜å˜é‡éƒ½ get å‡ºæ¥æ¯”è¾ƒï¼š
    
    {% highlight cpp %}
    assertEquals(xxx, a.getId());
@@ -80,9 +114,21 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    assertEquals(xxx, a.getB().getC().getV1());
    ...
    {% endhighlight %}
-   ÕâÖÖ°ì·¨µÄÎÊÌâÏÔ¶øÒ×¼û£ºÈç¹û²»Ğ¡ĞÄÂ©ÁËÒ»¸öÖØÒª³ÉÔ±±äÁ¿µÄget£¬ÄÇ²âÊÔ¾Í²»¹»È«ÃæÁË¡£¶øÇÒ²¢²»ÊÇËùÓĞ³ÉÔ±±äÁ¿¶¼ÓĞget·½·¨£¬Ğè²»ĞèÒªget·½·¨µÃ¿´¾ßÌåĞèÒª£¬¶ø²»ÄÜÖ»Îªunit test×¨ÃÅÌá¹©¡£¶øÇÒ£¬ÏñÕâÃ´¼òµ¥µÄÀà£¬¶¼ĞèÒªÕâÃ´¶àĞĞassertEqual£¬Èç¹ûÓĞ¸ü¶àµÄ³ÉÔ±±äÁ¿»òÕßÓĞºÜÉîµÄ¾ÛºÏ²ã´Î£¬ÄÇ½«ÎŞ·¨ÏëÏó¡£Èç¹ûAÀàµÄ½á¹»ÔÚ×ö¸öµ÷Õû£¬ÄÇ¸Ä¶¯µÄµØ·½¾ÍºÜ¶àÁË¡£ÕâÑùµÄunit testÎ¬»¤³É±¾Ö®¸ß¿ÉÏë¶øÖª£¬»¹ÓĞË­ÓĞ¶¯Á¦Ğ´unit test£¬ÒòÎªÄÇÊÇÔÚ¸ø×Ô¼ºÕÒÂé·³£¡¶øÇÒ£¬²»ÊÇËùÓĞµÄ´úÂëÎÒÃÇ¶¼ÄÜ¿ØÖÆµÄ£¬±ÈÈçµÚÈı·½¿â¡£
+   è¿™ç§åŠæ³•çš„é—®é¢˜æ˜¾è€Œæ˜“è§ï¼šå¦‚æœä¸å°å¿ƒæ¼äº†ä¸€ä¸ªé‡è¦æˆå‘˜å˜é‡çš„getï¼Œé‚£æµ‹è¯•å°±ä¸å¤Ÿ
+
+å…¨é¢äº†ã€‚è€Œä¸”å¹¶ä¸æ˜¯æ‰€æœ‰æˆå‘˜å˜é‡éƒ½æœ‰getæ–¹æ³•ï¼Œéœ€ä¸éœ€è¦getæ–¹æ³•å¾—çœ‹å…·ä½“éœ€è¦ï¼Œè€Œä¸
+
+èƒ½åªä¸ºunit testä¸“é—¨æä¾›ã€‚è€Œä¸”ï¼Œåƒè¿™ä¹ˆç®€å•çš„ç±»ï¼Œéƒ½éœ€è¦è¿™ä¹ˆå¤šè¡ŒassertEqualï¼Œå¦‚
+
+æœæœ‰æ›´å¤šçš„æˆå‘˜å˜é‡æˆ–è€…æœ‰å¾ˆæ·±çš„èšåˆå±‚æ¬¡ï¼Œé‚£å°†æ— æ³•æƒ³è±¡ã€‚å¦‚æœAç±»çš„ç»“å¤Ÿåœ¨åšä¸ªè°ƒ
+
+æ•´ï¼Œé‚£æ”¹åŠ¨çš„åœ°æ–¹å°±å¾ˆå¤šäº†ã€‚è¿™æ ·çš„unit testç»´æŠ¤æˆæœ¬ä¹‹é«˜å¯æƒ³è€ŒçŸ¥ï¼Œè¿˜æœ‰è°æœ‰åŠ¨åŠ›
+
+å†™unit testï¼Œå› ä¸ºé‚£æ˜¯åœ¨ç»™è‡ªå·±æ‰¾éº»çƒ¦ï¼è€Œä¸”ï¼Œä¸æ˜¯æ‰€æœ‰çš„ä»£ç æˆ‘ä»¬éƒ½èƒ½æ§åˆ¶çš„ï¼Œæ¯”
+
+å¦‚ç¬¬ä¸‰æ–¹åº“ã€‚
    
-   2. ÎªAÀàÊµÏÖequals·½·¨£¬ÄÇassertEquals¾ÍÖ»ÓĞÒ»¸öÁË£º
+   2. ä¸ºAç±»å®ç°equalsæ–¹æ³•ï¼Œé‚£assertEqualså°±åªæœ‰ä¸€ä¸ªäº†ï¼š
 
    {% highlight cpp %}
    A expected = new A();
@@ -98,12 +144,22 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    assertEquals(expected, a);
    {% endhighlight %}
    
-   ËäÈ»assertEqualsÖ»ÓĞÒ»¸ö£¬µ«ÎªÁË½¨Á¢Ò»¸öÆÚ´ıµÄexpected×÷Îª±ê³ßÀ´±È½Ï£¬ĞèÒªÎªÌá¹©´óÁ¿µÄset·½·¨¡£ÕâÃ´¶àset·½·¨´øÀ´µÄÎÊÌâÆäÊµ²¢²»±ÈÄÇÃ´¶àgetÉÙ¡£
-   ¶øÇÒ£¬ÎªAÀàÊµÏÖequals·½·¨Ò²ÊÇÓĞ·çÏÕµÄ£¬ÒòÎªequals·½·¨±¾ÉíÒ²ĞèÒª²âÊÔ£¨Ö»ÒªÊÇÈËĞ´µÄ´úÂë±¾ÖÊÉÏ¶¼ĞèÒª²âÊÔ£¡£©£¬Ò²ĞèÒªÊ±¼ä³É±¾¡£ºÜ¶àÀàÆäÊµÃ»±ØÒªÈ¥override equals·½·¨¡£Ğ´´úÂë¾ÍµÃÎ¬»¤£¬Ã»±ØÒªĞ´µÄ´úÂë¼á¾ö²»Ğ´£¬·ñÔòÎ¬»¤Á¿¸ü¶à¡£Í¬ÑùµÄ£¬²»ÊÇËùÓĞµÄ´úÂë¶¼ÄÜ¿ØÖÆµÄ¡£
+   è™½ç„¶assertEqualsåªæœ‰ä¸€ä¸ªï¼Œä½†ä¸ºäº†å»ºç«‹ä¸€ä¸ªæœŸå¾…çš„expectedä½œä¸ºæ ‡å°ºæ¥æ¯”è¾ƒï¼Œéœ€
 
-##1.3 Ê¹ÓÃPretty
+è¦ä¸ºæä¾›å¤§é‡çš„setæ–¹æ³•ã€‚è¿™ä¹ˆå¤šsetæ–¹æ³•å¸¦æ¥çš„é—®é¢˜å…¶å®å¹¶ä¸æ¯”é‚£ä¹ˆå¤šgetå°‘ã€‚
+   è€Œä¸”ï¼Œä¸ºAç±»å®ç°equalsæ–¹æ³•ä¹Ÿæ˜¯æœ‰é£é™©çš„ï¼Œå› ä¸ºequalsæ–¹æ³•æœ¬èº«ä¹Ÿéœ€è¦æµ‹è¯•ï¼ˆåªè¦
 
-   PrettyÀà¿ÉÒÔºÜprettyµÄ½â¾öÒÔÉÏµ÷ÊÔºÍµ¥Ôª²âÊÔÖĞµÄÎÊÌâ¡£ÔÚ¸ø³öPrettyÀàÖ®Ç°£¬ÏÈ´ÓÊ¹ÓÃÕßµÄ½Ç¶È¿´¿´ËıµÄpretty£º
+æ˜¯äººå†™çš„ä»£ç æœ¬è´¨ä¸Šéƒ½éœ€è¦æµ‹è¯•ï¼ï¼‰ï¼Œä¹Ÿéœ€è¦æ—¶é—´æˆæœ¬ã€‚å¾ˆå¤šç±»å…¶å®æ²¡å¿…è¦å»override 
+
+equalsæ–¹æ³•ã€‚å†™ä»£ç å°±å¾—ç»´æŠ¤ï¼Œæ²¡å¿…è¦å†™çš„ä»£ç åšå†³ä¸å†™ï¼Œå¦åˆ™ç»´æŠ¤é‡æ›´å¤šã€‚åŒæ ·çš„ï¼Œ
+
+ä¸æ˜¯æ‰€æœ‰çš„ä»£ç éƒ½èƒ½æ§åˆ¶çš„ã€‚
+
+##1.3 ä½¿ç”¨Pretty
+
+   Prettyç±»å¯ä»¥å¾ˆprettyçš„è§£å†³ä»¥ä¸Šè°ƒè¯•å’Œå•å…ƒæµ‹è¯•ä¸­çš„é—®é¢˜ã€‚åœ¨ç»™å‡ºPrettyç±»ä¹‹å‰
+
+ï¼Œå…ˆä»ä½¿ç”¨è€…çš„è§’åº¦çœ‹çœ‹å¥¹çš„prettyï¼š
    
    {% highlight cpp %}
 
@@ -137,7 +193,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		private int id = 100;
 		private File path = new File("/home/wenzhe/code/pretty");
 		private Integer[] array = {86, 755, 1234, 5678};
-		private List<String> list = Arrays.asList("My", "name", "is", "Wenzhe");
+		private List<String> list = Arrays.asList("My", "name", 
+
+"is", "Wenzhe");
 		private B b = new B("This is my Pretty Test"); 
 	  }
   
@@ -148,10 +206,14 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 
 		public B(String desc) {
 		  this.desc = desc;
-		  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-
+
+MM-dd");
 		  try {
 			map.put("Today", dateFormat.parse("2013-06-15"));
-			map.put("Earth Doomsday", dateFormat.parse("2012-12-21"));
+			map.put("Earth Doomsday", dateFormat.parse("2012-12
+
+-21"));
 		  } catch (ParseException e) {
 			throw new RuntimeException(e);
 		  }
@@ -179,9 +241,13 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	
 	{% endhighlight %}
 	
-  ##1.3.1 Pretty½á¹¹
+  ##1.3.1 Prettyç»“æ„
 
-    ÕâÊÇÒ»¸ö´øÓĞmain·½·¨µÄµ¥Ôª²âÊÔÀà¡£ÏÈÆ²¿ªµ¥Ôª²âÊÔ£¬ÎÒÃÇ°ÑËüµ±³ÉÒ»¸öÆÕÍ¨javaÎÄ¼şÀ´ÔËĞĞ£¨¼´´Ómain·½·¨¿ªÊ¼ÔËĞĞ£©£¬ÔÚÆÁÄ»ÉÏ»á´òÓ¡³ö¶ÔÏó a µÄpretty½á¹¹£º
+    è¿™æ˜¯ä¸€ä¸ªå¸¦æœ‰mainæ–¹æ³•çš„å•å…ƒæµ‹è¯•ç±»ã€‚å…ˆæ’‡å¼€å•å…ƒæµ‹è¯•ï¼Œæˆ‘ä»¬æŠŠå®ƒå½“æˆä¸€ä¸ªæ™®é€š
+
+javaæ–‡ä»¶æ¥è¿è¡Œï¼ˆå³ä»mainæ–¹æ³•å¼€å§‹è¿è¡Œï¼‰ï¼Œåœ¨å±å¹•ä¸Šä¼šæ‰“å°å‡ºå¯¹è±¡ a çš„prettyç»“æ„
+
+ï¼š
 	{% highlight cpp %}
 	org.wenzhe.jvlib.debug.test.PrettyTest$A {
       array : [86, 755, 1234, 5678]
@@ -191,7 +257,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	     v2 : 3.141592653589793238462643383279502884197169399
 	    }
 		desc : This is my Pretty Test
-		map : {Earth Doomsday=Fri Dec 21 00:00:00 PST 2012, Today=Sat Jun 15 00:00:00 PDT 2013}
+		map : {Earth Doomsday=Fri Dec 21 00:00:00 PST 2012, 
+
+Today=Sat Jun 15 00:00:00 PDT 2013}
       }
 	  id : 100
 	  list : [My, name, is, Wenzhe]
@@ -199,15 +267,55 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
     }
 	{% endhighlight %}
 	
-	¸ù¾İpretty½á¹¹µÄËõ½ø£¬¿ÉÒÔºÜÈİÒ×¿´³ö£¬¶ÔÏóaµÄÀàÊÇ£º org.wenzhe.jvlib.debug.test.PrettyTestÀàµÄÄÚ²¿ÀàA£¬Æä³ÉÔ±arrayÊÇÒ»¸öÊı×é£¬ÖµÎª[86, 755, 1234, 5678]¡£ÁíÒ»¸ö³ÉÔ± b ÊÇÀà £¨PrettyTestµÄÄÚ²¿ÀàB£©µÄ¶ÔÏó£¬b ÀïÃæµÄ³ÉÔ±±äÁ¿c ÊÇÀà£¨PrettyTestÄÚ²¿ÀàC£©µÄ¶ÔÏó¡­¡­¸ù¾İËõ½ø£¬¸÷ÖÖ³ÉÔ±±äÁ¿¼°ÆäÇ¶Ì×¾ÛºÏÀàµÄ¶ÔÏóÒ²¶¼ÇáÒ×¿É¼û¡£ÕâÔÚ¿ª·¢µ÷ÊÔ¹ı³ÌÖĞ·Ç³£ºÃÓÃ£¡
-    Èç¹ûÒÔµ¥Ôª²âÊÔµÄ·½Ê½ÔËĞĞ£¬ÆÁÄ»ÉÏÃ»ÓĞÈÎºÎÊä³ö£¨No news is Good news£©£¬JUnit ViewÖĞ³öÏÖ´ó¼ÒÏ²°®µÄÂÌÉ«Ìõ£¬×£ºØÄã±í²âÊÔÍ¨¹ıÁË¡££¨Ò»°ã¶ÔÓÚunittestÀ´Ëµ£¬ÕıÈ·µÄÊ±ºòÊÇÃ»Êä³öĞÅÏ¢µÄ¡££©
-    ÄÇÃ´³ÌĞòÔõÃ´ÖªµÀ¶ÔÏóaÊÇÆÚÍûµÄÄØ£¿×¢Òâµ½µÚ61ĞĞ£¬Pretty.equalsGolden("test1", a);  ¶ÔÏóaÊµ¼ÊÉÏÊÇ¸úÒ»¸öÃû×ÖÎªtest1µÄgoldenÎÄ¼ş×öÁË±È½Ï¡£Õâ¸ögoldenÎÄ¼şµÄËùÔÚµÄÄ¿Â¼Îª£º ${project_root}/src/test/resources/golden/pretty/£¬ÕâÊÇpretty¹¤¾ßµÄÒ»¸öconvention£¬µ±È»Ò²¿ÉÒÔ¸Ä³É±ğµÄÄ¿Â¼£¬µ«ÎÒ²»ÍÆ¼ö¸Ä£¬ºÜ¶àÊ±ºò×ñ´Ó¡°Ô¼¶¨ÓÅÓÚÅäÖÃ¡±µÄÔ­Ôò×ÜÊÇ¸üºÃµÄ¡£´ò¿ªtest1ÎÄ¼ş£¬Äã»á·¢ÏÖÕâÒ²ÊÇÒ»¸öpretty½á¹¹£¬¸úÖ®Ç°ÆÁÄ»ÉÏÊä³öµÄÍêÈ«Ò»Ñù¡£
+	æ ¹æ®prettyç»“æ„çš„ç¼©è¿›ï¼Œå¯ä»¥å¾ˆå®¹æ˜“çœ‹å‡ºï¼Œå¯¹è±¡açš„ç±»æ˜¯ï¼š 
 
-    Äã¿ÉÄÜÆæ¹ÖÎªÊ²Ã´×÷ÎªÆÕÍ¨javaÀàÔËĞĞÆÁÄ»ÉÏ»á´òÓ¡£¬¶ø×÷Îªunit testÈ´²»»á´òÓ¡ÄØ£¿ÆäÊµÇø±ğ²¢²»ÔÚÓÚÓÃÄÄÖÖÔËĞĞ·½Ê½£¬Î¨Ò»µÄÇø±ğÔÚÓÚÊÇ·ñÑ¡ÔñÁËPrettyÀàµÄdebugÄ£Ê½¡££¨Ò»°ãÀ´Ëµ£¬unit testÏÂ²»Æô¶¯debugÄ£Ê½£¬¶øÔÚ¿ª·¢µ÷ÊÔ¹ı³ÌÖĞÆô¶¯£©¡£×¢Òâµ½mainº¯Êı¸Õ¿ªÊ¼µÄÊ±ºò£¨µÚ65ĞĞ£©£¬debug modeÉèÖÃÎªtrue£¬µ±Pretty¹¤¾ßÒªµÃµ½¶ÔÏóaµÄpretty½á¹¹Ê±£¬»á½«Ëü´òÓ¡³öÀ´£¬·½±ãµ÷ÊÔ£¬Ê¡µÃÔÚ´úÂëÀïÃæ¼ÓÈëprintº¯ÊıµÄÂé·³¡£debug modeÈ±Ê¡ÊÇ¹ØµÄ£¬ËùÒÔunit test¾ÍÃ»ÓĞ´òÓ¡³öÀ´ÁË¡££¨ÓĞĞËÈ¤¿ÉÒÔÔÄ¶ÁºóÃæµÄÔ´´úÂë£©¡£
+org.wenzhe.jvlib.debug.test.PrettyTestç±»çš„å†…éƒ¨ç±»Aï¼Œå…¶æˆå‘˜arrayæ˜¯ä¸€ä¸ªæ•°ç»„ï¼Œå€¼
+
+ä¸º[86, 755, 1234, 5678]ã€‚å¦ä¸€ä¸ªæˆå‘˜ b æ˜¯ç±» ï¼ˆPrettyTestçš„å†…éƒ¨ç±»Bï¼‰çš„å¯¹è±¡ï¼Œb 
+
+é‡Œé¢çš„æˆå‘˜å˜é‡c æ˜¯ç±»ï¼ˆPrettyTestå†…éƒ¨ç±»Cï¼‰çš„å¯¹è±¡â€¦â€¦æ ¹æ®ç¼©è¿›ï¼Œå„ç§æˆå‘˜å˜é‡åŠå…¶
+
+åµŒå¥—èšåˆç±»çš„å¯¹è±¡ä¹Ÿéƒ½è½»æ˜“å¯è§ã€‚è¿™åœ¨å¼€å‘è°ƒè¯•è¿‡ç¨‹ä¸­éå¸¸å¥½ç”¨ï¼
+    å¦‚æœä»¥å•å…ƒæµ‹è¯•çš„æ–¹å¼è¿è¡Œï¼Œå±å¹•ä¸Šæ²¡æœ‰ä»»ä½•è¾“å‡ºï¼ˆNo news is Good newsï¼‰ï¼Œ
+
+JUnit Viewä¸­å‡ºç°å¤§å®¶å–œçˆ±çš„ç»¿è‰²æ¡ï¼Œç¥è´ºä½ è¡¨æµ‹è¯•é€šè¿‡äº†ã€‚ï¼ˆä¸€èˆ¬å¯¹äºunittestæ¥è¯´
+
+ï¼Œæ­£ç¡®çš„æ—¶å€™æ˜¯æ²¡è¾“å‡ºä¿¡æ¯çš„ã€‚ï¼‰
+    é‚£ä¹ˆç¨‹åºæ€ä¹ˆçŸ¥é“å¯¹è±¡aæ˜¯æœŸæœ›çš„å‘¢ï¼Ÿæ³¨æ„åˆ°ç¬¬61è¡Œï¼ŒPretty.equalsGolden
+
+("test1", a);  å¯¹è±¡aå®é™…ä¸Šæ˜¯è·Ÿä¸€ä¸ªåå­—ä¸ºtest1çš„goldenæ–‡ä»¶åšäº†æ¯”è¾ƒã€‚è¿™ä¸ª
+
+goldenæ–‡ä»¶çš„æ‰€åœ¨çš„ç›®å½•ä¸ºï¼š ${project_root}/src/test/resources/golden/pretty/
+
+ï¼Œè¿™æ˜¯prettyå·¥å…·çš„ä¸€ä¸ªconventionï¼Œå½“ç„¶ä¹Ÿå¯ä»¥æ”¹æˆåˆ«çš„ç›®å½•ï¼Œä½†æˆ‘ä¸æ¨èæ”¹ï¼Œå¾ˆå¤š
+
+æ—¶å€™éµä»â€œçº¦å®šä¼˜äºé…ç½®â€çš„åŸåˆ™æ€»æ˜¯æ›´å¥½çš„ã€‚æ‰“å¼€test1æ–‡ä»¶ï¼Œä½ ä¼šå‘ç°è¿™ä¹Ÿæ˜¯ä¸€ä¸ª
+
+prettyç»“æ„ï¼Œè·Ÿä¹‹å‰å±å¹•ä¸Šè¾“å‡ºçš„å®Œå…¨ä¸€æ ·ã€‚
+
+    ä½ å¯èƒ½å¥‡æ€ªä¸ºä»€ä¹ˆä½œä¸ºæ™®é€šjavaç±»è¿è¡Œå±å¹•ä¸Šä¼šæ‰“å°ï¼Œè€Œä½œä¸ºunit testå´ä¸ä¼šæ‰“
+
+å°å‘¢ï¼Ÿå…¶å®åŒºåˆ«å¹¶ä¸åœ¨äºç”¨å“ªç§è¿è¡Œæ–¹å¼ï¼Œå”¯ä¸€çš„åŒºåˆ«åœ¨äºæ˜¯å¦é€‰æ‹©äº†Prettyç±»çš„
+
+debugæ¨¡å¼ã€‚ï¼ˆä¸€èˆ¬æ¥è¯´ï¼Œunit testä¸‹ä¸å¯åŠ¨debugæ¨¡å¼ï¼Œè€Œåœ¨å¼€å‘è°ƒè¯•è¿‡ç¨‹ä¸­å¯åŠ¨ï¼‰
+
+ã€‚æ³¨æ„åˆ°mainå‡½æ•°åˆšå¼€å§‹çš„æ—¶å€™ï¼ˆç¬¬65è¡Œï¼‰ï¼Œdebug modeè®¾ç½®ä¸ºtrueï¼Œå½“Prettyå·¥å…·è¦
+
+å¾—åˆ°å¯¹è±¡açš„prettyç»“æ„æ—¶ï¼Œä¼šå°†å®ƒæ‰“å°å‡ºæ¥ï¼Œæ–¹ä¾¿è°ƒè¯•ï¼Œçœå¾—åœ¨ä»£ç é‡Œé¢åŠ å…¥printå‡½
+
+æ•°çš„éº»çƒ¦ã€‚debug modeç¼ºçœæ˜¯å…³çš„ï¼Œæ‰€ä»¥unit testå°±æ²¡æœ‰æ‰“å°å‡ºæ¥äº†ã€‚ï¼ˆæœ‰å…´è¶£å¯ä»¥
+
+é˜…è¯»åé¢çš„æºä»£ç ï¼‰ã€‚
 
   ##1.3.2 Pretty Diff
   
-    Èç¹ûunit test²âµ½¶ÔÏóaÓëgoldenÎÄ¼ş²»Í¬£¬ÄÇ»áÔõÑù£¿¼ÙÈçÓĞ¸ö´óÀÏ´Ö²»Ğ¡ĞÄ°ÑCÀàÖĞµÄ³ÉÔ±±äÁ¿v1É¾³ıÁË£¬ÓÖ²»Ğ¡ĞÄÔö¼ÓÁË³ÉÔ±±äÁ¿v3£¨È¡ÖµÎªtrue£©£¬¸üÊÇ²»Ğ¡ĞÄ°ÑAÀàµÄ³ÉÔ±±äÁ¿listÀïÃæinsertÁËÒ»¸ö¡°NOT¡±£¬²»¹ÜÊÇ²»ÊÇÔÚPrettyµÄdebugÄ£Ê½£¬ÆÁÄ»ÉÏ¶¼»áÊä³ö£º
+    å¦‚æœunit testæµ‹åˆ°å¯¹è±¡aä¸goldenæ–‡ä»¶ä¸åŒï¼Œé‚£ä¼šæ€æ ·ï¼Ÿå‡å¦‚æœ‰ä¸ªå¤§è€ç²—ä¸å°å¿ƒæŠŠ
+
+Cç±»ä¸­çš„æˆå‘˜å˜é‡v1åˆ é™¤äº†ï¼Œåˆä¸å°å¿ƒå¢åŠ äº†æˆå‘˜å˜é‡v3ï¼ˆå–å€¼ä¸ºtrueï¼‰ï¼Œæ›´æ˜¯ä¸å°å¿ƒ
+
+æŠŠAç±»çš„æˆå‘˜å˜é‡listé‡Œé¢insertäº†ä¸€ä¸ªâ€œNOTâ€ï¼Œä¸ç®¡æ˜¯ä¸æ˜¯åœ¨Prettyçš„debugæ¨¡å¼ï¼Œå±
+
+å¹•ä¸Šéƒ½ä¼šè¾“å‡ºï¼š
 
 	{% highlight cpp %}
 	Diff from Expected to Actual: 
@@ -217,19 +325,37 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
     >:   list : [My, name, is, NOT, Wenzhe]
 	{% endhighlight %}
 
-	Pretty¹¤¾ßµÄ´íÎóÊä³ö£¬¹»pretty°É£¬´óÀÏ´Ö¸ÉÁËÄÄĞ©»µÊÂÕâÀïÒ»Ä¿ÁËÈ»¡£
+	Prettyå·¥å…·çš„é”™è¯¯è¾“å‡ºï¼Œå¤Ÿprettyå§ï¼Œå¤§è€ç²—å¹²äº†å“ªäº›åäº‹è¿™é‡Œä¸€ç›®äº†ç„¶ã€‚
 
   ##1.3.3 Pretty Golden
-    Èç¹û´óÀÏ´ÖÊÇ¹ÊÒâÕâÃ´ĞŞ¸ÄµÄ£¨±³ºóÓĞ´óÀÏ°åÖ§³Ö£¬ÓÃÈí¼şĞĞÒµµÄÓïÑÔ½²¾ÍÊÇ¡°ĞèÇó±äÁË¡±£©£¬ÄÇÃ´goldenÎÄ¼şÒ²¾Í¹ıÊ±ÁË£¬ĞèÒª¸üĞÂ²ÅÄÜÈÃunit testÍ¨¹ı¡£
+    å¦‚æœå¤§è€ç²—æ˜¯æ•…æ„è¿™ä¹ˆä¿®æ”¹çš„ï¼ˆèƒŒåæœ‰å¤§è€æ¿æ”¯æŒï¼Œç”¨è½¯ä»¶è¡Œä¸šçš„è¯­è¨€è®²å°±æ˜¯â€œéœ€
 
-    ĞèÒªÊÖ¶¯¸ü¸ÄgoldenÎÄ¼şÂğ£¿ÎÒ¿É²»¸É£¡ÒòÎªPrettyÈÃÎÒÔ½À´Ô½ÀÁÁË¡£
+æ±‚å˜äº†â€ï¼‰ï¼Œé‚£ä¹ˆgoldenæ–‡ä»¶ä¹Ÿå°±è¿‡æ—¶äº†ï¼Œéœ€è¦æ›´æ–°æ‰èƒ½è®©unit testé€šè¿‡ã€‚
 
-    ÀÁÈË¶¼Ï²»¶Pretty£¬ÒòÎªPrettyÌá¹©ÁË×Ô¶¯¸üĞÂgoldenÎÄ¼şµÄ¹¦ÄÜ¡£ÕâÊ±ºòÄã¿ªÆôPrettyµÄdebugÄ£Ê½£¬ÔËĞĞ£¬ÆÁÄ»ÉÏ³ıÁËÊä³ö¶ÔÏóaµÄpretty½á¹¹ºÍDiffĞÅÏ¢Ö®Íâ£¬Pretty»¹»áÎÊÄã¡°Overwrite (Y/N)? ¡±£¬»Ø´ğY¼´¿É×Ô¶¯¸üĞÂgoldenÎÄ¼ştest1¡£
-    ÓĞÁËPretty£¬ÄãÓÀÔ¶²»ĞèÒªÊÖ¶¯Ğ´goldenÎÄ¼ş£ºµ±golden²»´æÔÚÊ±£¬Pretty»á°ïÄã´´½¨£»µ±golden´æÔÚµ«ÓĞDiffÊ±»áÌáĞÑÄãÊÇ·ñĞèÒª¸üĞÂ¡£
+    éœ€è¦æ‰‹åŠ¨æ›´æ”¹goldenæ–‡ä»¶å—ï¼Ÿæˆ‘å¯ä¸å¹²ï¼å› ä¸ºPrettyè®©æˆ‘è¶Šæ¥è¶Šæ‡’äº†ã€‚
 
-##1.4 PrettyÔ­Àí¼°Ô´Âë
+    æ‡’äººéƒ½å–œæ¬¢Prettyï¼Œå› ä¸ºPrettyæä¾›äº†è‡ªåŠ¨æ›´æ–°goldenæ–‡ä»¶çš„åŠŸèƒ½ã€‚è¿™æ—¶å€™ä½ å¼€å¯
+
+Prettyçš„debugæ¨¡å¼ï¼Œè¿è¡Œï¼Œå±å¹•ä¸Šé™¤äº†è¾“å‡ºå¯¹è±¡açš„prettyç»“æ„å’ŒDiffä¿¡æ¯ä¹‹å¤–ï¼Œ
+
+Prettyè¿˜ä¼šé—®ä½ â€œOverwrite (Y/N)? â€ï¼Œå›ç­”Yå³å¯è‡ªåŠ¨æ›´æ–°goldenæ–‡ä»¶test1ã€‚
+    æœ‰äº†Prettyï¼Œä½ æ°¸è¿œä¸éœ€è¦æ‰‹åŠ¨å†™goldenæ–‡ä»¶ï¼šå½“goldenä¸å­˜åœ¨æ—¶ï¼ŒPrettyä¼šå¸®ä½ 
+
+åˆ›å»ºï¼›å½“goldenå­˜åœ¨ä½†æœ‰Diffæ—¶ä¼šæé†’ä½ æ˜¯å¦éœ€è¦æ›´æ–°ã€‚
+
+##1.4 PrettyåŸç†åŠæºç 
  
-    Ò²ĞíÄãÒÑ¾­ÆÈ²»¼°´ıµØÏëÖªµÀPrettyÀàÊÇÔõÃ´ÊµÏÖµÄ£¬Ô­ÀíÆäÊµÒ²¼òµ¥£¬¾ÍÊÇÍ¨¹ıJavaµÄ¡°·´Éä¡±»úÖÆ£¬°ÑÀàµÄ³ÉÔ±±äÁ¿ÄÃ³öÀ´£¬·Å½øÒ»¸öMapÀï£¬keyÎª³ÉÔ±±äÁ¿Ãû£¬valueÎª³ÉÔ±±äÁ¿µÄÖµ£¬È»ºóµİ¹éµØÊä³öµ½Ò»¸ö¾ßÓĞËõ½ø²ã´ÎµÄ´ú±ípretty½á¹¹µÄ×Ö·û´®Àï¡£ÕâÊÇÒ»¸ö¼ÈÃÀÀöÓÖºÃÓÃµÄ×Ö·û´®£¬ÔÚdebugÄ£Ê½ÏÂ´òÓ¡µ½±ê×¼Êä³ö£¬ÔÚunit testÏÂ¾ÍÊÇÓëgoldenÎÄ¼ş½øĞĞ×Ö·û´®±È½Ï£¬´Ó¶ø±ÜÃâÁË×ö¶ÔÏó±È½ÏµÄÂé·³£¬Í¬Ê±goldenÎÄ¼şµÄpretty½á¹¹¼ÇÂ¼ÁËÆÚ´ı¶ÔÏóÍêÕûµÄ²ã²ãĞÅÏ¢£¬ÓĞÖúÓÚÀí½â´úÂë£¬^_^¡£
+    ä¹Ÿè®¸ä½ å·²ç»è¿«ä¸åŠå¾…åœ°æƒ³çŸ¥é“Prettyç±»æ˜¯æ€ä¹ˆå®ç°çš„ï¼ŒåŸç†å…¶å®ä¹Ÿç®€å•ï¼Œå°±æ˜¯é€šè¿‡
+
+Javaçš„â€œåå°„â€æœºåˆ¶ï¼ŒæŠŠç±»çš„æˆå‘˜å˜é‡æ‹¿å‡ºæ¥ï¼Œæ”¾è¿›ä¸€ä¸ªMapé‡Œï¼Œkeyä¸ºæˆå‘˜å˜é‡åï¼Œ
+
+valueä¸ºæˆå‘˜å˜é‡çš„å€¼ï¼Œç„¶åé€’å½’åœ°è¾“å‡ºåˆ°ä¸€ä¸ªå…·æœ‰ç¼©è¿›å±‚æ¬¡çš„ä»£è¡¨prettyç»“æ„çš„å­—ç¬¦
+
+ä¸²é‡Œã€‚è¿™æ˜¯ä¸€ä¸ªæ—¢ç¾ä¸½åˆå¥½ç”¨çš„å­—ç¬¦ä¸²ï¼Œåœ¨debugæ¨¡å¼ä¸‹æ‰“å°åˆ°æ ‡å‡†è¾“å‡ºï¼Œåœ¨unit test
+
+ä¸‹å°±æ˜¯ä¸goldenæ–‡ä»¶è¿›è¡Œå­—ç¬¦ä¸²æ¯”è¾ƒï¼Œä»è€Œé¿å…äº†åšå¯¹è±¡æ¯”è¾ƒçš„éº»çƒ¦ï¼ŒåŒæ—¶goldenæ–‡ä»¶
+
+çš„prettyç»“æ„è®°å½•äº†æœŸå¾…å¯¹è±¡å®Œæ•´çš„å±‚å±‚ä¿¡æ¯ï¼Œæœ‰åŠ©äºç†è§£ä»£ç ï¼Œ^_^ã€‚
 
 	{% highlight cpp %}
 	package org.wenzhe.jvlib.debug;
@@ -301,7 +427,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		return str(obj, level, debugMode);
 	  }
 
-	  public static String str(Object obj, int level, boolean debugMode) {
+	  public static String str(Object obj, int level, boolean debugMode) 
+
+{
 		String result = str(obj, 0, level);
 		if (debugMode) {
 		  System.out.println(result);
@@ -354,10 +482,16 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		  return results.toString();
 		}
 		else if (obj instanceof Map) {
-		  Map<String, String> results = new TreeMap<String, String>();
-		  for (Map.Entry<Object, Object> entry : ((Map<Object, Object>)obj).entrySet()) {
+		  Map<String, String> results = new TreeMap<String, String>
+
+();
+		  for (Map.Entry<Object, Object> entry : ((Map<Object, 
+
+Object>)obj).entrySet()) {
 			String key = str(entry.getKey(), tabCnt + 1, level);
-			String value = str(entry.getValue(), tabCnt + 1, level);
+			String value = str(entry.getValue(), tabCnt + 1, 
+
+level);
 			results.put(key, value);
 		  }
 		  return results.toString();
@@ -390,26 +524,48 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		return sb.toString();
 	  }
 	  
-	  public static boolean equalsGolden(String goldenFileName, Object obj) throws IOException {
+	  public static boolean equalsGolden(String goldenFileName, Object 
+
+obj) throws IOException {
 		return equalsGolden(goldenFileName, obj, 5);
 	  }
 
-	  public static boolean equalsGolden(String goldenFileName, Object obj, int level) throws IOException {
-		File goldenFile = new File("src/test/resources/golden/pretty", goldenFileName);
+	  public static boolean equalsGolden(String goldenFileName, Object 
+
+obj, int level) throws IOException {
+		File goldenFile = new File
+
+("src/test/resources/golden/pretty", goldenFileName);
 		return equalsGolden(goldenFile, obj, level);
 	  }
 	  
-	  public static boolean equalsGolden(File goldenFile, Object obj, int level) throws IOException {
+	  public static boolean equalsGolden(File goldenFile, Object obj, 
+
+int level) throws IOException {
 		String actual = str(obj, level, false).trim();
 		return Golden.equals(goldenFile, actual);
 	  }
 	}
 	{% endhighlight %}
 
-	ÔÚµ÷ÊÔ¹ı³ÌÖĞ£¬PrettyµÄstr·½·¨ºÍprintln·½·¨ÊÇºÜ³£ÓÃµÄ£»¶øÔÚunit testÖĞ£¬equalsGolden·½·¨¸ü¼Ó·½±ã¡£
+	åœ¨è°ƒè¯•è¿‡ç¨‹ä¸­ï¼ŒPrettyçš„stræ–¹æ³•å’Œprintlnæ–¹æ³•æ˜¯å¾ˆå¸¸ç”¨çš„ï¼›è€Œåœ¨unit test
 
-##1.5 Pretty½ãÃÃÆª£ºGoldenÔ­Àí¼°Ô´Âë
-    PrettyÀàÓÃµ½ÁËÁíÒ»¸öÏàµ±ÊµÓÃµÄ¹¤¾ßÀà£ºGolden£¬ÊÇPrettyµÄºÃ½ãÃÃ£¬Èç¹ûgoldenÎÄ¼ş²»´æÔÚÔò°ïÄã´´½¨£¬Èç¹û´æÔÚÁËÔò°ïÄã°Ñ×Ö·û´®¸úgoldenÎÄ¼ş×ö±È½Ï£¬Ò»µ©·¢ÏÖ²îÒì£¬Ôò½«²îÒì²¿·Ö´òÓ¡³öÀ´¡£ÔÚGoldenÀàµÄµ÷ÊÔÄ£Ê½ÏÂ£¨debugMode=true£©»¹»áÌáÊ¾ÄãÊÇ·ñĞèÒªoverwirteÄãµÄgoldenÎÄ¼ş¡£ÕâÊÇºÜÊµÓÃµÄ¹¦ÄÜ£¬ÊÔÏëÒ»ÏÂÈç¹ûÓĞÉÏÇ§¸ögoldenÎÄ¼ş£¬Î¬»¤µÄ¹¤×÷Á¿ÊÇºÜ´óµÄ¡£ĞèÇó±äÁË£¬´úÂë½á¹¹Ò²±äÁË£¬Ô­ÏÈµÄgolden²»ÔÙÕıÈ·Ê±¾ÍĞèÒª¸üĞÂ¡£ÒªÊÇÃ¿´Î¶¼µÃÊÖ¶¯È¥ÎÄ¼şÀï²éÕÒÄÄĞ©²»Í¬£¬ÊÖ¶¯È¥ĞŞ¸ÄgoldenÎÄ¼ş£¬ÄÇÒ²ÊÇÏàµ±Âé·³µÄÊÂ¡£GoldenÀà¿ÉÒÔ¸øÄã¡°Ò»¼ü¸ã¶¨¡±µÄ³É¾Í¸Ğ£¡
+ä¸­ï¼ŒequalsGoldenæ–¹æ³•æ›´åŠ æ–¹ä¾¿ã€‚
+
+##1.5 Prettyå§å¦¹ç¯‡ï¼šGoldenåŸç†åŠæºç 
+    Prettyç±»ç”¨åˆ°äº†å¦ä¸€ä¸ªç›¸å½“å®ç”¨çš„å·¥å…·ç±»ï¼šGoldenï¼Œæ˜¯Prettyçš„å¥½å§å¦¹ï¼Œå¦‚æœ
+
+goldenæ–‡ä»¶ä¸å­˜åœ¨åˆ™å¸®ä½ åˆ›å»ºï¼Œå¦‚æœå­˜åœ¨äº†åˆ™å¸®ä½ æŠŠå­—ç¬¦ä¸²è·Ÿgoldenæ–‡ä»¶åšæ¯”è¾ƒï¼Œä¸€æ—¦
+
+å‘ç°å·®å¼‚ï¼Œåˆ™å°†å·®å¼‚éƒ¨åˆ†æ‰“å°å‡ºæ¥ã€‚åœ¨Goldenç±»çš„è°ƒè¯•æ¨¡å¼ä¸‹ï¼ˆdebugMode=trueï¼‰è¿˜ä¼š
+
+æç¤ºä½ æ˜¯å¦éœ€è¦overwirteä½ çš„goldenæ–‡ä»¶ã€‚è¿™æ˜¯å¾ˆå®ç”¨çš„åŠŸèƒ½ï¼Œè¯•æƒ³ä¸€ä¸‹å¦‚æœæœ‰ä¸Šåƒ
+
+ä¸ªgoldenæ–‡ä»¶ï¼Œç»´æŠ¤çš„å·¥ä½œé‡æ˜¯å¾ˆå¤§çš„ã€‚éœ€æ±‚å˜äº†ï¼Œä»£ç ç»“æ„ä¹Ÿå˜äº†ï¼ŒåŸå…ˆçš„goldenä¸
+
+å†æ­£ç¡®æ—¶å°±éœ€è¦æ›´æ–°ã€‚è¦æ˜¯æ¯æ¬¡éƒ½å¾—æ‰‹åŠ¨å»æ–‡ä»¶é‡ŒæŸ¥æ‰¾å“ªäº›ä¸åŒï¼Œæ‰‹åŠ¨å»ä¿®æ”¹goldenæ–‡
+
+ä»¶ï¼Œé‚£ä¹Ÿæ˜¯ç›¸å½“éº»çƒ¦çš„äº‹ã€‚Goldenç±»å¯ä»¥ç»™ä½ â€œä¸€é”®æå®šâ€çš„æˆå°±æ„Ÿï¼
 
 	{% highlight cpp %}
 	package org.wenzhe.jvlib.debug;
@@ -434,12 +590,18 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		debugMode = toDebug;
 	  }
 
-	  public static boolean equals(String goldenFileName, String actual) throws IOException {
-		File goldenFile = new File("src/test/resources/golden", goldenFileName);
+	  public static boolean equals(String goldenFileName, String actual) 
+
+throws IOException {
+		File goldenFile = new File("src/test/resources/golden", 
+
+goldenFileName);
 		return equals(goldenFile, actual);
 	  }
 	  
-	  public static boolean equals(File goldenFile, String actual) throws IOException {
+	  public static boolean equals(File goldenFile, String actual) 
+
+throws IOException {
 		if (debugMode) {
 		  System.out.println(actual);
 		}
@@ -450,7 +612,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		  Files.write(actual, goldenFile, Charsets.UTF_8);
 		  return true;
 		}
-		String expected = Files.toString(goldenFile, Charsets.UTF_8);
+		String expected = Files.toString(goldenFile, 
+
+Charsets.UTF_8);
 		if (actual.equals(expected)) {
 		  return true;
 		} else {
@@ -472,9 +636,13 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	}
 	{% endhighlight %}
 	
-2. PrettyÖ®Python°æ
+2. Prettyä¹‹Pythonç‰ˆ
 
-   PythonµÄÊµÏÖ·½·¨·Ç³£¼òµ¥£¬×Ô´øµÄpprint·½·¨¾Í¿ÉÒÔÊµÏÖpretty print£¬Òò´ËÒª×öµ½Ö÷ÒªÊÇ½«object×ª»»³Édict£¨¼´JavaÀïµÄMap£©£¬¶øPython×Ô´øµÄvarsº¯Êı·µ»ØµÄ¾ÍÊÇ³ÉÔ±±äÁ¿µÄdict¡£Ô´ÂëÈçÏÂ£º
+   Pythonçš„å®ç°æ–¹æ³•éå¸¸ç®€å•ï¼Œè‡ªå¸¦çš„pprintæ–¹æ³•å°±å¯ä»¥å®ç°pretty printï¼Œå› æ­¤è¦
+
+åšåˆ°ä¸»è¦æ˜¯å°†objectè½¬æ¢æˆdictï¼ˆå³Javaé‡Œçš„Mapï¼‰ï¼Œè€ŒPythonè‡ªå¸¦çš„varså‡½æ•°è¿”å›çš„
+
+å°±æ˜¯æˆå‘˜å˜é‡çš„dictã€‚æºç å¦‚ä¸‹ï¼š
 	{% highlight cpp %}
 	  # author: liuwenzhe2008@qq.com
 		import pprint
@@ -504,7 +672,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 				return o
 			
 		def printObj(o, stream=None):
-			"""Pretty-print a mapped Python object to a stream [default is sys.stdout]."""
+			"""Pretty-print a mapped Python object to a stream 
+
+[default is sys.stdout]."""
 			pprint.pprint(obj2map(o), stream)
 			
 		def obj2str(o):
@@ -514,13 +684,17 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		
       {% endhighlight %}
 
-      ÓÉÓÚPythonµÄ¶¯Ì¬½Å±¾ÓïÑÔÌØĞÔ£¬ÎÒÃÇ¿ÉÒÔÔÚÔËĞĞÊ±µ¼ÈëPretty£¬È»ºó´òÓ¡¸ĞĞËÈ¤µÄ¶ÔÏó¡£ÏÂÃæÊÇPrettyÔÚpdbµ÷ÊÔÖĞµÄÀı×Ó¡£
+      ç”±äºPythonçš„åŠ¨æ€è„šæœ¬è¯­è¨€ç‰¹æ€§ï¼Œæˆ‘ä»¬å¯ä»¥åœ¨è¿è¡Œæ—¶å¯¼å…¥Prettyï¼Œç„¶åæ‰“å°æ„Ÿå…´
+
+è¶£çš„å¯¹è±¡ã€‚ä¸‹é¢æ˜¯Prettyåœ¨pdbè°ƒè¯•ä¸­çš„ä¾‹å­ã€‚
 	  {% highlight cpp %}
 	  pdb> import Pretty
       pdb> Pretty.printObj(xxx)
 	  {% endhighlight %}
 	    
-	  Python°æµÄPretty£¬Êä³ö½á¹ûÒ²ÊÇÍ¬Ñùpretty£¬Çë¿´ÏÂÃæµÄunit testÎÄ¼ş£¬ÌØ±ğÊÇ¸´ÔÓÀàAµÄ¶ÔÏóaËù¶ÔÓ¦µÄpretty½á¹¹£¬¼´×Ö·û´®expectedStrA
+	  Pythonç‰ˆçš„Prettyï¼Œè¾“å‡ºç»“æœä¹Ÿæ˜¯åŒæ ·prettyï¼Œè¯·çœ‹ä¸‹é¢çš„unit testæ–‡ä»¶
+
+ï¼Œç‰¹åˆ«æ˜¯å¤æ‚ç±»Açš„å¯¹è±¡aæ‰€å¯¹åº”çš„prettyç»“æ„ï¼Œå³å­—ç¬¦ä¸²expectedStrA
 	  {% highlight cpp %}
 	  # author: liuwenzhe2008@qq.com
 		import unittest
@@ -548,8 +722,12 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		 'a2': 2,
 		 'b': {'bm': {3: {'c': 3, 'cs': '3'},
 					  '4': {'c': 4, 'cs': '4'},
-					  "{'cs': '7', 'c': 7}": {'c': 8, 'cs': '8'}},
-			   'bt': ({'c': 5, 'cs': '5'}, {'c': 6, 'cs': '6'})},
+					  "{'cs': '7', 'c': 7}": {'c': 8, 
+
+'cs': '8'}},
+			   'bt': ({'c': 5, 'cs': '5'}, {'c': 6, 'cs': 
+
+'6'})},
 		 'c': [{'c': 1, 'cs': '1'}, {'c': 2, 'cs': '2'}]}
 
 		expectedStrA = """
@@ -557,8 +735,12 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		 'a2': 2,
 		 'b': {'bm': {3: {'c': 3, 'cs': '3'},
 					  '4': {'c': 4, 'cs': '4'},
-					  "{'cs': '7', 'c': 7}": {'c': 8, 'cs': '8'}},
-			   'bt': ({'c': 5, 'cs': '5'}, {'c': 6, 'cs': '6'})},
+					  "{'cs': '7', 'c': 7}": {'c': 8, 
+
+'cs': '8'}},
+			   'bt': ({'c': 5, 'cs': '5'}, {'c': 6, 'cs': 
+
+'6'})},
 		 'c': [{'c': 1, 'cs': '1'}, {'c': 2, 'cs': '2'}]}
 		"""
 				
@@ -573,7 +755,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 				
 			def testObj2Str(self):
 				s = Pretty.obj2str(self.a)
-				self.assertEqual(expectedStrA.strip(), s.strip())
+				self.assertEqual(expectedStrA.strip(), 
+
+s.strip())
 				
 				Pretty.printObj(self.a)
 
@@ -582,8 +766,10 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 			
 	 {% endhighlight %}
 	 
-##3.PrettyÖ®Groovy°æ
-    GroovyÊÇÓï·¨¼ò»¯¡¢µ«È´¹¦ÄÜÀ©Õ¹µÄJava£¬Ë¼Â·ÊÇÒ»ÑùµÄ£¬Ö»ÊÇ´úÂëĞ´ÆğÀ´¼òµ¥Ò»Ğ©£¨±ÈÈç·´Éä¡¢¸ñÊ½»¯µÈ£©¡£Ô´ÂëÈçÏÂ£º
+##3.Prettyä¹‹Groovyç‰ˆ
+    Groovyæ˜¯è¯­æ³•ç®€åŒ–ã€ä½†å´åŠŸèƒ½æ‰©å±•çš„Javaï¼Œæ€è·¯æ˜¯ä¸€æ ·çš„ï¼Œåªæ˜¯ä»£ç å†™èµ·æ¥ç®€å•ä¸€
+
+äº›ï¼ˆæ¯”å¦‚åå°„ã€æ ¼å¼åŒ–ç­‰ï¼‰ã€‚æºç å¦‚ä¸‹ï¼š
    
    {% highlight cpp %}
 	
@@ -641,7 +827,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 			if (tabLevel <= 0) {
 			  return str(key) + ' : ' + str(val)
 			} else {
-			  return str(key) + ' : ' + strLevel(val, tabLevel + 1)
+			  return str(key) + ' : ' + strLevel(val, tabLevel + 
+
+1)
 			}
 		  }
 		  return str(list)
@@ -650,7 +838,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		Map<String, Object> props = obj.getProperties()
 		
 		if (tabLevel <= 0) {
-		  return props.inject(obj.class.name + ' {\n') { buf, entry ->
+		  return props.inject(obj.class.name + ' {\n') { buf, entry 
+
+->
 			if (entry.key == "class") {
 			  return buf;
 			} else {
@@ -658,17 +848,23 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 			}
 		  } + "}"
 		} else {
-		  return props.inject(obj.class.name + ' {\n') { buf, entry ->
+		  return props.inject(obj.class.name + ' {\n') { buf, entry 
+
+->
 			if (entry.key == "class") {
 			  return buf;
 			} else {
-			  return buf + strFormat(entry.key, entry.value, tabLevel)
+			  return buf + strFormat(entry.key, entry.value, 
+
+tabLevel)
 			}
 		  } + TAB * (tabLevel - 1) + "}"
 		}
 	  }
 	  
-	  private static String strFormat(String key, Object value, int tabLevel) {
+	  private static String strFormat(String key, Object value, int 
+
+tabLevel) {
 		String s = strLevel(value, tabLevel + 1)
 		return TAB * tabLevel + "$key : $s\n";
 	  }
@@ -678,16 +874,22 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	  }
 	  
 	  static String listMethodDescs(obj) {
-		List<String> methods = obj.metaClass.methods.cachedMethod*.toString()
+		List<String> methods = 
+
+obj.metaClass.methods.cachedMethod*.toString()
 		return formatMethodList(obj, methods)
 	  }
 	  
 	  static String listMethodNames(obj) {
-		List<String> methods = obj.metaClass.methods.cachedMethod*.name.sort().unique()
+		List<String> methods = 
+
+obj.metaClass.methods.cachedMethod*.name.sort().unique()
 		return formatMethodList(obj, methods)
 	  }
 	  
-	  static private String formatMethodList(obj, List<String> methods) {
+	  static private String formatMethodList(obj, List<String> methods) 
+
+{
 		return """${obj.class.name} {
 		${methods.join("\n    ")}
 	}"""
@@ -696,5 +898,16 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	
 	{% endhighlight %}
 	
-##4. PrettyÖ®C++Éè¼ÆË¼Â·
-  ÓÉÓÚC++Ã»ÓĞ¡°·´Éä¡±»úÖÆ£¬ÒªÏë»ñÈ¡ÀàµÄËùÓĞË½ÓĞ£¨»ò¹«ÓĞ£©³ÉÔ±±äÁ¿µÄÃû×ÖÓëÀàĞÍ²¢²»ÈİÒ×¡£µ«Ë¼Â·»¹ÊÇÓĞµÄ£¬±ÈÈç¿ÉÒÔÍ¨¹ı·ÖÎöC++ÀàµÄÔ´´úÂëÀ´»ñµÃ£¬¿ÉÒÔ½èÖúµÚÈı·½¿â£¬ÈçClangÀ´ÊµÏÖ¡£ClangÓÉApple¿ª·¢£¬BSD¿ªÔ´ÊÚÈ¨£¬Ö§³ÖC£¬C++£¬Object C£¬Object C++µÈ±à³ÌÓïÑÔ£¬ÄÜ¹»¶ÔÔ´´úÂë½øĞĞ´Ê·¨ºÍÓïÒâ·ÖÎö£¬½á¹ûÎª³éÏóÓï·¨Ê÷¡£Í¨¹ı³éÏóÓï·¨Ê÷£¬ÎÒÃÇ¿ÉÒÔÄ£·ÂÀàËÆÓëJavaÖĞ¡°·´Éä¡±»úÖÆ£¬À´µÃµ½ÀàµÄ³ÉÔ±ĞÅÏ¢£¨Ãû×Ö£¬ÀàĞÍ£¬È¡ÖµµÈ£©¡£Ö»ÊÇÒ»¸öË¼Â·£¬ÓĞĞËÈ¤µÄÅóÓÑ²»·ÁÒ»ÊÔ¡£
+##4. Prettyä¹‹C++è®¾è®¡æ€è·¯
+
+  ç”±äºC++æ²¡æœ‰â€œåå°„â€æœºåˆ¶ï¼Œè¦æƒ³è·å–ç±»çš„æ‰€æœ‰ç§æœ‰ï¼ˆæˆ–å…¬æœ‰ï¼‰æˆå‘˜å˜é‡çš„åå­—ä¸ç±»å‹
+
+å¹¶ä¸å®¹æ˜“ã€‚ä½†æ€è·¯è¿˜æ˜¯æœ‰çš„ï¼Œæ¯”å¦‚å¯ä»¥é€šè¿‡åˆ†æC++ç±»çš„æºä»£ç æ¥è·å¾—ï¼Œå¯ä»¥å€ŸåŠ©ç¬¬ä¸‰
+
+æ–¹åº“ï¼Œå¦‚Clangæ¥å®ç°ã€‚Clangç”±Appleå¼€å‘ï¼ŒBSDå¼€æºæˆæƒï¼Œæ”¯æŒCï¼ŒC++ï¼ŒObject Cï¼Œ
+
+Object C++ç­‰ç¼–ç¨‹è¯­è¨€ï¼Œèƒ½å¤Ÿå¯¹æºä»£ç è¿›è¡Œè¯æ³•å’Œè¯­æ„åˆ†æï¼Œç»“æœä¸ºæŠ½è±¡è¯­æ³•æ ‘ã€‚é€šè¿‡
+
+æŠ½è±¡è¯­æ³•æ ‘ï¼Œæˆ‘ä»¬å¯ä»¥æ¨¡ä»¿ç±»ä¼¼ä¸Javaä¸­â€œåå°„â€æœºåˆ¶ï¼Œæ¥å¾—åˆ°ç±»çš„æˆå‘˜ä¿¡æ¯ï¼ˆåå­—ï¼Œç±»
+
+å‹ï¼Œå–å€¼ç­‰ï¼‰ã€‚åªæ˜¯ä¸€ä¸ªæ€è·¯ï¼Œæœ‰å…´è¶£çš„æœ‹å‹ä¸å¦¨ä¸€è¯•ã€‚
