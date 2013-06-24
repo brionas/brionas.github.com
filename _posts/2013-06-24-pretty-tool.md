@@ -1,12 +1,13 @@
+---
 layout: post
-title : "Pretty工具类：让软件开发调试与单元测试更happy!"
-description :pretty 工具
-category : "Java"
-tags : [Java]
-refer_author: Wenzhe
-refer_blog_addr:http://blog.csdn.net/liuwenzhe2008
-refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
-
+title: "[Chrome源码阅读]Chrome启动代码流程2"
+description: TAB URL 启动和navigation初始化
+category: "chrome"
+tags: [chrome, 源码分析]
+refer_author: Zero
+refer_blog_addr: http://zeroli.github.io/
+refer_post_addr: http://zeroli.github.io/chrome/2013/03/25/chrome-code-launch-procedure2/
+---
 {% include JB/setup %}
 
     在软件开发调试过程中，经常会去查看某一对象的取值。但类之间复杂的层次关系，再加上数组（链表）、映射（字典）等多种数据结构，让我们难以一目了然。本文介绍的Pretty工具类，以缩进的方式突出类之间的层次关系，并且将对象一层层的整个结构pretty地打印出来！
