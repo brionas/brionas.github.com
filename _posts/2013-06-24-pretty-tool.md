@@ -1,6 +1,6 @@
 layout: post
-title : "Pretty�����ࣺ���������������뵥Ԫ���Ը�happy!"
-description :pretty ����
+title : "Pretty工具类：让软件开发调试与单元测试更happy!"
+description :pretty 工具
 category : "Java"
 tags : [Java]
 refer_author: Wenzhe
@@ -9,38 +9,38 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 
 {% include JB/setup %}
 
-    �������������Թ����У�������ȥ�鿴ĳһ�����ȡֵ������֮�临�ӵĲ�ι�ϵ���ټ������飨��������ӳ�䣨�ֵ䣩�ȶ������ݽṹ������������һĿ��Ȼ�����Ľ��ܵ�Pretty�����࣬�������ķ�ʽͻ����֮��Ĳ�ι�ϵ�����ҽ�����һ���������ṹpretty�ش�ӡ������
+    在软件开发调试过程中，经常会去查看某一对象的取值。但类之间复杂的层次关系，再加上数组（链表）、映射（字典）等多种数据结构，让我们难以一目了然。本文介绍的Pretty工具类，以缩进的方式突出类之间的层次关系，并且将对象一层层的整个结构pretty地打印出来！
 
-    �ڱ�д��Ԫ����ʱ��������ȥ�Ƚ�ĳһ�����Ƿ����Ԥ�ȵ�����ֵ��������һ��������Ķ������ֵ�Ԫ���Բ�����д������Ƭ�滯�����ӻ���Pretty�����࣬���ܹ������ļ�⸴����Ķ��󣬶��ҿɶ��Ժã�����������롣�������������ṹ��ƥ��ʱ�������������Diff��Ϣ�����������û��Ƿ���Ҫ�Զ�����case�������á�
+    在编写单元测试时，经常会去比较某一对象是否符合预先的期望值。但对于一个复杂类的对象，这种单元测试并不好写，容易片面化、复杂化。Pretty工具类，既能够完整的检测复杂类的对象，而且可读性好，便于理解代码。当检测出与期望结构不匹配时，不仅可以输出Diff信息，还能提醒用户是否需要自动更新case，简单易用。
 
-    ����ʵ����3�����԰汾��Pretty�����ࣺJava�棬Python�棬Groovy�档�����Java���Pretty�����ص���ܣ��������汾ֻ�Ǽ򵥴�������Ϊʵ�ֵ�ԭ������һ���ģ�ֻ�ǻ��ɲ�ͬ���Զ��ѡ���󣬶���ͬ���㷺Ӧ�õ�C++��������Ȼû�и�������ʵ�֣���Ҳ�ṩ��һ�����˼·������Ȥ�����ѿ�����һ�ԡ�
+    本文实现了3种语言版本的Pretty工具类：Java版，Python版，Groovy版。这里对Java版的Pretty做了重点介绍，而其它版本只是简单带过，因为实现的原理都是一样的，只是换成不同语言而已。最后，对于同样广泛应用的C++，本文虽然没有给出具体实现，但也提供了一个设计思路，有兴趣的朋友可以试一试。
 
-##1. Pretty֮Java��
+##1. Pretty之Java版
 
- ##1.1 �����е�����
-    �������ڵ��Գ����ʱ�򣬾�����鿴ĳһ������ֵ��һ����˵�������ַ����������õ���
+ ##1.1 调试中的问题
+    当我们在调试程序的时候，经常会查看某一变量的值。一般来说，有两种方法被经常用到：
 
-	1.     �õ���������Eclipse  Debug������gdb/pdb��
+	1.     用调试器，如Eclipse  Debug，或者gdb/pdb。
 
-	2.     ��print��������logger��ֱ�ӽ�����ֵ��ӡ������
+	2.     用print函数或者logger，直接将变量值打印出来。
 
-    �����ְ취����ȱ�㣬��������Ҫһ���չ��������������������������ṹ���߹�ϣ����ʱ�򣬾Ͳ�̫���׿������ˡ���print������ʵֻ��toString�����ķ���ֵ��ȡ����toString������ʵ�֣���ʵ�����ɿ���
+    这两种办法都有缺点，调试器需要一层层展开看，而且如果杯具碰到链表结构或者哈希表的时候，就不太容易看明白了。而print函数其实只是toString方法的返回值，取决于toString函数的实现，其实并不可靠。
 
-    �����д����Ķ��߻��뵽���������ڶ������ʱ�򣬶�overrideһ��toString�����������ɶ���������Object���ȱʡʵ�֣�JVM�еĵ�ַ����
+    可能有聪明的读者会想到，那我们在定义类的时候，都override一下toString方法，让它可读，而不是Object类的缺省实现（JVM中的地址）。
 
-    ����һ����������뷨��
+    这是一个很天真的想法：
 
-	1.     ���ȣ��������е��඼�ܹ������ǿ��ƣ���Java��⣬�������⣬���������ŶӵĴ��룬�ȵȡ�
+	1.     首先，不是所有的类都能够由我们控制，如Java类库，第三方库，其他开发团队的代码，等等。
 
-	2.     ���toString��������������ҵ���ֵ������ֻ��Ϊ�˷�����ԡ�
+	2.     类的toString方法可能有它的业务价值，而不只是为了方便调试。
 
-	3.     ���⹤�������ⲻ�Ǳ���ģ���������Ҫ��ÿ���඼ȥoverride toString�����������Ӻܶ�û�б�Ҫ�Ĺ������������ܶ಻��Ҫ�Ĵ��룬����������ά������Ĺ���������������bug�����ң�
+	3.     额外工作量：这不是必须的，若是其中要求每个类都去override toString方法，会增加很多没有必要的工作量，产生很多不必要的代码，反而会增大维护代码的工作量，甚至引起bug。而且，
     
-    ����ÿ������/�޸�/ɾ����Ա����ʱ����Ҫȥ�޸�toString����������print��������ϢҲ�Ͳ��ɿ��ˣ������Ǻ��ѱ�֤�ġ�
+    当类每次增加/修改/删除成员变量时，都要去修改toString方法，否则print出来的信息也就不可靠了，但这是很难保证的。
 
-##1.2 ��Ԫ�����е�����
+##1.2 单元测试中的问题
  
-    ������һ����A���ۺ�����B����B�־ۺ���C�����´��룺
+    有下面一个类A，聚合了类B，而B又聚合类C，如下代码：
  
  {% highlight cpp %}
 	
@@ -67,9 +67,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    
    {% endhighlight %}
 
-   ���������Ȳ���һ���� A �Ķ��� a �ǲ������ڴ��ģ�һ�������뵽���漸��������
+   现在我们先测试一下类 A 的对象 a 是不是所期待的，一般容易想到下面几个方法：
 
-   1. �����г�Ա������ get �����Ƚϣ�
+   1. 把所有成员变量都 get 出来比较：
    
    {% highlight cpp %}
    assertEquals(xxx, a.getId());
@@ -80,9 +80,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    assertEquals(xxx, a.getB().getC().getV1());
    ...
    {% endhighlight %}
-   ���ְ취�������Զ��׼��������С��©��һ����Ҫ��Ա������get���ǲ��ԾͲ���ȫ���ˡ����Ҳ��������г�Ա��������get�������費��Ҫget�����ÿ�������Ҫ��������ֻΪunit testר���ṩ�����ң�����ô�򵥵��࣬����Ҫ��ô����assertEqual������и���ĳ�Ա���������к���ľۺϲ�Σ��ǽ��޷��������A��Ľṻ�������������ǸĶ��ĵط��ͺܶ��ˡ�������unit testά���ɱ�֮�߿����֪������˭�ж���дunit test����Ϊ�����ڸ��Լ����鷳�����ң��������еĴ������Ƕ��ܿ��Ƶģ�����������⡣
+   这种办法的问题显而易见：如果不小心漏了一个重要成员变量的get，那测试就不够全面了。而且并不是所有成员变量都有get方法，需不需要get方法得看具体需要，而不能只为unit test专门提供。而且，像这么简单的类，都需要这么多行assertEqual，如果有更多的成员变量或者有很深的聚合层次，那将无法想象。如果A类的结够在做个调整，那改动的地方就很多了。这样的unit test维护成本之高可想而知，还有谁有动力写unit test，因为那是在给自己找麻烦！而且，不是所有的代码我们都能控制的，比如第三方库。
    
-   2. ΪA��ʵ��equals��������assertEquals��ֻ��һ���ˣ�
+   2. 为A类实现equals方法，那assertEquals就只有一个了：
 
    {% highlight cpp %}
    A expected = new A();
@@ -98,12 +98,12 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    assertEquals(expected, a);
    {% endhighlight %}
    
-   ��ȻassertEqualsֻ��һ������Ϊ�˽���һ���ڴ���expected��Ϊ������Ƚϣ���ҪΪ�ṩ������set��������ô��set����������������ʵ��������ô��get�١�
-   ���ң�ΪA��ʵ��equals����Ҳ���з��յģ���Ϊequals��������Ҳ��Ҫ���ԣ�ֻҪ����д�Ĵ��뱾���϶���Ҫ���ԣ�����Ҳ��Ҫʱ��ɱ����ܶ�����ʵû��Ҫȥoverride equals������д����͵�ά����û��Ҫд�Ĵ�������д������ά�������ࡣͬ���ģ��������еĴ��붼�ܿ��Ƶġ�
+   虽然assertEquals只有一个，但为了建立一个期待的expected作为标尺来比较，需要为提供大量的set方法。这么多set方法带来的问题其实并不比那么多get少。
+   而且，为A类实现equals方法也是有风险的，因为equals方法本身也需要测试（只要是人写的代码本质上都需要测试！），也需要时间成本。很多类其实没必要去override equals方法。写代码就得维护，没必要写的代码坚决不写，否则维护量更多。同样的，不是所有的代码都能控制的。
 
-##1.3 ʹ��Pretty
+##1.3 使用Pretty
 
-   Pretty����Ժ�pretty�Ľ�����ϵ��Ժ͵�Ԫ�����е����⡣�ڸ���Pretty��֮ǰ���ȴ�ʹ���ߵĽǶȿ�������pretty��
+   Pretty类可以很pretty的解决以上调试和单元测试中的问题。在给出Pretty类之前，先从使用者的角度看看她的pretty：
    
    {% highlight cpp %}
 
@@ -179,9 +179,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	
 	{% endhighlight %}
 	
-  ##1.3.1 Pretty�ṹ
+  ##1.3.1 Pretty结构
 
-    ����һ������main�����ĵ�Ԫ�����ࡣ��Ʋ����Ԫ���ԣ����ǰ�������һ����ͨjava�ļ������У�����main������ʼ���У�������Ļ�ϻ��ӡ������ a ��pretty�ṹ��
+    这是一个带有main方法的单元测试类。先撇开单元测试，我们把它当成一个普通java文件来运行（即从main方法开始运行），在屏幕上会打印出对象 a 的pretty结构：
 	{% highlight cpp %}
 	org.wenzhe.jvlib.debug.test.PrettyTest$A {
       array : [86, 755, 1234, 5678]
@@ -199,15 +199,15 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
     }
 	{% endhighlight %}
 	
-	����pretty�ṹ�����������Ժ����׿���������a�����ǣ� org.wenzhe.jvlib.debug.test.PrettyTest����ڲ���A�����Աarray��һ�����飬ֵΪ[86, 755, 1234, 5678]����һ����Ա b ���� ��PrettyTest���ڲ���B���Ķ���b ����ĳ�Ա����c ���ࣨPrettyTest�ڲ���C���Ķ��󡭡��������������ֳ�Ա��������Ƕ�׾ۺ���Ķ���Ҳ�����׿ɼ������ڿ������Թ����зǳ����ã�
-    ����Ե�Ԫ���Եķ�ʽ���У���Ļ��û���κ������No news is Good news����JUnit View�г��ִ��ϲ������ɫ����ף���������ͨ���ˡ���һ�����unittest��˵����ȷ��ʱ����û�����Ϣ�ġ���
-    ��ô������ô֪������a���������أ�ע�⵽��61�У�Pretty.equalsGolden("test1", a);  ����aʵ�����Ǹ�һ������Ϊtest1��golden�ļ����˱Ƚϡ����golden�ļ������ڵ�Ŀ¼Ϊ�� ${project_root}/src/test/resources/golden/pretty/������pretty���ߵ�һ��convention����ȻҲ���Ըĳɱ��Ŀ¼�����Ҳ��Ƽ��ģ��ܶ�ʱ����ӡ�Լ���������á���ԭ�����Ǹ��õġ���test1�ļ�����ᷢ����Ҳ��һ��pretty�ṹ����֮ǰ��Ļ���������ȫһ����
+	根据pretty结构的缩进，可以很容易看出，对象a的类是： org.wenzhe.jvlib.debug.test.PrettyTest类的内部类A，其成员array是一个数组，值为[86, 755, 1234, 5678]。另一个成员 b 是类 （PrettyTest的内部类B）的对象，b 里面的成员变量c 是类（PrettyTest内部类C）的对象……根据缩进，各种成员变量及其嵌套聚合类的对象也都轻易可见。这在开发调试过程中非常好用！
+    如果以单元测试的方式运行，屏幕上没有任何输出（No news is Good news），JUnit View中出现大家喜爱的绿色条，祝贺你表测试通过了。（一般对于unittest来说，正确的时候是没输出信息的。）
+    那么程序怎么知道对象a是期望的呢？注意到第61行，Pretty.equalsGolden("test1", a);  对象a实际上是跟一个名字为test1的golden文件做了比较。这个golden文件的所在的目录为： ${project_root}/src/test/resources/golden/pretty/，这是pretty工具的一个convention，当然也可以改成别的目录，但我不推荐改，很多时候遵从“约定优于配置”的原则总是更好的。打开test1文件，你会发现这也是一个pretty结构，跟之前屏幕上输出的完全一样。
 
-    ��������Ϊʲô��Ϊ��ͨjava��������Ļ�ϻ��ӡ������Ϊunit testȴ�����ӡ�أ���ʵ���𲢲��������������з�ʽ��Ψһ�����������Ƿ�ѡ����Pretty���debugģʽ����һ����˵��unit test�²�����debugģʽ�����ڿ������Թ�������������ע�⵽main�����տ�ʼ��ʱ�򣨵�65�У���debug mode����Ϊtrue����Pretty����Ҫ�õ�����a��pretty�ṹʱ���Ὣ����ӡ������������ԣ�ʡ���ڴ����������print�������鷳��debug modeȱʡ�ǹصģ�����unit test��û�д�ӡ�����ˡ�������Ȥ�����Ķ������Դ���룩��
+    你可能奇怪为什么作为普通java类运行屏幕上会打印，而作为unit test却不会打印呢？其实区别并不在于用哪种运行方式，唯一的区别在于是否选择了Pretty类的debug模式。（一般来说，unit test下不启动debug模式，而在开发调试过程中启动）。注意到main函数刚开始的时候（第65行），debug mode设置为true，当Pretty工具要得到对象a的pretty结构时，会将它打印出来，方便调试，省得在代码里面加入print函数的麻烦。debug mode缺省是关的，所以unit test就没有打印出来了。（有兴趣可以阅读后面的源代码）。
 
   ##1.3.2 Pretty Diff
   
-    ���unit test�⵽����a��golden�ļ���ͬ���ǻ������������и����ϴֲ�С�İ�C���еĳ�Ա����v1ɾ���ˣ��ֲ�С�������˳�Ա����v3��ȡֵΪtrue�������ǲ�С�İ�A��ĳ�Ա����list����insert��һ����NOT���������ǲ�����Pretty��debugģʽ����Ļ�϶��������
+    如果unit test测到对象a与golden文件不同，那会怎样？假如有个大老粗不小心把C类中的成员变量v1删除了，又不小心增加了成员变量v3（取值为true），更是不小心把A类的成员变量list里面insert了一个“NOT”，不管是不是在Pretty的debug模式，屏幕上都会输出：
 
 	{% highlight cpp %}
 	Diff from Expected to Actual: 
@@ -217,19 +217,19 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
     >:   list : [My, name, is, NOT, Wenzhe]
 	{% endhighlight %}
 
-	Pretty���ߵĴ����������pretty�ɣ����ϴָ�����Щ��������һĿ��Ȼ��
+	Pretty工具的错误输出，够pretty吧，大老粗干了哪些坏事这里一目了然。
 
   ##1.3.3 Pretty Golden
-    ������ϴ��ǹ�����ô�޸ĵģ������д��ϰ�֧�֣���������ҵ�����Խ����ǡ�������ˡ�������ôgolden�ļ�Ҳ�͹�ʱ�ˣ���Ҫ���²�����unit testͨ����
+    如果大老粗是故意这么修改的（背后有大老板支持，用软件行业的语言讲就是“需求变了”），那么golden文件也就过时了，需要更新才能让unit test通过。
 
-    ��Ҫ�ֶ�����golden�ļ����ҿɲ��ɣ���ΪPretty����Խ��Խ���ˡ�
+    需要手动更改golden文件吗？我可不干！因为Pretty让我越来越懒了。
 
-    ���˶�ϲ��Pretty����ΪPretty�ṩ���Զ�����golden�ļ��Ĺ��ܡ���ʱ���㿪��Pretty��debugģʽ�����У���Ļ�ϳ����������a��pretty�ṹ��Diff��Ϣ֮�⣬Pretty�������㡰Overwrite (Y/N)? �����ش�Y�����Զ�����golden�ļ�test1��
-    ����Pretty������Զ����Ҫ�ֶ�дgolden�ļ�����golden������ʱ��Pretty����㴴������golden���ڵ���Diffʱ���������Ƿ���Ҫ���¡�
+    懒人都喜欢Pretty，因为Pretty提供了自动更新golden文件的功能。这时候你开启Pretty的debug模式，运行，屏幕上除了输出对象a的pretty结构和Diff信息之外，Pretty还会问你“Overwrite (Y/N)? ”，回答Y即可自动更新golden文件test1。
+    有了Pretty，你永远不需要手动写golden文件：当golden不存在时，Pretty会帮你创建；当golden存在但有Diff时会提醒你是否需要更新。
 
-##1.4 Prettyԭ����Դ��
+##1.4 Pretty原理及源码
  
-    Ҳ�����Ѿ��Ȳ���������֪��Pretty������ôʵ�ֵģ�ԭ����ʵҲ�򵥣�����ͨ��Java�ġ����䡱���ƣ�����ĳ�Ա�����ó������Ž�һ��Map�keyΪ��Ա��������valueΪ��Ա������ֵ��Ȼ��ݹ�������һ������������εĴ���pretty�ṹ���ַ��������һ���������ֺ��õ��ַ�������debugģʽ�´�ӡ����׼�������unit test�¾�����golden�ļ������ַ����Ƚϣ��Ӷ�������������Ƚϵ��鷳��ͬʱgolden�ļ���pretty�ṹ��¼���ڴ����������Ĳ����Ϣ��������������룬^_^��
+    也许你已经迫不及待地想知道Pretty类是怎么实现的，原理其实也简单，就是通过Java的“反射”机制，把类的成员变量拿出来，放进一个Map里，key为成员变量名，value为成员变量的值，然后递归地输出到一个具有缩进层次的代表pretty结构的字符串里。这是一个既美丽又好用的字符串，在debug模式下打印到标准输出，在unit test下就是与golden文件进行字符串比较，从而避免了做对象比较的麻烦，同时golden文件的pretty结构记录了期待对象完整的层层信息，有助于理解代码，^_^。
 
 	{% highlight cpp %}
 	package org.wenzhe.jvlib.debug;
@@ -406,10 +406,10 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	}
 	{% endhighlight %}
 
-	�ڵ��Թ����У�Pretty��str������println�����Ǻܳ��õģ�����unit test�У�equalsGolden�������ӷ��㡣
+	在调试过程中，Pretty的str方法和println方法是很常用的；而在unit test中，equalsGolden方法更加方便。
 
-##1.5 Pretty����ƪ��Goldenԭ����Դ��
-    Pretty���õ�����һ���൱ʵ�õĹ����ࣺGolden����Pretty�ĺý��ã����golden�ļ�����������㴴��������������������ַ�����golden�ļ����Ƚϣ�һ�����ֲ��죬�򽫲��첿�ִ�ӡ��������Golden��ĵ���ģʽ�£�debugMode=true��������ʾ���Ƿ���Ҫoverwirte���golden�ļ������Ǻ�ʵ�õĹ��ܣ�����һ���������ǧ��golden�ļ���ά���Ĺ������Ǻܴ�ġ�������ˣ�����ṹҲ���ˣ�ԭ�ȵ�golden������ȷʱ����Ҫ���¡�Ҫ��ÿ�ζ����ֶ�ȥ�ļ��������Щ��ͬ���ֶ�ȥ�޸�golden�ļ�����Ҳ���൱�鷳���¡�Golden����Ը��㡰һ���㶨���ĳɾ͸У�
+##1.5 Pretty姐妹篇：Golden原理及源码
+    Pretty类用到了另一个相当实用的工具类：Golden，是Pretty的好姐妹，如果golden文件不存在则帮你创建，如果存在了则帮你把字符串跟golden文件做比较，一旦发现差异，则将差异部分打印出来。在Golden类的调试模式下（debugMode=true）还会提示你是否需要overwirte你的golden文件。这是很实用的功能，试想一下如果有上千个golden文件，维护的工作量是很大的。需求变了，代码结构也变了，原先的golden不再正确时就需要更新。要是每次都得手动去文件里查找哪些不同，手动去修改golden文件，那也是相当麻烦的事。Golden类可以给你“一键搞定”的成就感！
 
 	{% highlight cpp %}
 	package org.wenzhe.jvlib.debug;
@@ -472,9 +472,9 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	}
 	{% endhighlight %}
 	
-2. Pretty֮Python��
+2. Pretty之Python版
 
-   Python��ʵ�ַ����ǳ��򵥣��Դ���pprint�����Ϳ���ʵ��pretty print�����Ҫ������Ҫ�ǽ�objectת����dict����Java���Map������Python�Դ���vars�������صľ��ǳ�Ա������dict��Դ�����£�
+   Python的实现方法非常简单，自带的pprint方法就可以实现pretty print，因此要做到主要是将object转换成dict（即Java里的Map），而Python自带的vars函数返回的就是成员变量的dict。源码如下：
 	{% highlight cpp %}
 	  # author: liuwenzhe2008@qq.com
 		import pprint
@@ -514,13 +514,13 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 		
       {% endhighlight %}
 
-      ����Python�Ķ�̬�ű��������ԣ����ǿ���������ʱ����Pretty��Ȼ���ӡ����Ȥ�Ķ���������Pretty��pdb�����е����ӡ�
+      由于Python的动态脚本语言特性，我们可以在运行时导入Pretty，然后打印感兴趣的对象。下面是Pretty在pdb调试中的例子。
 	  {% highlight cpp %}
 	  pdb> import Pretty
       pdb> Pretty.printObj(xxx)
 	  {% endhighlight %}
 	    
-	  Python���Pretty��������Ҳ��ͬ��pretty���뿴�����unit test�ļ����ر��Ǹ�����A�Ķ���a����Ӧ��pretty�ṹ�����ַ���expectedStrA
+	  Python版的Pretty，输出结果也是同样pretty，请看下面的unit test文件，特别是复杂类A的对象a所对应的pretty结构，即字符串expectedStrA
 	  {% highlight cpp %}
 	  # author: liuwenzhe2008@qq.com
 		import unittest
@@ -582,8 +582,8 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 			
 	 {% endhighlight %}
 	 
-##3.Pretty֮Groovy��
-    Groovy���﷨�򻯡���ȴ������չ��Java��˼·��һ���ģ�ֻ�Ǵ���д������һЩ�����練�䡢��ʽ���ȣ���Դ�����£�
+##3.Pretty之Groovy版
+    Groovy是语法简化、但却功能扩展的Java，思路是一样的，只是代码写起来简单一些（比如反射、格式化等）。源码如下：
    
    {% highlight cpp %}
 	
@@ -696,5 +696,5 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	
 	{% endhighlight %}
 	
-##4. Pretty֮C++���˼·
-  ����C++û�С����䡱���ƣ�Ҫ���ȡ�������˽�У����У���Ա���������������Ͳ������ס���˼·�����еģ��������ͨ������C++���Դ��������ã����Խ����������⣬��Clang��ʵ�֡�Clang��Apple������BSD��Դ��Ȩ��֧��C��C++��Object C��Object C++�ȱ�����ԣ��ܹ���Դ������дʷ���������������Ϊ�����﷨����ͨ�������﷨�������ǿ���ģ��������Java�С����䡱���ƣ����õ���ĳ�Ա��Ϣ�����֣����ͣ�ȡֵ�ȣ���ֻ��һ��˼·������Ȥ�����Ѳ���һ�ԡ�
+##4. Pretty之C++设计思路
+  由于C++没有“反射”机制，要想获取类的所有私有（或公有）成员变量的名字与类型并不容易。但思路还是有的，比如可以通过分析C++类的源代码来获得，可以借助第三方库，如Clang来实现。Clang由Apple开发，BSD开源授权，支持C，C++，Object C，Object C++等编程语言，能够对源代码进行词法和语意分析，结果为抽象语法树。通过抽象语法树，我们可以模仿类似与Java中“反射”机制，来得到类的成员信息（名字，类型，取值等）。只是一个思路，有兴趣的朋友不妨一试。
