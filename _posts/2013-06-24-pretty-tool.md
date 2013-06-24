@@ -68,6 +68,7 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    {% endhighlight %}
 
    现在我们先测试一下类 A 的对象 a 是不是所期待的，一般容易想到下面几个方法：
+
    1. 把所有成员变量都 get 出来比较：
    
    {% highlight cpp %}
@@ -105,6 +106,7 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
    Pretty类可以很pretty的解决以上调试和单元测试中的问题。在给出Pretty类之前，先从使用者的角度看看她的pretty：
    
    {% highlight cpp %}
+
 	package org.wenzhe.jvlib.debug.test;
 
 	import static org.junit.Assert.*;
@@ -206,6 +208,7 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
   ##1.3.2 Pretty Diff
   
     如果unit test测到对象a与golden文件不同，那会怎样？假如有个大老粗不小心把C类中的成员变量v1删除了，又不小心增加了成员变量v3（取值为true），更是不小心把A类的成员变量list里面insert了一个“NOT”，不管是不是在Pretty的debug模式，屏幕上都会输出：
+
 	{% highlight cpp %}
 	Diff from Expected to Actual: 
     -:       v1 : 3.14
@@ -213,6 +216,7 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
     <:   list : [My, name, is, Wenzhe]
     >:   list : [My, name, is, NOT, Wenzhe]
 	{% endhighlight %}
+
 	Pretty工具的错误输出，够pretty吧，大老粗干了哪些坏事这里一目了然。
 
   ##1.3.3 Pretty Golden
@@ -226,6 +230,7 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 ##1.4 Pretty原理及源码
  
     也许你已经迫不及待地想知道Pretty类是怎么实现的，原理其实也简单，就是通过Java的“反射”机制，把类的成员变量拿出来，放进一个Map里，key为成员变量名，value为成员变量的值，然后递归地输出到一个具有缩进层次的代表pretty结构的字符串里。这是一个既美丽又好用的字符串，在debug模式下打印到标准输出，在unit test下就是与golden文件进行字符串比较，从而避免了做对象比较的麻烦，同时golden文件的pretty结构记录了期待对象完整的层层信息，有助于理解代码，^_^。
+
 	{% highlight cpp %}
 	package org.wenzhe.jvlib.debug;
 
@@ -400,10 +405,12 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	  }
 	}
 	{% endhighlight %}
+
 	在调试过程中，Pretty的str方法和println方法是很常用的；而在unit test中，equalsGolden方法更加方便。
 
 ##1.5 Pretty姐妹篇：Golden原理及源码
     Pretty类用到了另一个相当实用的工具类：Golden，是Pretty的好姐妹，如果golden文件不存在则帮你创建，如果存在了则帮你把字符串跟golden文件做比较，一旦发现差异，则将差异部分打印出来。在Golden类的调试模式下（debugMode=true）还会提示你是否需要overwirte你的golden文件。这是很实用的功能，试想一下如果有上千个golden文件，维护的工作量是很大的。需求变了，代码结构也变了，原先的golden不再正确时就需要更新。要是每次都得手动去文件里查找哪些不同，手动去修改golden文件，那也是相当麻烦的事。Golden类可以给你“一键搞定”的成就感！
+
 	{% highlight cpp %}
 	package org.wenzhe.jvlib.debug;
 
@@ -466,7 +473,8 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	{% endhighlight %}
 	
 2. Pretty之Python版
-	Python的实现方法非常简单，自带的pprint方法就可以实现pretty print，因此要做到主要是将object转换成dict（即Java里的Map），而Python自带的vars函数返回的就是成员变量的dict。源码如下：
+
+   Python的实现方法非常简单，自带的pprint方法就可以实现pretty print，因此要做到主要是将object转换成dict（即Java里的Map），而Python自带的vars函数返回的就是成员变量的dict。源码如下：
 	{% highlight cpp %}
 	  # author: liuwenzhe2008@qq.com
 		import pprint
@@ -575,7 +583,7 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	 {% endhighlight %}
 	 
 ##3.Pretty之Groovy版
-     Groovy是语法简化、但却功能扩展的Java，思路是一样的，只是代码写起来简单一些（比如反射、格式化等）。源码如下：
+    Groovy是语法简化、但却功能扩展的Java，思路是一样的，只是代码写起来简单一些（比如反射、格式化等）。源码如下：
    
    {% highlight cpp %}
 	
@@ -689,4 +697,4 @@ refer_post_addr:http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 	{% endhighlight %}
 	
 ##4. Pretty之C++设计思路
-    由于C++没有“反射”机制，要想获取类的所有私有（或公有）成员变量的名字与类型并不容易。但思路还是有的，比如可以通过分析C++类的源代码来获得，可以借助第三方库，如Clang来实现。Clang由Apple开发，BSD开源授权，支持C，C++，Object C，Object C++等编程语言，能够对源代码进行词法和语意分析，结果为抽象语法树。通过抽象语法树，我们可以模仿类似与Java中“反射”机制，来得到类的成员信息（名字，类型，取值等）。只是一个思路，有兴趣的朋友不妨一试。
+  由于C++没有“反射”机制，要想获取类的所有私有（或公有）成员变量的名字与类型并不容易。但思路还是有的，比如可以通过分析C++类的源代码来获得，可以借助第三方库，如Clang来实现。Clang由Apple开发，BSD开源授权，支持C，C++，Object C，Object C++等编程语言，能够对源代码进行词法和语意分析，结果为抽象语法树。通过抽象语法树，我们可以模仿类似与Java中“反射”机制，来得到类的成员信息（名字，类型，取值等）。只是一个思路，有兴趣的朋友不妨一试。
