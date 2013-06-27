@@ -5,8 +5,8 @@ description: 介绍一种让程序调试与单元测试更容易更happy的工�
 category: "工具"
 tags: [Java, Python, Groovy]
 refer_author: Wenzhe
-refer_blog_addr: http://blog.csdn.net/liuwenzhe2008/article/details/9104331
-refer_post_addr: http://blog.csdn.net/liuwenzhe2008/
+refer_blog_addr: http://blog.csdn.net/liuwenzhe2008/
+refer_post_addr: http://blog.csdn.net/liuwenzhe2008/article/details/9104331
 ---
 {% include JB/setup %}
 
