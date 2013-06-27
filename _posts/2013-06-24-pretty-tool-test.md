@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "Pretty tool 介绍"
-description: slab提出来是为了解决内部内存碎片的问题，在linux内核中与buddy system一起来解决内核内存管理。但是要看懂slab在linux内核中的实现当前有些困难，我们不如拿些容易阅读的代码来了解slab算法的运作过程。GLIB库实现非常clear，可以做为slab算法的实现学习的入门。
-category: "memory_management"
-tags: [slab, glib, 源码阅读]
-refer_author: Zero
-refer_blog_addr: http://zeroli.github.io/
-refer_post_addr: http://zeroli.github.io/memory_management/2013/03/24/glib-slab-algo-explain/
+description: 介绍一种让程序调试与单元测试更容易更happy的工具
+category: "工具"
+tags: [Java, Python, Groovy]
+refer_author: Wenzhe
+refer_blog_addr: http://blog.csdn.net/liuwenzhe2008/article/details/9104331
+refer_post_addr: http://blog.csdn.net/liuwenzhe2008/
 ---
 {% include JB/setup %}
 
@@ -18,7 +18,7 @@ refer_post_addr: http://zeroli.github.io/memory_management/2013/03/24/glib-slab-
 
 ##1. Pretty之Java版
 
-##1.1 调试中的问题
+###1.1 调试中的问题
 当我们在调试程序的时候，经常会查看某一变量的值。一般来说，有两种方法被经常用到：
 
 1.     用调试器，如Eclipse  Debug，或者gdb/pdb。
@@ -38,7 +38,7 @@ refer_post_addr: http://zeroli.github.io/memory_management/2013/03/24/glib-slab-
 3.     额外工作量：这不是必须的，若是其中要求每个类都去override toString方法，会增加很多没有必要的工作量，产生很多不必要的代码，反而会增大维护代码的工作量，甚至引起bug。而且，
 
 当类每次增加/修改/删除成员变量时，都要去修改toString方法，否则print出来的信息也就不可靠了，但这是很难保证的。
-##1.2 单元测试中的问题
+###1.2 单元测试中的问题
 
 有下面一个类A，聚合了类B，而B又聚合类C，如下代码：
 {% highlight cpp %}
@@ -100,7 +100,7 @@ assertEquals(expected, a);
 虽然assertEquals只有一个，但为了建立一个期待的expected作为标尺来比较，需要为提供大量的set方法。这么多set方法带来的问题其实并不比那么多get少。
 而且，为A类实现equals方法也是有风险的，因为equals方法本身也需要测试（只要是人写的代码本质上都需要测试！），也需要时间成本。很多类其实没必要去override equals方法。写代码就得维护，没必要写的代码坚决不写，否则维护量更多。同样的，不是所有的代码都能控制的。
 
-##1.3 使用Pretty
+###1.3 使用Pretty
 
 Pretty类可以很pretty的解决以上调试和单元测试中的问题。在给出Pretty类之前，先从使用者的角度看看她的pretty：
 
@@ -177,7 +177,7 @@ public class PrettyTest {
 }
 
 {% endhighlight %}
-##1.3.1 Pretty结构
+###1.3.1 Pretty结构
 
 这是一个带有main方法的单元测试类。先撇开单元测试，我们把它当成一个普通java文件来运行（即从main方法开始运行），在屏幕上会打印出对象 a 的pretty结构：
 {% highlight cpp %}
@@ -202,7 +202,7 @@ org.wenzhe.jvlib.debug.test.PrettyTest$A {
 那么程序怎么知道对象a是期望的呢？注意到第61行，Pretty.equalsGolden("test1", a);  对象a实际上是跟一个名字为test1的golden文件做了比较。这个golden文件的所在的目录为： ${project_root}/src/test/resources/golden/pretty/，这是pretty工具的一个convention，当然也可以改成别的目录，但我不推荐改，很多时候遵从“约定优于配置”的原则总是更好的。打开test1文件，你会发现这也是一个pretty结构，跟之前屏幕上输出的完全一样。
 
 你可能奇怪为什么作为普通java类运行屏幕上会打印，而作为unit test却不会打印呢？其实区别并不在于用哪种运行方式，唯一的区别在于是否选择了Pretty类的debug模式。（一般来说，unit test下不启动debug模式，而在开发调试过程中启动）。注意到main函数刚开始的时候（第65行），debug mode设置为true，当Pretty工具要得到对象a的pretty结构时，会将它打印出来，方便调试，省得在代码里面加入print函数的麻烦。debug mode缺省是关的，所以unit test就没有打印出来了。（有兴趣可以阅读后面的源代码）。
-##1.3.2 Pretty Diff
+###1.3.2 Pretty Diff
 
 如果unit test测到对象a与golden文件不同，那会怎样？假如有个大老粗不小心把C类中的成员变量v1删除了，又不小心增加了成员变量v3（取值为true），更是不小心把A类的成员变量list里面insert了一个“NOT”，不管是不是在Pretty的debug模式，屏幕上都会输出：
 
@@ -222,7 +222,7 @@ Pretty工具的错误输出，够pretty吧，大老粗干了哪些坏事这里�
 
 懒人都喜欢Pretty，因为Pretty提供了自动更新golden文件的功能。这时候你开启Pretty的debug模式，运行，屏幕上除了输出对象a的pretty结构和Diff信息之外，Pretty还会问你“Overwrite (Y/N)? ”，回答Y即可自动更新golden文件test1。
 有了Pretty，你永远不需要手动写golden文件：当golden不存在时，Pretty会帮你创建；当golden存在但有Diff时会提醒你是否需要更新。
-##1.4 Pretty原理及源码
+###1.4 Pretty原理及源码
 
 也许你已经迫不及待地想知道Pretty类是怎么实现的，原理其实也简单，就是通过Java的“反射”机制，把类的成员变量拿出来，放进一个Map里，key为成员变量名，value为成员变量的值，然后递归地输出到一个具有缩进层次的代表pretty结构的字符串里。这是一个既美丽又好用的字符串，在debug模式下打印到标准输出，在unit test下就是与golden文件进行字符串比较，从而避免了做对象比较的麻烦，同时golden文件的pretty结构记录了期待对象完整的层层信息，有助于理解代码，^_^。
 
@@ -402,7 +402,7 @@ public class Pretty {
 {% endhighlight %}
 
 在调试过程中，Pretty的str方法和println方法是很常用的；而在unit test中，equalsGolden方法更加方便。
-##1.5 Pretty姐妹篇：Golden原理及源码
+###1.5 Pretty姐妹篇：Golden原理及源码
 Pretty类用到了另一个相当实用的工具类：Golden，是Pretty的好姐妹，如果golden文件不存在则帮你创建，如果存在了则帮你把字符串跟golden文件做比较，一旦发现差异，则将差异部分打印出来。在Golden类的调试模式下（debugMode=true）还会提示你是否需要overwirte你的golden文件。这是很实用的功能，试想一下如果有上千个golden文件，维护的工作量是很大的。需求变了，代码结构也变了，原先的golden不再正确时就需要更新。要是每次都得手动去文件里查找哪些不同，手动去修改golden文件，那也是相当麻烦的事。Golden类可以给你“一键搞定”的成就感！
 
 {% highlight cpp %}
@@ -465,7 +465,8 @@ public class Golden {
   }
 }
 {% endhighlight %}
-Pretty之Python版
+
+##2.Pretty之Python版
 
 Python的实现方法非常简单，自带的pprint方法就可以实现pretty print，因此要做到主要是将object转换成dict（即Java里的Map），而Python自带的vars函数返回的就是成员变量的dict。源码如下：
 {% highlight cpp %}
@@ -686,5 +687,5 @@ class Pretty {
 }
 
 {% endhighlight %}
-##4. Pretty之C++设计思路
+###4. Pretty之C++设计思路
 由于C++没有“反射”机制，要想获取类的所有私有（或公有）成员变量的名字与类型并不容易。但思路还是有的，比如可以通过分析C++类的源代码来获得，可以借助第三方库，如Clang来实现。Clang由Apple开发，BSD开源授权，支持C，C++，Object C，Object C++等编程语言，能够对源代码进行词法和语意分析，结果为抽象语法树。通过抽象语法树，我们可以模仿类似与Java中“反射”机制，来得到类的成员信息（名字，类型，取值等）。只是一个思路，有兴趣的朋友不妨一试。
