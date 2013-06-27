@@ -2,7 +2,7 @@
 layout: post
 title: "在Eclipse RCP中集成HTML/CSS/Javascript"
 description: Integrate HTML/CSS/Javascript in Eclipse RCP
-category: "eclipse"
+category: "Eclipse"
 tags: [eclipse]
 refer_author: Yongqiang
 refer_blog_addr: http://www.bloodlee.com/

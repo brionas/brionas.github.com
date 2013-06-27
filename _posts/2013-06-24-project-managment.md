@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "软件需求文档可以这样写 ---- “香皮匠式”需求文档"
-description: 关于撰写需求文档的思考
+description: 关于撰写需求文档的思考.
 category: "项目管理"
 tags: [Project]
 refer_author: Wenzhe
