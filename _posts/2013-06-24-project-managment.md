@@ -102,6 +102,5 @@ refer_post_addr: http://blog.csdn.net/liuwenzhe2008/article/details/9099641
 
 				Bug tickets: xxx, xxx (与此ticket相关的bug通通link过来)
 
- 
 
    在编码之前，有一份完善的、多角度的需求文档，可以尽早发现问题，降低风险，有的放矢，做客户真正急切需要的事，而不是白干、蛮干。而且有助于以后做需求管理，分析总结，需求跟踪，并且有助于新同事快速理解项目，有助于所有团队整体效率的提高，真正做到1+ 1 > 2。
