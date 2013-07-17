@@ -52,15 +52,15 @@ class A {
     // ...
 } 
 class B {
-private String desc;
-private Map map;
-private C c = new C();
+    private String desc;
+    private Map map;
+    private C c = new C();
 // ...
 }
 
 class C {
-private double v1;
-private BigDecimal v2;
+    private double v1;
+    private BigDecimal v2;
 // ...
 }
 
