@@ -12,13 +12,13 @@ refer_post_addr: http://blog.csdn.net/liuwenzhe2008/article/details/9099641
 
  不同的team对于同一个需求的理解是不完全一样的，甚至有可能完全不一样。由于知识背景的差异、工作重心的差异，看问题的角度也不一样，见解自然也就容易产生分歧。比如：
 
-	1.产品人员注重产品的功能、外观、易用性、可靠性，以及能为客户解决哪些实际问题，带来多少好处。特别是站在用户的角度考虑问题，想客户之所想，提出合理的需求让开发人员去实现。成就感来自于用户对产品的认可和赞扬，让客户Happy！
+* 1.产品人员注重产品的功能、外观、易用性、可靠性，以及能为客户解决哪些实际问题，带来多少好处。特别是站在用户的角度考虑问题，想客户之所想，提出合理的需求让开发人员去实现。成就感来自于用户对产品的认可和赞扬，让客户Happy！
 
-	2.算法人员注重产品逻辑功能的底层实现，兴趣点在于建立良好的数学模型，用高效率的算法解决问题。特别是从算法效率的角度考虑问题，成就感来自于数学之美，巧妙精美地解决各种技术难题，世上无难事，只要有数学！
+* 2.算法人员注重产品逻辑功能的底层实现，兴趣点在于建立良好的数学模型，用高效率的算法解决问题。特别是从算法效率的角度考虑问题，成就感来自于数学之美，巧妙精美地解决各种技术难题，世上无难事，只要有数学！
 
-	3.应用软件人员注重软件本身的架构设计，兴趣点在于软件产品的可读性、可复用性、可扩展性、可维护性等等。特别是从软件设计原则/模式的角度考虑问题，成就感来自于软件之美，能够轻易拥抱不断变化的需求，能够让傻子也能读懂，甚至当成小说那样的喜欢读，让代码的维护不再枯燥，而是如同打游戏一般的Happy！
+* 3.应用软件人员注重软件本身的架构设计，兴趣点在于软件产品的可读性、可复用性、可扩展性、可维护性等等。特别是从软件设计原则/模式的角度考虑问题，成就感来自于软件之美，能够轻易拥抱不断变化的需求，能够让傻子也能读懂，甚至当成小说那样的喜欢读，让代码的维护不再枯燥，而是如同打游戏一般的Happy！
 
-	4.测试人员注重需求的测试点，同样的需求他们会考虑到各种case，以及边缘性的case。兴趣点在于寻找产品中的bug，像玩扫雷游戏一样有趣。有时候发现问题比解决问题更重要，发现bug其实也是一件很爽的事！
+* 4.测试人员注重需求的测试点，同样的需求他们会考虑到各种case，以及边缘性的case。兴趣点在于寻找产品中的bug，像玩扫雷游戏一样有趣。有时候发现问题比解决问题更重要，发现bug其实也是一件很爽的事！
 
       
  因此，写需求文档的时候，每个team都从自己的角度来写，却往往很少考虑其他team的人是否能够准确理解你的需求，或者说，你的需求是否能让其他team的人理解。这其实是一个跨team之间的交流沟通的问题，也可以说是一个工作流程的问题。
@@ -45,62 +45,62 @@ refer_post_addr: http://blog.csdn.net/liuwenzhe2008/article/details/9099641
 
  一份完善的需求文档的形成，需要经过以下3个阶段：
 
-	1.雏形阶段：每个team根据自己的理解，任务分解，估算，写入到ticket上属于自己team的空间。
+* 1.雏形阶段：每个team根据自己的理解，任务分解，估算，写入到ticket上属于自己team的空间。
 
-	2.成形阶段：经过吸收其他team的理解，讨论，从而进一步深入自己的理解，改进和完善文档。
+* 2.成形阶段：经过吸收其他team的理解，讨论，从而进一步深入自己的理解，改进和完善文档。
 
-	3.稳定阶段：当每个team之间消除了误差，都能接受其他team的意见，达成一致，并且认为自己team的任务计划已经完善时，需求文档也就定下来了。
+* 3.稳定阶段：当每个team之间消除了误差，都能接受其他team的意见，达成一致，并且认为自己team的任务计划已经完善时，需求文档也就定下来了。
 	  以后就不能随随便便修改需求。倘若真的要修改，你需要有足够的理由去说服参与该ticket的所有team，需要大家一致同意才行。保持需求文档的稳定性，是很重要的，如果今天不爽就改需求，明天特爽也改需求，那么需求文档就是废纸一张了。
 	
 “香皮匠式”需求文档的格式是必须包括以下内容：
 
-	Ticket ID: xxx                         (由reporter创建)
-
-	Title: xxx                             (由reporter提供)
-
-	Description: xxx                       (由reporter提供)
-
-	Priority: xxx                          (有项目管理者设定)
-
-	Assignee: Wenzhe Liu                   (由哪个team或者哪个人来完成任务最合适，比如我，^_^)
-
-	Reporter: xxx
-
-	Product Team Input Area:
-
-				Requirement understanding: xxx
-
-				What is needed for the requirement:xxx
-
-				Related tickets:xxx, xxx  (类似的需求，相关背景，父需求，子需求)
-
-	Algorithm Team Input Area:
-
-				Requirement understanding: xxx
-
-				What to do for the requirement: xxx
-
-				Sub-Tasktickets: xxx, xxx (分解为一个个的小任务)
-
-				Estimate:xxx (估算完成得花多少时间)
-
-	Application Software Team Input Area:
-
-				Requirement understanding: xxx
-
-				What to do for the requirement: xxx
-
-				Sub-Tasktickets: xxx, xxx (分解为一个个的小任务)
-
-				Estimate:xxx (估算完成得花多少时间)
-
-	QA Team Input Area:
-
-				Requirement understanding: xxx
-
-				What to test for the requirement:xxx
-
-				Bug tickets: xxx, xxx (与此ticket相关的bug通通link过来)
-
+> Ticket ID: xxx                         (由reporter创建)
+> 
+> Title: xxx                             (由reporter提供)
+> 
+> Description: xxx                       (由reporter提供)
+> 
+> Priority: xxx                          (有项目管理者设定)
+> 
+> Assignee: Wenzhe Liu                   (由哪个team或者哪个人来完成任务最合适，比如我，^_^)
+> 
+> Reporter: xxx
+> 
+> Product Team Input Area:
+> 
+>:     Requirement understanding: xxx
+>    
+>:     What is needed for the requirement:xxx
+>     
+>:     Related tickets:xxx, xxx  (类似的需求，相关背景，父需求，子需求)
+>
+> Algorithm Team Input Area:
+> 
+>:     Requirement understanding: xxx
+>     
+>:     What to do for the requirement: xxx
+>     
+>:     Sub-Tasktickets: xxx, xxx (分解为一个个的小任务)
+>     
+>:     Estimate:xxx (估算完成得花多少时间)
+> 
+> Application Software Team Input Area:
+> 
+>:    Requirement understanding: xxx
+>    
+>:    What to do for the requirement: xxx
+>    
+>:    Sub-Tasktickets: xxx, xxx (分解为一个个的小任务)
+>    
+>:    Estimate:xxx (估算完成得花多少时间)
+> 
+> QA Team Input Area:
+> 
+>:    Requirement understanding: xxx
+>    
+>:    What to test for the requirement:xxx
+>    
+>:    Bug tickets: xxx, xxx (与此ticket相关的bug通通link过来)
+> 
 
    在编码之前，有一份完善的、多角度的需求文档，可以尽早发现问题，降低风险，有的放矢，做客户真正急切需要的事，而不是白干、蛮干。而且有助于以后做需求管理，分析总结，需求跟踪，并且有助于新同事快速理解项目，有助于所有团队整体效率的提高，真正做到1+ 1 > 2。
