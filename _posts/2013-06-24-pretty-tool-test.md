@@ -197,7 +197,7 @@ org.wenzhe.jvlib.debug.test.PrettyTest$A {
 }
 {% endhighlight %}
 
-根据pretty结构的缩进，可以很容易看出，对象a的类是： org.wenzhe.jvlib.debug.test.PrettyTest类的内部类A，其成员array是一个数组，值为[86, 755, 1234, 5678]。另一个成员 b 是类 （PrettyTest的内部类B）的对象，b 里面的成员变量c 是类（PrettyTest内部类C）的对象……根据缩进，各种成员变量及其嵌套聚合类的对象也都轻易可见。这在开发调试过程中非常好用！
+根据pretty结构的缩进，可以很容易看出，对象a的类是： org.wenzhe.jvlib.debug.test.PrettyTest类的内部类A，其成员array是一个数组，值为`[86, 755, 1234, 5678]`。另一个成员 b 是类 （PrettyTest的内部类B）的对象，b 里面的成员变量c 是类（PrettyTest内部类C）的对象……根据缩进，各种成员变量及其嵌套聚合类的对象也都轻易可见。这在开发调试过程中非常好用！
 如果以单元测试的方式运行，屏幕上没有任何输出（No news is Good news），JUnit View中出现大家喜爱的绿色条，祝贺你表测试通过了。（一般对于unittest来说，正确的时候是没输出信息的。）
 那么程序怎么知道对象a是期望的呢？注意到第61行，Pretty.equalsGolden("test1", a);  对象a实际上是跟一个名字为test1的golden文件做了比较。这个golden文件的所在的目录为： ${project_root}/src/test/resources/golden/pretty/，这是pretty工具的一个convention，当然也可以改成别的目录，但我不推荐改，很多时候遵从“约定优于配置”的原则总是更好的。打开test1文件，你会发现这也是一个pretty结构，跟之前屏幕上输出的完全一样。
 
