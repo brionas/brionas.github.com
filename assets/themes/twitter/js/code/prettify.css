@@ -36,18 +36,20 @@ li.L1, li.L3, li.L5, li.L7, li.L9{background:#111;}
 }
 */
 
-.com { color: rgb(45, 68, 248); }
-.kwd { color: rgb(248, 6, 219);  }
+.com { color: #008200;font-style:italic;}
+.kwd { color: rgb(163, 21, 21);font-weight:bold; }
+.typ {color: teal;font-weight:bold;}
 .lit { color: #195f91; }
 .pun, .opn, .clo { color: #93a1a1; }
 .fun { color: #dc322f; }
 .str, .atv { color: #D14; }
-.linenums,.tag { color: #1e347b; }
-.typ, .atn, .dec, .var { color: teal; }
+.linenums{ color: #1e347b; }
+.tag { color: #1e347b;font-weight:bold;}
+.atn, .dec, .var { color: teal; }
 .pln { color: #48484c; }
 
 /* Put a border around prettyprinted code snippets. */
-pre.prettyprint { padding: 2px; width: auto; overflow: auto; max-height:600px}
+pre.prettyprint { padding: 2px; overflow: auto;}
 
 .prettyprint {
   padding: 8px;
@@ -55,9 +57,9 @@ pre.prettyprint { padding: 2px; width: auto; overflow: auto; max-height:600px}
   border: 1px solid #e1e1e8;
 }
 .prettyprint.linenums {
-  -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 42px 0 0 rgb(44, 245, 35);
-     -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 42px 0 0 rgb(44, 245, 35);
-          box-shadow: inset 40px 0 0 #fbfbfc, inset 42px 0 0 rgb(44, 245, 35);
+  -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 43px 0 0 rgb(44, 245, 35);
+     -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 43px 0 0 rgb(44, 245, 35);
+          box-shadow: inset 40px 0 0 #fbfbfc, inset 43px 0 0 rgb(44, 245, 35);
 }
 
 /* Specify class=linenums on a pre to get line numbering */
@@ -67,24 +69,24 @@ ol.linenums {
 ol.linenums li {
   padding-left: 12px;
   color: #bebec5;
-  line-height: 18px;
+  line-height: 3px;
   text-shadow: 0 1px 0 #fff;
 }
 
 pre code {
 display: block;
-padding: 8.5px;
+padding: 3px;
 margin: 0 0 9px;
 color: inherit;
 line-height: 12px;
-font-size: 12px;
-font-family: Menlo, Monaco, "Courier New", monospace;
+font-size: 14px;
+font-family: Consolas,"Courier New",sans-serif,Menlo, Monaco,monospace;
 }
 
 code, pre {
   padding: 0 3px 2px;
-  font-family: Menlo, Monaco, "Courier New", monospace;
-  font-size: 12px;
+  font-family: Consolas, Menlo, Monaco, "Courier New", monospace;
+  font-size: 14px;
   color: #333333;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -97,20 +99,16 @@ code {
 }
 pre {
   display: block;
-  padding: 8.5px;
+  padding: 3px;
   margin: 0 0 9px;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 6px;
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  white-space: pre;
-  white-space: pre-wrap;
-  word-break: break-all;
-  word-wrap: break-work;
 }
 pre.prettyprint {
   margin-bottom: 18px;
