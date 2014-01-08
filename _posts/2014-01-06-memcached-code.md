@@ -39,8 +39,7 @@ hash算法等概念有基本的了解。文系列将从以下几个方面展开�
 ##### 概念与特点
 
 作为一个缓存系统，memcached的主要任务在于通过在内存中缓存一些常用数据，减少对数据库的存储操作，一方面将数据存储在内存中，
-
-加快数据的存储速度；另一方面减轻数据库的负载，提高数据库的利用率，
+加快数据的存储速度；另一方面减轻数据库的负载，提高数据库的利用率。
 如下图所示：
 
 ![](/assets/image/2014-01/memcached_code_files/memcached_concept.png)
@@ -84,7 +83,7 @@ memcached的“分布式”特指客户-服务器之间一对多的分布式映�
 ##### memcached的使用
 
 
-从终端输入一下命令
+从终端输入以下命令
 
 	Server: ./memcached -p 11211 -d -u rqiu -m 512 -c 1024 -vv
 	
@@ -161,7 +160,7 @@ memcached的“分布式”特指客户-服务器之间一对多的分布式映�
 
 从用户发送命令到数据存储到内存中， memcached经历了三个阶段的hash。
 
-1.  客户端接收请求调用hash算法选择对应的服务器来进行后续操作，将键值对的存取操作分配的不同的memcahced服务器
+1.  客户端接收请求调用hash算法选择对应的服务器来进行后续操作，将键值对的存取操作分配到不同的memcahced服务器
 2.  在memcached服务器中主线程根据简单的hash算法选择特定的工作线程进行任务分发
 3.  工作线程根据特定的key值采用hash算法进行键值对的存储操作
 
@@ -179,14 +178,14 @@ memcached的“分布式”特指客户-服务器之间一对多的分布式映�
 ![](/assets/image/2014-01/memcached_code_files/consistent_hash_1.png)                     
     
 
-一致性hash算法的思想比较简单，首先建立一个有1-2\^23个位置的圆环，把所有server按照一定的hash值映射到圆环上，然后采用特定的算法把键值对映射到圆环上。  
+一致性hash算法的思想比较简单，首先建立一个有1-2^23个位置的圆环，把所有server按照一定的hash值映射到圆环上，然后采用特定的算法把键值对映射到圆环上。  
 沿着键值对在圆环上的位置顺时针找到的第一个server点对应的server就是键值对所需要存放的位置。为了实现服务器之间的负载均衡，同时保证该hash算法具有良好的散列性，可以采用虚拟节点的方法对其进行改进：用一个物理server对应多个虚拟server，虚拟server再按照一定的算法映射圆环上，保证一个键值对存放到个server上的概念大致均衡。那么一致性hash算法怎么解决上面求余hash添加或删除server的问题呢？见下图：
 
 ![](/assets/image/2014-01/memcached_code_files/consistent_hash_2.png)
 
 当添加server时，将在圆环上增加改server的映射点，则该变动的影响就局限于添加server的映射点与其逆时针方向的第一个server点之间对应的键值对了。  
 
-上图中添加node5后，是原本node5和弄得之间原本映射到node4上的键值对映射到node5上了，由此可以最大限度地减少添加server造成的键值对失效数目。
+上图中添加node5后，是原本node5和node2之间原本映射到node4上的键值对映射到node5上了，由此可以最大限度地减少添加server造成的键值对失效数目。
 
 一致性hash算法现在应用场合较多，网上关于其介绍也比较多，这里不再详细介绍，感兴趣可以参考[http://thor.cs.ucsb.edu/\~ravenben/papers/coreos/kll+97.pdf](http://thor.cs.ucsb.edu/~ravenben/papers/coreos/kll+97.pdf)。
 
@@ -233,16 +232,16 @@ stats, flush_all, version, quit <br class="atl-forced-newline"> </td>
 
 各命令的基本使用请参考官方网站，这里主要介绍一些命令的注意事项：
 
--   add命令必须memcached中不存在相应key才能作用
+-   add命令必须在memcached中不存在相应key才能作用
 -   replace命令要求memcached中必须存在相应key才能作用
 -   set命令不管key存在与否，强制进行set操作
--   cas（check and set）命令的使用设计到一个版本号的概念，这里为cas
-unique id即键值对存储到memcached中时，会有一个特定的cas unique id,
+-   cas（check and set）命令的使用涉及到一个版本号的概念，这里为cas
+unique id，即键值对存储到memcached中时，会有一个特定的cas unique id,
 使用cas命令时，要求跟随一个cas id作为参数输入，当输入的cas
 id与key对应的数据目前的cas id一致，才进行键值对的set操作
 -   gets命令为根据多个key一次获取多个键值对，用来提高获取数据的效率，但是当这些key映射在不同的server上时，客户端需要同多个server进行通信，gets的意义不大，所以使用gets操作时，用户应该尽量保证多个key映射在同一个server上
 -   touch命令涉及到一个过期时间（exptime）的概念，即在将数据存储到memcached中时，会设置一个过期时间，当前时间超过过期时间时，数据将自动失效，touch命令即用来更新数据的过期时间。
--   flush\_all用来清楚memcached中所有时间，主要采取将所有数据设置为过期的方式实现
+-   flush_all用来清除memcached中所有时间，主要采取将所有数据设置为过期的方式实现
 -   slabs ressign, slabs automove主要用来在subclass之间转移slab,
 后续会做介绍。
 
@@ -320,16 +319,16 @@ stats的系统状态记录结构，参数详细信息见代码，关键参数已
 	    int item_size_max;      /* slab中最大item的大小,初始化1M */
 	    bool sasl;              /* SASL on/off */
 	    bool maxconns_fast;
-	    bool slab_reassign;     /* 是够允许slab reassign */
-	    int slab_automove;      /* 是够允许slab automove */
+	    bool slab_reassign;     /* 是否允许slab reassign */
+	    int slab_automove;      /* 是否允许slab automove */
 	    int hashpower_init;     /* 初始化的hash power level */
 	};
 	
 	
 	struct stats {
 	    pthread_mutex_t mutex;      /* 互斥信号量 */
-	    unsigned int  curr_items;   /* 现在有效item */
-	    unsigned int  total_items;  /* 总共存储的item*/
+	    unsigned int  curr_items;   /* 现在有效item数*/
+	    unsigned int  total_items;  /* 总共存储的item数*/
 	    uint64_t      curr_bytes;   /* 现在有效的字节*/
 	    unsigned int  curr_conns;   /* 当前客户端连接数*/
 	    unsigned int  total_conns;  /* 总共连接数*/
@@ -364,13 +363,17 @@ stats的系统状态记录结构，参数详细信息见代码，关键参数已
 
 ### 参考文档：
 
-1.[http://memcached.org/](http://memcached.org/)[http://tech.idv2.com/2008/07/10/memcached-001/](http://tech.idv2.com/2008/07/10/memcached-001/)
+1. [http://memcached.org/](http://memcached.org/)
 
-2.[Memcache](http://tech.idv2.com/2008/07/10/memcached-001/)[完全剖析](http://tech.idv2.com/2008/07/10/memcached-001/)[http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+2. [http://tech.idv2.com/2008/07/10/memcached-001/](http://tech.idv2.com/2008/07/10/memcached-001/)
 
-3.[Memcached](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)[源代码分析](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+3. [Memcache完全剖析](http://tech.idv2.com/2008/07/10/memcached-001/)
 
-4.[Memcached](http://basiccoder.com/thread-model-and-state-machine-of-memcached.html)[的线程模型及状态机](http://basiccoder.com/thread-model-and-state-machine-of-memcached.html)
+4. [http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+
+5. [Memcached源代码分析](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+
+6. [Memcached的线程模型及状态机](http://basiccoder.com/thread-model-and-state-machine-of-memcached.html)
 
 ---
 
@@ -389,7 +392,7 @@ stats的系统状态记录结构，参数详细信息见代码，关键参数已
 memcahced采用libevent作为处理框架，首先我们对于libevent进行简单介绍。libevent是一个程序库，它将linux的epoll,
 kqueue, select等事件处理功能封装成统一的接口，
 
-即使服务器连接数的增加，也发挥O(1)的性能。下面为libevent的建立事件处理的基本API:
+即使服务器连接数的增加，也能发挥O(1)的性能。下面为libevent的建立事件处理的基本API:
 
 	main_base = event_init();   /* 创建event_base */
 	
@@ -413,7 +416,7 @@ memcached
 memcached线程模型主要有一个主线程和多个工作线程，另外还包括一些辅助线程，如slab线程，assoc线程，后续会进行介绍。memcached服务器与客户端采用socket通信，
 
 主线程与工作线程采用管道通信。
-主线程主要监听socket端的读事件，事件响应时选择合适的工作线程将任务分发出去，相应的工作线程创建于socket端的连接读取数据，
+主线程主要监听socket端的读事件，事件响应时选择合适的工作线程将任务分发出去，相应的工作线程创建与socket端的连接读取数据，
 
 进行实际的数据处理，主线程与工作线程的事件处理流程中将采用状态机实现状态转移。下面介绍线程模型中主要的数据结构：
 
@@ -519,12 +522,11 @@ memcached线程模型主要有一个主线程和多个工作线程，另外还�
 ##### 工作线程
 
 工作线程进行实际的事件处理工作，其在thread_init中进行初始化，
-其初始化流程大致为：
-
-1.  与主线程之间建立管道
-2.  初始化连接队列
-3.  创建独立的event_base，监听管道的读事件
-4.  采用thread_libevent_process作为事件处理函数
+其初始化流程大致为：  
+	1.  与主线程之间建立管道  
+	2.  初始化连接队列  
+	3.  创建独立的event_base，监听管道的读事件  
+	4.  采用thread_libevent_process作为事件处理函数
 
 代码如下：
 
@@ -590,17 +592,19 @@ memcached连接主要包括以下几种状态：
 	};
 
 
-为简单起见，我们在接下来的叙述中将忽略掉一些不重要的状态，如下图：
+为简单起见，我们在接下来的叙述中将忽略掉一些不重要的状态，如下图：  
 
-![](/assets/image/2014-01/memcached_code_files/memcached_drive_machine.png)
+![](/assets/image/2014-01/memcached_code_files/memcached_drive_machine.png)  
 
-1.  主线程进入conn\_listen状态，同过accpt函数监听socket事件响应，该状态为主线程独有
-2.  主线程监听到事件响应后，触发合适的工作线程进行事件处理
-3.  工作线程创建连接进入conn\_new\_cmd状态开始解析命令，由此进入conn\_read状态
-4.  工作线程通过conn\_read状态读取命令行后，进入conn\_parse\_cmd命令进行命令解析
-5.  若解析命令后获悉需要获取额外的数据行，则进入conn\_nread读取数据行
-6.  处理完之后进入conn\_write状态，向客户端写回反馈信息。
-7.  以上各状态出现问题时，将直接进入conn\_closing等状态，结束当前连接。
+
+
+1\. 主线程进入conn\_listen状态，同过accept函数监听socket事件响应，该状态为主线程独有。  
+2\. 主线程监听到事件响应后，触发合适的工作线程进行事件处理。  
+3\. 工作线程创建连接进入conn\_new\_cmd状态开始解析命令，由此进入conn\_read状态。  
+4\. 工作线程通过conn\_read状态读取命令行后，进入conn\_parse\_cmd状态进行命令解析。  
+5\. 若解析命令后获悉需要获取额外的数据行，则进入conn\_nread读取数据行。  
+6\. 处理完之后进入conn\_write状态，向客户端写回反馈信息。  
+7\. 以上各状态出现问题时，将直接进入conn\_closing等状态，结束当前连接。 
 
 一次完整的输入可能包含命令行和数据行，两行数据在不同的连接状态读入并进行解析，下图为解析一次完整输入的详细步骤：  
 
@@ -627,22 +631,26 @@ conn\_new\_cmd为解析输入的初始状态，在conn\_write状态向客户端�
 
 assoc线程主要负责hash表的管理，负责hash的扩展和维护，这里不做详细介绍。slab线程主要负责实现一个slabautomove的功能，memcahced内存区域分为不同的slabclass，
 
-每个slabclass里面包含相同大小的内存块。slab automove即通过一个背景线程是否需要在某些slabclass内存不足时，通过在slabclass之间移动内存来满足需求。slab automove
-主要涉及到两个线程slab\_maintenance\_thread和slab\_rebalance\_thread, slab\_maintenance\_thread决定是够需要进行一定， slab\_rebalance\_thread进行实际的移动工作，两个线程通过一个do\_run\_slab\_rebalance\_thread来交互,见下图：
+每个slabclass里面包含相同大小的内存块。slab automove通过在后台运行一个线程， 这个线程会在某些slabclass内存不足时， 在slabclass之间移动内存来保证其正常工作。。slab automove
+主要涉及到两个线程slab\_maintenance\_thread和slab\_rebalance\_thread, slab\_maintenance\_thread决定是否需要进行一定， slab\_rebalance\_thread进行实际的移动工作，两个线程通过一个do\_run\_slab\_rebalance\_thread来交互,见下图：
 
 ![](/assets/image/2014-01/memcached_code_files/memcached_automove.png)
 
 
 ##### 总结：
 
-本文主要介绍memcached的线程机制，memcahced的内存机制和hash表的管理不做详细介绍，读者可以参考[memcached内存管理](http://confluence.briontech.com/pages/viewpage.action?pageId=14587214)一文。
+本文主要介绍memcached的线程机制，memcahced的内存机制和hash表的管理不做详细介绍。
 
 ##### 参考文档：
 
-1.[http://memcached.org/](http://memcached.org/)[http://tech.idv2.com/2008/07/10/memcached-001/](http://tech.idv2.com/2008/07/10/memcached-001/)
+1.[http://memcached.org/](http://memcached.org/)
 
-2.[Memcache](http://tech.idv2.com/2008/07/10/memcached-001/)[完全剖析](http://tech.idv2.com/2008/07/10/memcached-001/)[http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+2.[http://tech.idv2.com/2008/07/10/memcached-001/](http://tech.idv2.com/2008/07/10/memcached-001/)
 
-3.[Memcached](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)[源代码分析](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+3.[Memcache完全剖析](http://tech.idv2.com/2008/07/10/memcached-001/)
 
-4.[Memcached](http://basiccoder.com/thread-model-and-state-machine-of-memcached.html)[的线程模型及状态机](http://basiccoder.com/thread-model-and-state-machine-of-memcached.html)
+4.[http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+
+4.[Memcached源代码分析](http://wenku.baidu.com/view/d08e431dff00bed5b9f31d59)
+
+5.[Memcached的线程模型及状态机](http://basiccoder.com/thread-model-and-state-machine-of-memcached.html)
