@@ -16,23 +16,164 @@ wxWidgets Sizing & Sizer
 我们在学习和使用wxWidgets时，经常会被其中的各种Size (size、client、best
 size …) 及各种Sizer(wxBoxSizer、wxGridSizer) 搞得晕头转向;
 而且它们相关有些函数如Fit， Layout 等在wxWindow
-和Sizer类中都有实现，而在做垒码过程中也时常不清楚哪种情况下应该用哪个类的哪个函数，而干脆”宁可杀错不可放过”胡乱调用一通，这样往往会得到让人”意外”的结果。如果亲们和我一样具有类似经历，那么我们就很有必要对这些知识进行梳理和总结了。最后我会介绍一种，
+和Sizer类中都有实现，而在做编码过程中也时常不清楚哪种情况下应该用哪个类的哪个函数，而干脆”宁可杀错不可放过”胡乱调用一通，这样往往会得到让人”意外”的结果。如果亲们和我一样具有类似经历，那么我们就很有必要对这些知识进行梳理和总结了。最后我会介绍一种，
 在Dialogblock中利用wxGridBagSizer 实现类似于VS拖拽的界面设计方法。 
 Let’s go！！ 
 
 目录
 ----
 
-一、  wxWidgets 的各种Size及相关函数
+一、  wxWidgets Sizer简单介绍  
 
-二、  Sizer简单介绍
+二、  wxWidgets 的各种Size及相关函数  
 
-三、  Dialogblock设计新方法 
+三、  Dialogblock设计新方法  
 
-一.  Window 的各种Size
+一. wxWidgets Sizer简单介绍
+------------------
+
+1.1 Sizer具有的优点
+-------------------
+
+        首先我们讨论下为什么需要Sizer,总结起来主要有以下三点优点:
+
+         1. 平台无关, 我们不需要考虑不同的控件在不同平台显示的大小差异;
+
+         2. 灵活, 利用Sizer我们可以方便设计出复杂的布局结构;
+
+         3. 简单,
+在改变窗口大小时,我们不需要为窗口内控件添加额外处理代码,即可实现控件大小随窗口大小改变而改变.
+
+      ![](/assets/image/2014-01/size_files/2.jpg)
+
+  具有这些好特性,当然也不是wxWidgets这个图形库所特有,Qt里也有Layout的概念,具体它们谁山寨谁,我们不去深究.但把wxWidgets和Qt的”Sizer”放在比较我们就会发现它们具有很多类似的地方.
+
+            ![](/assets/image/2014-01/size_files/3.jpg)
+
+1.2 Sizer的一般特性
+-------------------
+
+wxWidgets具有多种Sizer,但是它们的公共特性一些概念是通用的.我们一起回忆下下书上对于这些特性的描述.
+
+**● minimal size:**
+布局控件中的每个元素都有计算自己的最小大小的能力(这往往是通过每个元素的DoGetBestSize函数计算出来的).这是这个元素的自然大小.举例来说,一个复选框的自然大小等于其复选框图形的大小加上其标签的最合适大小.                                                         
+
+**● border:** 用于各个独立控件的间距大小,
+我们在进行Sizer::Add可以通过**wxTOP, wxBOTTOM, wxLEFT, wxRIGHT,
+wxALL**进行设置.
+
+**●alignment:** 对齐方式, 设置在Sier中的对齐方式,
+主要有上下左右,居中等对齐.
+对齐既可以是水平方向的也可以是垂直方向的,但是对于大多数布局控件来说,只有一个方向是有效的.比如对于水平布局控件来说,只有垂直方向是有效的,因为水平方向的空间是被所有的子元素分割的,因此设置水平对齐方式是没有意义的(当然,为了达到水平对齐的效果,我们可能需要插入一个水平方向的空白区域,关于这点我们不作太多的说明).
+
+●**stretch factor:**
+伸缩因子,如果一个布局控件的空间大于它所有子元素所需要的空间,那么我们需要一个机制来
+
+分割多余的空间.为了实现这个目的,布局控件中的每一个元素都可以指定一个伸缩因子,如果这个因子设置为默认值0,那么子元素将保持其原本的大小,大于0的值用来指定这个子元素可以分割的多余空间的比例,因此如果两个子元素的伸缩因子为1,其它子元素的伸缩机制为0,那么这两个子元素将会各占用多余空间的50%的大小.
+
+
+Sizer的通用特性介绍完了,下面我们开始对各个Sizer进行简单介绍,真的会很简单,主要是介绍了下各个Sizer特地及作用,和一些常用的函数,
+其余的很多内容请自觉参考手册.
+
+### 1.3 Sizer介绍
+
+      首先我们看下wxWidgets提供给我们的多种Sizer的继承关系图,这样我们对各个Sizer会有个大体的了解:
+![](/assets/image/2014-01/size_files/4.png)
+    
+
+   wxSizer是所有sizer的基类, 它是一个抽象类,我们一般是使用其子类:
+wxBoxSizer,wxStaticBoxSizer,wxGridSizer, wxFlexGridSizer,
+wxGridBagSizer,因此不对其做过多介绍.
+
+**● wxBoxSizer:** 最基础的一个sizer,
+具有水平及垂直两种方式,通过在构造函数中传递`wxVERTICAL`或
+`wxHORIZONTAL`初始化.  构造函数为`wxBoxSizer(int orient);`
+ 例: `wxBoxSizer *sizer =new wxBoxSizer(wxHORIZONTAL);`
+
+在初始化后,通过Add 函数将控件添加进Sizer中.
+
+	     wxSizerItem* Add(wxWindow* window, int proportion = 0, int flag =
+	0, int border = 0)
+	
+	     window:需要添加进Sizer的控件, 也可以是其他Sizer;
+	
+	     proportion: 同2.2节讲的stretch factor,伸缩因子
+	
+	     flag:标志位,决定控件在Sizer中的表现形式,具体可参考手册.
+	
+	     border:同2.2节介绍的border.
+
+我们可以创建出嵌套的Sizer布局方式,如下: 
+
+![](/assets/image/2014-01/size_files/5.jpg)
+ 
+
+**● wxStaticSizer:** 基本同wxBoxSize一样,
+只是在原本不可见的Sizer外框,添加一个Static Label, 给人更清晰的提示.
+
+    ![](/assets/image/2014-01/size_files/5.png)
+   
+
+*● wxGridSizer:*提供一个N行N列的布局区域, 期间每个单元的大小是一样的.
+
+`wxGridSizer(int rows, int cols, int vgap, int hgap)`
+
+  
+构造一个rows行cols列的Sizer矩阵.vgap及hgap定义了其中各个控件的间距.** **
+
+     ![](/assets/image/2014-01/size_files/6.png)
+
+**●wxFlexGridSizer:**
+有时我们需要在N行N列的wxGridSizer中的某行,某列或者某个单元,具有不同的大小,
+这时候wxFlexGridSizer就派上用场了.
+
+`wxFlexGridSizer(int rows, int cols, int vgap, int hgap) ;`
+
+构造函数基本同wxGridSizer, 但我们可以通过:
+	
+	void AddGrowableCol (size_t idx, int proportion = 0);
+	
+	void AddGrowableRow (size_t idx, int proportion = 0);
+
+改变指定行列的元素可以具有随窗口增长的能力.如设置:
+
+	AddGrowableRow(1);
+	
+	AddGrowableCol(2);
+
+我们可以使第二行,第3列的按钮随窗口改变大小.  
+
+![](/assets/image/2014-01/size_files/7.png)
+
+**●wxGridBagSizer:** 这个Sizer从wxFlexGridSizer继承,
+wxFlexGridSizer只有在添加控件才能显示排布方式不同,
+wxGridBagSizer提供虚拟的网格,使得我们能在这些网格中通过wxGBPosition及wxGBSpan改变任意改变控件的位置和大小.构造函数:
+
+`wxGridBagSizer (int vgap = 0 , int hgap = 0 )`
+
+我们可以通过`void SetEmptyCellSize ( const wxSize& sz)`
+函数设置网格中空白单元的大小,如下添加10\*10网格.
+
+    ![](/assets/image/2014-01/size_files/8.png)
+
+通过函数
+`wxSizerItem *Add(wxWindow* window, const wxGBPosition& pos,
+const wxGBSpan& span = wxDefaultSpan, int flag = 0, int border = 0,
+wxObject* userData =
+NULL)`,我们向GridBagSizer中添加元素.下面演示在上述的单元网格中添加按键的:
+
+`Add(itemButton4, wxGBPosition(5, 4), wxGBSpan(1, 2),
+wxALIGN_CENTER_HORIZONTAL| wxALIGN_CENTER_VERTICAL| wxALL, 5)`
+
+         ![](/assets/image/2014-01/size_files/9.png)\
+
+     Sizer的简单介绍就到这里,
+具体每个Sizer的使用方法,大家最好还是参考手册.
+
+二.  Window 的各种Size
 ----------------------
 
-### 1.1 wxWidgets 的Size
+### 2.1 wxWidgets 的Size
 
 wxWidgets中有许多的Size，
 要清楚理解它们的具体含义，而不再编码时造成混淆，
@@ -225,13 +366,12 @@ Size, 对于wxSize(150,-1)则会设置为wxSize(150, BestSize.height).
 ● “Virtual Size”: the virtual size is the size of the potentially
 viewable area of the widget. 字面理解为虚拟尺寸,
 即是我们设置整个”画布”大小(请允许我做这个比喻, 我们通过”窗口”
-大小改变和移动, 变换可视的大小和范围区域).
+大小改变和移动, 变换可视的大小和范围区域).Virtual Size并非只有Scroll window所独有， 但是非Scroll window 尽量不要设置Virtual Size， 否则可能引起一些窗口内控件显示不全的bug。
 
 至此,我们的Size基本梳理完毕,希望各位看官对各个Size的会有更加清晰的理解,
 如果想有更深入的理解可以参考官方文档[http://docs.wxwidgets.org/trunk/overview\_windowsizing.html](http://docs.wxwidgets.org/trunk/overview_windowsizing.html)及阅读相关的源码.
 
-### 1.2 Size相关函数
-
+### 2.2 Size相关函数
         
 上一节我们几种Size,下面选取几个常用的Size相关的函数进行介绍,这些函数在wxWindow及wxSizer中名字是相同的,
 使用时经常会造成混淆和不解, 所以很有必要拿出来一起比较说明.
@@ -254,162 +394,20 @@ constraints
 ,那么将调用constraints算法,对窗口元素进行排列.(注:这个constraints
 文档已建议不要使用, 而用Sizer代替).
 
-●wxSizer::Layout(void):让sizer重新计算能容纳所有控件的最小尺寸
+●wxSizer::Layout(void):当Sizer内进行添加、删除控件或窗口操作后，调用该函数更新Sizer 的布局。
 
 ●wxWindow::SetSizeHints: 这个函数在介绍”Minimal & Maximum Size”时提及,
 它是用来设置,最小及最大窗口尺寸的.
 建议使用[wxWindow::](http://docs.wxwidgets.org/trunk/classwx_window.html)[SetMinSize](http://docs.wxwidgets.org/trunk/classwx_window.html)[()](http://docs.wxwidgets.org/trunk/classwx_window.html)
-和[wxWindow::](http://docs.wxwidgets.org/trunk/classwx_window.html)[SetMaxSize](http://docs.wxwidgets.org/trunk/classwx_window.html)[()](http://docs.wxwidgets.org/trunk/classwx_window.html)代替.
+和[wxWindow::](http://docs.wxwidgets.org/trunk/classwx_window.html)[SetMaxSize](http://docs.wxwidgets.org/trunk/classwx_window.html)[()](http://docs.wxwidgets.org/trunk/classwx_window.html)代替.这个函数不允许非toplevel窗口（wxDialog或wxFrame）调用。这个函数虽然和wxSizer中的SetSizeHints同名,但是功能不相同, wxWindow的SetSizeHints是用来设置最大、最小尺寸的,而wxSizer功能随后介绍。  
 
-●wxSizer::SetSizeHints:调用这个函数首先会调用wxSizer::Fit
-,然后调用wxWindow::SetSizeHints改变窗口大小,使得窗口能够容纳所有控件大小.
-通常只有像wxFrame或者wxDialog,这种继承自”wxTopLevelWinodw”的顶层窗口,函数调用才有效.一般的窗口或者控件调用无作用.
-这个函数比较有用, 我们在设计好窗口控件及排列后, 可以通过调用这个函数,
-使得我们的窗口满足大小要求. 
+●wxSizer::SetSizeHints(wxWindow \*window):调用这个函数首先会调用wxSizer::Fit ,这样传递的window就会调整窗口大小刚好容纳子窗口；然后调用wxWindow::SetSizeHints设置最大和最小尺寸。通常只有像wxFrame或者wxDialog,这种继承自”wxTopLevelWinodw”的顶层窗口,函数调用才有效.一般的窗口或者控件调用无作用. 这个函数比较有用, 我们在设计好窗口控件及排列后, 可以通过调用这个函数, 使得我们的窗口满足大小要求. 可以说wxSizer版的SetSizeHints是wxWindow的升级加强版，具有调整窗口大小的功能。  
 
-二.  Sizer简单介绍
-------------------
-
-2.1 Sizer具有的优点
--------------------
-
-        首先我们讨论下为什么需要Sizer,总结起来主要有以下三点优点:
-
-         1. 平台无关, 我们不需要考虑不同的控件在不同平台显示的大小差异;
-
-         2. 灵活, 利用Sizer我们可以方便设计出复杂的布局结构;
-
-         3. 简单,
-在改变窗口大小时,我们不需要为窗口内控件添加额外处理代码,即可实现控件大小随窗口大小改变而改变.
-
-      ![](/assets/image/2014-01/size_files/2.jpg)
-
-  具有这些好特性,当然也不是wxWidgets这个图形库所特有,Qt里也有Layout的概念,具体它们谁山寨谁,我们不去深究.但把wxWidgets和Qt的”Sizer”放在比较我们就会发现它们具有很多类似的地方.
-
-            ![](/assets/image/2014-01/size_files/3.jpg)
-
-2.2 Sizer的一般特性
--------------------
-
-wxWidgets具有多种Sizer,但是它们的公共特性一些概念是通用的.我们一起回忆下下书上对于这些特性的描述.
-
-**● minimal size:**
-布局控件中的每个元素都有计算自己的最小大小的能力(这往往是通过每个元素的DoGetBestSize函数计算出来的).这是这个元素的自然大小.举例来说,一个复选框的自然大小等于其复选框图形的大小加上其标签的最合适大小.                                                         
-
-**● border:** 用于各个独立控件的间距大小,
-我们在进行Sizer::Add可以通过**wxTOP, wxBOTTOM, wxLEFT, wxRIGHT,
-wxALL**进行设置.
-
-**●alignment:** 对齐方式, 设置在Sier中的对齐方式,
-主要有上下左右,居中等对齐.
-对齐既可以是水平方向的也可以是垂直方向的,但是对于大多数布局控件来说,只有一个方向是有效的.比如对于水平布局控件来说,只有垂直方向是有效的,因为水平方向的空间是被所有的子元素分割的,因此设置水平对齐方式是没有意义的(当然,为了达到水平对齐的效果,我们可能需要插入一个水平方向的空白区域,关于这点我们不作太多的说明).
-
-●**stretch factor:**
-伸缩因子,如果一个布局控件的空间大于它所有子元素所需要的空间,那么我们需要一个机制来
-
-分割多余的空间.为了实现这个目的,布局控件中的每一个元素都可以指定一个伸缩因子,如果这个因子设置为默认值0,那么子元素将保持其原本的大小,大于0的值用来指定这个子元素可以分割的多余空间的比例,因此如果两个子元素的伸缩因子为1,其它子元素的伸缩机制为0,那么这两个子元素将会各占用多余空间的50%的大小.
-
-
-Sizer的通用特性介绍完了,下面我们开始对各个Sizer进行简单介绍,真的会很简单,主要是介绍了下各个Sizer特地及作用,和一些常用的函数,
-其余的很多内容请自觉参考手册.
-
-### 2.3 Sizer介绍
-
-      首先我们看下wxWidgets提供给我们的多种Sizer的继承关系图,这样我们对各个Sizer会有个大体的了解:
-![](/assets/image/2014-01/size_files/4.png)
-    
-
-   wxSizer是所有sizer的基类, 它是一个抽象类,我们一般是使用其子类:
-wxBoxSizer,wxStaticBoxSizer,wxGridSizer, wxFlexGridSizer,
-wxGridBagSizer,因此不对其做过多介绍.
-
-**● wxBoxSizer:** 最基础的一个sizer,
-具有水平及垂直两种方式,通过在构造函数中传递`wxVERTICAL`或
-`wxHORIZONTAL`初始化.  构造函数为`wxBoxSizer(int orient);`
- 例: `wxBoxSizer *sizer =new wxBoxSizer(wxHORIZONTAL);`
-
-在初始化后,通过Add 函数将控件添加进Sizer中.
-
-	     wxSizerItem* Add(wxWindow* window, int proportion = 0, int flag =
-	0, int border = 0)
-	
-	     window:需要添加进Sizer的控件, 也可以是其他Sizer;
-	
-	     proportion: 同2.2节讲的stretch factor,伸缩因子
-	
-	     flag:标志位,决定控件在Sizer中的表现形式,具体可参考手册.
-	
-	     border:同2.2节介绍的border.
-
-我们可以创建出嵌套的Sizer布局方式,如下: 
-
-![](/assets/image/2014-01/size_files/5.jpg)
- 
-
-**● wxStaticSizer:** 基本同wxBoxSize一样,
-只是在原本不可见的Sizer外框,添加一个Static Label, 给人更清晰的提示.
-
-    ![](/assets/image/2014-01/size_files/5.png)
-   
-
-*● wxGridSizer:*提供一个N行N列的布局区域, 期间每个单元的大小是一样的.
-
-`wxGridSizer(int rows, int cols, int vgap, int hgap)`
-
-  
-构造一个rows行cols列的Sizer矩阵.vgap及hgap定义了其中各个控件的间距.** **
-
-     ![](/assets/image/2014-01/size_files/6.png)
-
-**●wxFlexGridSizer:**
-有时我们需要在N行N列的wxGridSizer中的某行,某列或者某个单元,具有不同的大小,
-这时候wxFlexGridSizer就派上用场了.
-
-`wxFlexGridSizer(int rows, int cols, int vgap, int hgap) ;`
-
-构造函数基本同wxGridSizer, 但我们可以通过:
-	
-	void AddGrowableCol (size_t idx, int proportion = 0);
-	
-	void AddGrowableRow (size_t idx, int proportion = 0);
-
-改变指定行列的元素可以具有随窗口增长的能力.如设置:
-
-	AddGrowableRow(1);
-	
-	AddGrowableCol(2);
-
-我们可以使第二行,第3列的按钮随窗口改变大小.  
-
-![](/assets/image/2014-01/size_files/7.png)
-
-**●wxGridBagSizer:** 这个Sizer从wxFlexGridSizer继承,
-wxFlexGridSizer只有在添加控件才能显示排布方式不同,
-wxGridBagSizer提供虚拟的网格,使得我们能在这些网格中通过wxGBPosition及wxGBSpan改变任意改变控件的位置和大小.构造函数:
-
-`wxGridBagSizer (int vgap = 0 , int hgap = 0 )`
-
-我们可以通过`void SetEmptyCellSize ( const wxSize& sz)`
-函数设置网格中空白单元的大小,如下添加10\*10网格.
-
-    ![](/assets/image/2014-01/size_files/8.png)
-
-通过函数
-`wxSizerItem *Add(wxWindow* window, const wxGBPosition& pos,
-const wxGBSpan& span = wxDefaultSpan, int flag = 0, int border = 0,
-wxObject* userData =
-NULL)`,我们向GridBagSizer中添加元素.下面演示在上述的单元网格中添加按键的:
-
-`Add(itemButton4, wxGBPosition(5, 4), wxGBSpan(1, 2),
-wxALIGN_CENTER_HORIZONTAL| wxALIGN_CENTER_VERTICAL| wxALL, 5)`
-
-         ![](/assets/image/2014-01/size_files/9.png)\
-
-     Sizer的简单介绍就到这里,
-具体每个Sizer的使用方法,大家最好还是参考手册.
 
 三. Dialogblock设计新方法
 -------------------------
+
+工欲善其事，必先利其器。在MFC上开发，有VS系列强大的可视化工具，基于wx也有许多辅助UI设计的工具软件。我们这里使用的是Dialogblock， 详细的Dialogblock介绍，大家可以参考官方[网址](http://www.anthemion.co.uk/dialogblocks/)。
 
 wxWidgets不同于微软提供的MFC, 不可以在设计界面时,利用简单的拖动进行完成.虽然我们有一些wxWidgets的UI设计软件提供帮助,但是包括常用的Dialogblock这些设计软件,都不能简单通过拖拽完成界面设计.有时为了使控件具有合适的大小,并在合适的位置放置,我们必须通过不断调整参数进行尝试.
 
