@@ -45,7 +45,7 @@ Python Web
 
 下图是整个ASSummary的基本架构图。
 
-![](/assets/image/2014-03/2014-04-25-ASSumary-design-analysis_files/frame.jpg)
+![](/assets/image/2014-03/2014-03-25-ASSumary-design-analysis_files/frame.jpg)
 
 从框架图我们可以看出， 我们用Apache作为我们的Http
 Server服务器，同时将Summary
@@ -90,7 +90,7 @@ Server中通过[mod\_wsgi](http://modwsgi.readthedocs.org/en/latest/)将Summary
 
 它首先将app.wsgi所在的目录加入到系统path目录中，然后启动bottle默认app。这个目录下具有我们网站所需的所有文件,我们一起看看目录下都有哪些主要文件：
 
-![](/assets/image/2014-03/2014-04-25-ASSumary-design-analysis_files/folder.png)
+![](/assets/image/2014-03/2014-03-25-ASSumary-design-analysis_files/folder.png)
 
 **Static** 文件夹用于存放于网站相关的css，image及一些Jscript文件。
 
@@ -159,7 +159,7 @@ url：访问的URL，这个会传递到模板文件中，决定页面显示。
 
 has\_query：是否具有请求，具有请求的页面会有如下的表单，可供用户输入查询时间等信息。
 
-![](/assets/image/2014-03/2014-04-25-ASSumary-design-analysis_files/form.png)
+![](/assets/image/2014-03/2014-03-25-ASSumary-design-analysis_files/form.png)
 
 filter：定义SQL查询结果的过滤条件，lambda表达式
 
@@ -171,7 +171,7 @@ need\_login：这个条件只有在第一次访问/document
 
 然后执行connect\_and\_get链接DB并执行SQL语句，在得到查询结果后我们将查询数据等信息传递到打开的base.tpl模板文件中。在这个模板文件中嵌入了python语句，会对传入的不同参数进行判断，从而在同一份模板文件中显示出不同的页面信息。最后再将经过模板文件“包装”过后的数据，返回给用户即完成了整个访问流程。下面是这个过程的流程图：
 
-![](/assets/image/2014-03/2014-04-25-ASSumary-design-analysis_files/ASSummary_flow.png)
+![](/assets/image/2014-03/2014-03-25-ASSumary-design-analysis_files/ASSummary_flow.png)
 
 从这个流程我们看出，ASSummary的响应过程是比较清晰简单的，针对不同的URL路由选择不同的SQL查询语句，然后利用传入模板的参数，修改返回页面模板供用户浏览。因此，维护及完善ASSummary的主要任务就需要编写SQL查询语句及修改模板base.tpl文件。
 
@@ -180,7 +180,7 @@ need\_login：这个条件只有在第一次访问/document
 对于某些统计数据表格，我们需要为其添加排列功能，如以下文档统计页面，它是用来统计指定时间范围内，组内成员原创或转载的文档，
 它具有5列分别显示：你对文档的投票状态、文档日期、文档submitter、文档链接、文档投票得分。
 
-![](/assets/image/2014-03/2014-04-25-ASSumary-design-analysis_files/table1.png)
+![](/assets/image/2014-03/2014-03-25-ASSumary-design-analysis_files/table1.png)
 
 不同情况下，我们可能需要根据不同的要求对表格数据进行排列。这些统计数据是由我们查询BrionCD数据库得到的，默认是根据文档post时间降序排列。因此为了实现这个功能首先最直接想到的实现方法是，在页面上添加一个select控件，然后列出排列的key供用户选择，根据key修改SQL语句排列顺序。但是这样实现会具有很多问题，首先最问题是每次重新排列都需要查询数据库，刷新页面，这样效率比较低；而且假设以后添加修改文档统计列，还必须记得修改这个select控件，维护成本高。
 
@@ -204,7 +204,7 @@ sort”排在第一位的是一个叫“[tablesorter](http://tablesorter.com/doc
 
 在添加排列功能后的统计页面如下图所示，
 我们可以通过点击每列的列名对表格进行顺序或降序排列。
-![](/assets/image/2014-03/2014-04-25-ASSumary-design-analysis_files/table2.png)
+![](/assets/image/2014-03/2014-03-25-ASSumary-design-analysis_files/table2.png)
 
 ### 3.4 定时发送邮件
 
@@ -218,7 +218,7 @@ sort”排在第一位的是一个叫“[tablesorter](http://tablesorter.com/doc
 首先，编辑Cron的配置文件/etc/crontab，添加如下画线部分内容。从这个配置文件的注释，我们也很容易理解添加这行语句的含义:
 每周1到5，早上9点35分，cd到/srv/www/ASSummary
 ，并执行**reviewboardmail.py**这个python脚本。  
- ![](/assets/image/2014-03/2014-04-25-ASSumary-design-analysis_files/cron.png)
+ ![](/assets/image/2014-03/2014-03-25-ASSumary-design-analysis_files/cron.png)
 
 显然这个reviewboardmail.py脚本就是将统计信息发送邮箱的脚本，它主要包含两部分功能：获取统计信息和发送邮箱。
 
