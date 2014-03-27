@@ -69,7 +69,7 @@ Ruby等很多脚本。并且对C++的继承、多态、模板，STL等都有较�
 	    m_num = num;
 	}
 
-为了使用SWIG导出该C++接口，我们需要为定义接口文件：
+为了使用SWIG导出该C++接口，我们需要为其定义接口文件：
 
 	// example.i
 	%module example // 模块名称
