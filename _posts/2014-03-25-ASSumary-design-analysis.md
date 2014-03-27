@@ -1,7 +1,7 @@
 ---
 layout: post
-title: ASummary 实现设计与分析
-description: ASummary 实现设计与分析
+title: ASSummary 实现设计与分析
+description: ASSummary 实现设计与分析
 category: 工具
 tags: [工具]
 refer_author: Jeremy
@@ -11,7 +11,7 @@ refer_post_addr:
 {% include JB/setup %}
 
 
-ASummary 实现设计与分析
+ASSummary 实现设计与分析
 ======================
 
 一  ASSummary介绍
@@ -25,14 +25,19 @@ ASummary 实现设计与分析
 
 ASSummary使得我们能方便的获得这两个独立网站的各种统计数据，例如：在Reviewboard中有多少提交代码没有被“Shiped”（代码已被其他人审查），有多少指定让你审查的代码，或者你在review过程中做了多少注释；又或者在BrionCD中哪个tags的问题最多，最近大家分享了哪些好文章。这些数据有助于提高团队的工作效率，同时对个人技术能力培养同样具有参考作用。先列出本文会讨论分析的内容：
 
--   一 **ASSummary****介绍**
--   **二 ASSummary****实现框架**
--   **三 How To****实现**
--   **3.1** **部署App****到Apache**
--   **3.2 ASSummary****响应过程**
--   **3.3** **添加可排序表格**
--   **3.4** **定时发送邮件**
--   **四** **总结**
+<ul>
+<li>一 ASSummary介绍</li> 
+<li>二 ASSummary实现框架</li>   
+<li>三 How To实现
+ <ul> 
+ <li>3.1 部署App到Apache</li>    
+ <li>3.2 ASSummary响应过程</li>    
+ <li>3.3 添加可排序表格</li>    
+ <li>3.4 定时发送邮件</li>   
+ </ul> 
+</li>
+<li>四 总结</li> 
+</ul>
 
 二  ASSummary实现框架
 ---------------------
