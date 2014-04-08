@@ -4,7 +4,7 @@ title: python参数传递介绍
 description: python参数传递介绍
 category: python
 tags: [python]
-refer_author: 
+refer_author: rqiu
 refer_blog_addr:
 refer_post_addr:
 ---
