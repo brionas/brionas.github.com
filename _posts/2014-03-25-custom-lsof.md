@@ -4,7 +4,7 @@ title: 自己裁剪一个lsof
 description: 自己裁剪一个lsof
 category: 工具
 tags: [工具]
-refer_author: wenli
+refer_author: wenlli
 refer_blog_addr:
 refer_post_addr:
 ---
@@ -342,16 +342,16 @@ lproc结构体的定义如下：
 
 lproc的数据成员file是lfile类型，记录了进程详细的打开文件的信息，取值举例如下：
 
-	(gdb) p \*Lf
+	(gdb) p *Lf
 	$55 = {access = 117 'u', lock = 32 ' ', dev_def = 1 '\001', inp_ty = 1 '\001', is_com = 0 '\0', is_nfs = 0 '\0',
 	is_stream = 0 '\0', lmi_srch = 0 '\0', nlink_def = 0 '\0', off_def = 0 '\0', rdev_def = 0 '\0', sz_def = 1 '\001',
-	fd = "   3\000\000\000", iproto = "\000\000\000\000\000\000\000", type = "REG\000\000\000\000", sf = 64, ch = \-1, ntype = 32,
-	off = 0, sz = 309, dev = 22, rdev = 34841, inode = 14728964, nlink = 0, dev_ch = 0x0, fsdir = 0x0, fsdev = 0x0, li = \{\{af = 0,
-	p = 0, ia = {a4 = \{s_addr = 0\}, a6 = {in6_u = {u6_addr8 = "\000\000\000\000\000\000\000\000 CW\000\000\000\000",
-	u6_addr16 = \{0, 0, 0, 0, 17184, 87, 0, 0\}, u6_addr32 = \{0, 0, 5718816, 0\}}}}}, {af = 0, p = \-1, ia = {a4 = \{
-	s_addr = 3474118656\}, a6 = {in6_u = {u6_addr8 = "\000Ø\022Ï4\000\000\0000CW\000\000\000\000", u6_addr16 = \{55296,
-	53010, 52, 0, 17200, 87, 0, 0\}, u6_addr32 = {3474118656, 52, 5718832, 0}}}}}}, lts = \{type = \-1, state = \{i = 0,
-	ui = 0\}, rq = 0, sq = 0, rqs = 0 '\0', sqs = 0 '\0'\}, nm = 0x573de0 "/home/wenlli/CppStudy/common.h", nma = 0x0,
+	fd = "   3\000\000\000", iproto = "\000\000\000\000\000\000\000", type = "REG\000\000\000\000", sf = 64, ch = -1, ntype = 32,
+	off = 0, sz = 309, dev = 22, rdev = 34841, inode = 14728964, nlink = 0, dev_ch = 0x0, fsdir = 0x0, fsdev = 0x0, li = {\{af = 0,
+	p = 0, ia = {a4 = {s_addr = 0}, a6 = {in6_u = {u6_addr8 = "\000\000\000\000\000\000\000\000 CW\000\000\000\000",
+	u6_addr16 = {0, 0, 0, 0, 17184, 87, 0, 0}, u6_addr32 = {0, 0, 5718816, 0}}}}}, {af = 0, p = -1, ia = {a4 = {
+	s_addr = 3474118656}, a6 = {in6_u = {u6_addr8 = "\000Ø\022Ï4\000\000\0000CW\000\000\000\000", u6_addr16 = {55296,
+	53010, 52, 0, 17200, 87, 0, 0}, u6_addr32 = {3474118656, 52, 5718832, 0}}}}}}, lts = {type = -1, state = {i = 0,
+	ui = 0}, rq = 0, sq = 0, rqs = 0 '\0', sqs = 0 '\0'}, nm = 0x573de0 "/home/wenlli/CppStudy/common.h", nma = 0x0,
 	next = 0x0}
 
 结合结构体的数据和print\_proc、print\_file函数代码，我们可以找到它们的对应关系：
@@ -368,32 +368,32 @@ lproc的数据成员file是lfile类型，记录了进程详细的打开文件的
 </thead>
  <tbody>
 <tr>
-<td>COMMAND</td> <td>Lp-\>cmd</td>
+<td>COMMAND</td> <td>Lp->cmd</td>
 </tr>
 <tr>
-<td>  PID </td>   <td>   Lp-\>pid</td>
+<td>  PID </td>   <td>   Lp->pid</td>
 </tr>
 <tr>
- <td> USER </td>  <td>   Lp-\>uid</td>
+ <td> USER </td>  <td>   Lp->uid</td>
 </tr>
 <tr>
-<td>  FD </td>   <td>Lf-\>fd<br> Lf-\>access</td>
+<td>  FD </td>   <td>Lf->fd<br> Lf->access</td>
 				 
 </tr>  
 <tr>            
- <td> TYPE</td>  <td>    Lf-\>type</td>
+ <td> TYPE</td>  <td>    Lf->type</td>
 </tr>
 <tr>
- <td> DEVICE</td> <td>   Lf-\>dev</td>
+ <td> DEVICE</td> <td>   Lf->dev</td>
 </tr>
 <tr>
- <td> SIZE </td>  <td>   Lf-\>sz</td>
+ <td> SIZE </td>  <td>   Lf->sz</td>
 </tr>
 <tr>
- <td> NODE </td> <td>    Lf-\>inode</td>
+ <td> NODE </td> <td>    Lf->inode</td>
 </tr>
 <tr>
-<td>  NAME</td>  <td>    Lf-\>nm</td>
+<td>  NAME</td>  <td>    Lf->nm</td>
 </tr>
 </tbody>
 </table>
