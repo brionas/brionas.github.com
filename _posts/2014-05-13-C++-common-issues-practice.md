@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Some common issues in C++ practice
-description: Some common issues in C++ practice
+title: C++问题汇总
+description: C++问题汇总
 category: C++
-tags: C++ common_issues
+tags: C++
 refer_author: bozhang
 refer_blog_addr:
 refer_post_addr:
