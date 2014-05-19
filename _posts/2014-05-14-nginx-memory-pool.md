@@ -97,11 +97,10 @@ nginx内存池的相关操作主要在文件./src/core/ngx\_palloc.h/c中，以�
 
      创建一个初始节点大小为size的内存池，需要注意几点：
 
-<<<<<<< .merge_file_J6cNd1
 -   size的大小必须介于sizeof(ngx\_pool\_t)和NGX\_MAX\_ALLOC\_FROM\_POOL(4K)之间，小于
     sizeof(ngx\_pool\_t)的话初始节点没有足够的空间来存放内存池的管理信息，可能造成程序Crash,
     超过NGX\_MAX\_ALLOC\_FROM\_POOL会造成内存浪费
--   实际可用的内存小于size，因为初始节点会占用部分内存存放内存池的管理信息，且该节点的max字段会选择size-sizeof(ngx\_pool\_t)和NGX\_MAX\_ALLOC\_FROM\_POOL的较小值。
+-   实际可用的内存小于size，因为初始节点会占用部分内存存放内存池的管理信息，且该节点的max字段会选择size-sizeof(ngx\_pool\_t)和NGX\_MAX\_ALLOC\_FROM\_POOL的较小值。  
 -   创建内存池时，大块内存链表和特殊资源清理链表为空。
 
 ####  申请内存 
