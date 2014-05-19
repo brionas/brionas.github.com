@@ -4,7 +4,7 @@ title: c++ 异常处理（上）
 description: c++ 异常处理（上）
 category: C++
 tags: C++ Exception-handling
-refer_author: miliao
+refer_author: Ming Dong
 refer_blog_addr:
 refer_post_addr:
 ---

@@ -4,7 +4,7 @@ title: Google breakpad介绍
 description: Google breakpad介绍
 category: 工具
 tags: breakpad
-refer_author: miliao
+refer_author: Ming Dong
 refer_blog_addr:
 refer_post_addr:
 ---

@@ -4,7 +4,7 @@ title: 说说尾递归
 description: 说说尾递归
 category: C++
 tags: C++ tail-recursion 尾递归
-refer_author: miliao
+refer_author: Ming Dong
 refer_blog_addr:
 refer_post_addr:
 ---
