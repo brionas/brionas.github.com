@@ -89,24 +89,24 @@ n\*res)的返回值。
 
 为什么这样说呢？先看下面的程序：
 
-     1 #include <stdio.h>
-     2 
-     3 int tail_func(int n, int res)
-     4 {
-     5      if (n <= 1) return res;
-     6 
-     7      return tail_func(n - 1, n * res);
-     8 }
-     9 
-    10 
-    11 int main()
-    12 {
-    13     int dummy[1024*1024]; // 尽可能占用栈。
-    14     
-    15     tail_func(2048*2048, 1);
-    16     
-    17     return 1;
-    18 }
+    #include <stdio.h>
+    
+    int tail_func(int n, int res)
+    {
+         if (n <= 1) return res;
+    
+         return tail_func(n - 1, n * res);
+    }
+    
+    
+    int main()
+    {
+        int dummy[1024*1024]; // 尽可能占用栈。
+        
+        tail_func(2048*2048, 1);
+        
+        return 1;
+    }
 
 上面这个程序在开了编译优化和没开编译优化的情况下编出来的结果是不一样的。
 
@@ -126,54 +126,54 @@ n\*res)的返回值。
 没开优化编译出来的汇编tail\_func：
 
 
-     1 .LFB3:
-     2         pushq   %rbp
-     3 .LCFI3:
-     4         movq    %rsp, %rbp
-     5 .LCFI4:
-     6         subq    $16, %rsp
-     7 .LCFI5:
-     8         movl    %edi, -4(%rbp)
-     9         movl    %esi, -8(%rbp)
-    10         cmpl    $1, -4(%rbp)
-    11         jg      .L4
-    12         movl    -8(%rbp), %eax
-    13         movl    %eax, -12(%rbp)
-    14         jmp     .L3
-    15 .L4:
-    16         movl    -8(%rbp), %eax
-    17         movl    %eax, %esi
-    18         imull   -4(%rbp), %esi
-    19         movl    -4(%rbp), %edi
-    20         decl    %edi
-    21         call    tail_func
-    22         movl    %eax, -12(%rbp)
-    23 .L3:
-    24         movl    -12(%rbp), %eax
-    25         leave
-    26         ret
+    .LFB3:
+            pushq   %rbp
+    .LCFI3:
+            movq    %rsp, %rbp
+    .LCFI4:
+            subq    $16, %rsp
+    .LCFI5:
+            movl    %edi, -4(%rbp)
+            movl    %esi, -8(%rbp)
+            cmpl    $1, -4(%rbp)
+            jg      .L4
+            movl    -8(%rbp), %eax
+            movl    %eax, -12(%rbp)
+            jmp     .L3
+    .L4:
+            movl    -8(%rbp), %eax
+            movl    %eax, %esi
+            imull   -4(%rbp), %esi
+            movl    -4(%rbp), %edi
+            decl    %edi
+            call    tail_func
+            movl    %eax, -12(%rbp)
+    .L3:
+            movl    -12(%rbp), %eax
+            leave
+            ret
 
 
-注意上面标红色的第21行，call
+注意上面的第21行，call
 指令就是直接进行了函数调用，它会先压栈，然后再jmp去tail\_func，而当前的栈还在用！
 就是说，尾递归的作用没有发挥。
 
 再看看开了优化得到的汇编：
 
 
-     1 tail_func:
-     2 .LFB13:
-     3         cmpl    $1, %edi
-     4         jle     .L8
-     5         .p2align 4,,7
-     6 .L9:
-     7         imull   %edi, %esi
-     8         decl    %edi
-     9         cmpl    $1, %edi
-    10         jg      .L9
-    11 .L8:
-    12         movl    %esi, %eax
-    13         ret
+    tail_func:
+    .LFB13:
+            cmpl    $1, %edi
+            jle     .L8
+            .p2align 4,,7
+    .L9:
+            imull   %edi, %esi
+            decl    %edi
+            cmpl    $1, %edi
+            jg      .L9
+    .L8:
+            movl    %esi, %eax
+            ret
 
 
 注意第7，第10行，尤其是第10行！

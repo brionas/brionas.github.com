@@ -10,11 +10,6 @@ refer_post_addr:
 ---
 {% include JB/setup %}
 
-
-c++ 异常处理（上）
-==============
-
-
 异常(exception)是c++中新增的一个特性，它提供了一种新的方式来结构化地处理错误，使得程序可以很方便地把异常处理与出错的程序分离，而且在使用上，它语法相当地简洁，以至于会让人错觉觉得它底层的实现也应该很简单，但事实上并不是这样。恰恰因为它语法上的简单没有规定过多细节，从而留给了编译器足够的空间来自己发挥，因此在不同操作系统，不同编译器下，它的实现是有很大不同的。[这篇](http://www.microsoft.com/msj/0197/exception/exception.aspx)文章介绍了windows和visual
 c++是怎样基于SEH来实现c++上的异常处理的，讲得很详细，虽然已经写了很久，但原理性的东西到现在也没过时，有兴趣可以去细读一下。
 
@@ -31,10 +26,9 @@ abort，而如果最后找到了相应的catch，就会进入该catch代码块�
 从抛异常开始到执行landing pad里的代码这中间的整个过程叫作stack
 unwind，这个过程包含了两个阶段：
 
-1）从抛异常的函数开始，一帧一帧地在每个调用函数里查找landing pad。
+1. 从抛异常的函数开始，一帧一帧地在每个调用函数里查找landing pad。
 
-2）如果没有找到landing pad则把程序abort，否则，则记下landing
-pad的位置，再重新回到抛异常的函数那里开始，一帧一帧地清理调用链上各个函数内部的局部变量，直到landing
+1. 如果没有找到landing pad则把程序abort，否则，则记下landing pad的位置，再重新回到抛异常的函数那里开始，一帧一帧地清理调用链上各个函数内部的局部变量，直到landing
 pad所在的函数为止。
 
 简而言之，正常情况下，stack
@@ -94,9 +88,9 @@ routine的函数（\_\_gxx\_personality\_v0)，该函数由上层的语言定义
 会在内部把当前函数栈的调用现场重建，然后传给personality
 routine，personality routine则主要负责做两件事情：
 
-1）检查当前函数是否含有相应catch可以处理上面抛出的异常。
+1. 检查当前函数是否含有相应catch可以处理上面抛出的异常。
 
-2）清掉调用栈上的局部变量。
+1. 清掉调用栈上的局部变量。
 
 显然，我们可以发现personality routine所做的这两件事情和前面所说的stack
 unwind所要经历的两个阶段一一对应起来了，因此也可以说，stack
@@ -142,8 +136,6 @@ routine遍历两次。
         }
     }
 
- 
-
  ABI中的函数使用到了两个自定义的数据结构，用于传递一些内部的信息。
 
 
@@ -155,8 +147,6 @@ routine遍历两次。
       uint64     private_1;
       uint64     private_2;
     };
-
-
 
 根据接口的介绍，\_Unwind\_Context是一个对调用者透明的结构，用于表示程序运行时的上下文，主要就是一些寄存器的值，函数返回地址等，它由接口实现者来定义及创建，但我没在接口中找到它的定义，只在gcc的源码里找到了一份它的[定义](http://stuff.mit.edu/afs/sipb/project/gcc-3.2/share/gcc-3.2.1/gcc/unwind-dw2.c)。
 
@@ -211,22 +201,14 @@ xxx"中的xxx，这两部分在内存中是连续的。
 
 当我们在程序里执行了抛出异常后，编译器为我们做了如下的事情：
 
-1）调用\_\_cxa\_allocate\_exception函数，分配一个异常对象。
+1. 调用\_\_cxa\_allocate\_exception函数，分配一个异常对象。
+1. 调用\_\_cxa\_throw函数，这个函数会将异常对象做一些初始化。
+1. \_\_cxa\_throw() 调用Itanium ABI里的\_Unwind\_RaiseException() 从而开始unwind。
+1. \_Unwind\_RaiseException()对调用链上的函数进行unwind时，调用personality routine。
+1. 如果该异常如能被处理(有相应的catch)，则personality routine会依次对调用链上的函数进行清理。
+1. \_Unwind\_RaiseException() 将控制权转到相应的catch代码。
 
-2）调用\_\_cxa\_throw函数，这个函数会将异常对象做一些初始化。
-
-3）\_\_cxa\_throw() 调用Itanium ABI里的\_Unwind\_RaiseException()
-从而开始unwind。
-
-4）\_Unwind\_RaiseException()对调用链上的函数进行unwind时，调用personality
-routine。
-
-5）如果该异常如能被处理(有相应的catch)，则personality
-routine会依次对调用链上的函数进行清理。
-
-6）\_Unwind\_RaiseException() 将控制权转到相应的catch代码。
-
-​7) unwind完成，用户代码继续执行。
+1. unwind完成，用户代码继续执行。
 
 从c++的角度看，一个完整的异常处理流程就完成了，当然，其中省略了很多的细
 节，其中最让人觉得神秘的也许就是personality

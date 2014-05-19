@@ -10,39 +10,31 @@ refer_post_addr:
 ---
 {% include JB/setup %}
 
-
-c++ 异常处理（下）
-==============
-
 前面一篇博文简单介绍了c++异常处理的流程，但在一些细节上一带而过了，比如，\_Unwind\_RaiseException是怎样重建函数现场的，personality routine是怎样清理栈上变量的等，这些细节涉及到很多与语言层面无关的东西，本文尝试介绍一下这些细节的具体实现。
 
-**相关的数据结构**
-------------------
+相关的数据结构
+--------------
 
 如前所述，unwind的进行需要编译器生成一定的数据来支持，这些数据保存了与每个可能抛异常的函数相关的信息以供运行时查找，那么，编译器都保存了哪些信息呢？根据Itanium
 ABI的[定义](http://www.intel.com/content/dam/www/public/us/en/documents/guides/itanium-software-runtime-architecture-guide.pdf)，主要包括以下三类：
 
-1）unwind
-table，这个表记录了与函数相关的信息，共三个字段：函数的起始地址，函数的结束地址，一个info
+1. unwind table，这个表记录了与函数相关的信息，共三个字段：函数的起始地址，函数的结束地址，一个info
 block指针。
-
-2）unwind descriptor table，
+1. unwind descriptor table，
 这个列表用于描述函数中需要unwind的区域的相关信息。
+1. 语言相关的数据(language specific data area)，用于上层语言内部的处理。
 
-3）语言相关的数据(language specific data area)，用于上层语言内部的处理。
-
-以 上数据结构的描述来自Itanium
-ABI的标准定义，但在具体实现时，这些数据是怎么组织以及放到了哪里则是由编译器来决定的，对于GCC来说，所有与unwind相关的数据都放到
+以上数据结构的描述来自Itanium ABI的标准定义，但在具体实现时，这些数据是怎么组织以及放到了哪里则是由编译器来决定的，对于GCC来说，所有与unwind相关的数据都放到
 了.eh\_frame及.gcc\_except\_table这两个section里面了，而且它的格式与内容和标准的定义稍稍有些不同。
 
-**.eh\_frame区域**
-------------------
+.eh\_frame区域
+----------------
 
 .eh\_frame的格式与.debug\_frame是很相似的（不完全相同），属于[DWARF](http://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-Core-generic/LSB-Core-generic/normativerefs.html#STD.DWARF3)标准中的一部分。所有由GCC编译生成的需要支持异常处理的程序都包含了DWARF格式的数据与字节码，这些数据与字节码的主要作用有两个：
 
-1）描述函数调用栈的结构（layout）
+1. 描述函数调用栈的结构（layout）
 
-2）异常发生后，指导unwinder怎么进行unwind。
+2. 异常发生后，指导unwinder怎么进行unwind。
 
 DWARF的字节码功能很强
 大，它是图灵完备的，这意味着仅仅通过DWARF就可以做几乎任何事情。但是从数据的组织上来看，DWARF实在略显复杂晦涩，因此很少有人愿意去碰，本
@@ -108,18 +100,18 @@ DWARF的字节码功能很强
 
 注意其中标注红色的字段：
 
-1）Initial Instructions，Call Frame Instructions
+1. Initial Instructions，Call Frame Instructions
 这两字段里放的就是所谓的DWARF字节码，比如：DW\_CFA\_def\_cfa R
 OFF，表示通过寄存器R及位移OFF来计算CFA，其功能类似于前面的表格中第二列指明的内容。
 
-2）PC begin，PC
+2. PC begin，PC
 range，这两个字段联合起来表示该FDE所能覆盖的指令的范围，eh\_frame中所有的FDE最后会按照pc
 begin排序进行存放。
 
-3）如果CIE中的Augmentation String中包含有字母"P"，则相应的Augmentation
+3. 如果CIE中的Augmentation String中包含有字母"P"，则相应的Augmentation
 Data中包含有指向personality routine的指针。
 
-4）如果CIE中的Augmentation String中包含有有字母“L”，则FDE中Aumentation
+4. 如果CIE中的Augmentation String中包含有有字母“L”，则FDE中Aumentation
 Data包含有language specific data的指针。
 
 对一个elf文件通过如下命令：readelf -Wwf
@@ -277,9 +269,9 @@ CIE，FDE存在于每一个需要处理异常的ELF文件中，当异常发生�
 
 Peronality routine 的作用主要有两个：
 
-1）检查当前函数是否有相应的catch语句。
+1. 检查当前函数是否有相应的catch语句。
 
-2）清理当前函数中的局部变量。
+2. 清理当前函数中的局部变量。
 
 十分不巧，这两件事情仅仅依靠运行时也是没法完成的，必须依靠编译器在编译时建立起相关的数据进行协助。对GCC来说，这些与抛异常的函数具体相
 关的信息全部放在.gcc\_except\_table区域里去了，这些信息会作为Itanium
@@ -303,73 +295,62 @@ routine的相关实现，发现两者还是有些许出入，因此本文接下�
 
 由上图所示，LSDA主要由一个表头，后面紧跟着三张表组成。
 
-#### 1.LSDA Header：
+###### 1. LSDA Header：
 
 该表头主要用来保存接下来三张表的相关信息，如编码，及表的位移等，该表头主要包含六个域：
 
-1）Landing pad起始地址的编码方式，长度为一个字节。
+1. Landing pad起始地址的编码方式，长度为一个字节。
 
-2）landing pad
+2. landing pad
 起始地址，这是可选的，只有当前面指明的编码方式不等于DW\_EH\_PE\_omit时，这个字段才存在，此时读取这个字段就需要根据前面指定的编码方式进行读取，长度不固定。
+如果这个字段不存在，则landing pad的起始地址需要通过调用\_Unwind\_GetRegionStart（）来获得，得到其实就是当前模块加载的起始地址，这是最常见的形式。
 
-    如果这个字段不存在，则landing
-pad的起始地址需要通过调用\_Unwind\_GetRegionStart（）来获得，得到其实就是当前模块加载的起始地址，这是最常见的形式。
+3. type table的编码方式，长度为一个字节。
 
-3）type table的编码方式，长度为一个字节。
-
-4）type table的位移，类型为unsigned
+4. type table的位移，类型为unsigned
 LEB128，这个字段是可选的，只有3）中编码方式不等于DW\_EH\_PE\_omit时，这个才存在。
 
-5）call site table的编码方式，长度为一个字节。
+5. call site table的编码方式，长度为一个字节。
 
-6）call site table 的长度，一个unsigned LEB128的值。
+6. call site table 的长度，一个unsigned LEB128的值。
 
-#### 2.call site table
+###### 2. call site table
 
 LSDA表头之后紧跟着的是call site
 table，该表用于记录程序中哪些指令有可能会抛异常，表中每条记录共有4个字段：
 
-1）可能会抛异常的指令的地址，该地址是距Landing
+1. 可能会抛异常的指令的地址，该地址是距Landing
 pad起始地址的偏移，编码方式由LSDA表头中第一个字段指明。
 
-2）可能抛异常的指令的区域长度，该字段与1）一起表示一系列连续的指令，编码方式与1）相同。
+2. 可能抛异常的指令的区域长度，该字段与1）一起表示一系列连续的指令，编码方式与1）相同。
 
-3）用于处理上述指令的Landing
+3. 用于处理上述指令的Landing
 pad的位移，这个值如果为0则表示不存在相应的landing pad。
 
-4）指明要采取哪些action，这是一个unsigned
+4. 指明要采取哪些action，这是一个unsigned
 LEB128的值，该值减1后作为下标获取action table中相应记录。
 
-call site
-table中的记录按第一个字段也就是指令起始地址进行排序存放，因此unwind的时候可以加快对该表的搜索，unwind时，如果当前pc的值不在
-call site
-table覆盖的范围内的话，搜索就会返回，然后就调用std::terminate()结束程序，这通常来说是不正常的行为。
+call site table中的记录按第一个字段也就是指令起始地址进行排序存放，因此unwind的时候可以加快对该表的搜索，unwind时，如果当前pc的值不在
+call site table覆盖的范围内的话，搜索就会返回，然后就调用std::terminate()结束程序，这通常来说是不正常的行为。
 
-如果在call site table中有对应的处理，但landing
-pad的地址却是0的话，表明当前函数既不存在catch语句，也不需要清理局部变量，这是一种正常情况，unwinder应该继续向上unwind，而
-如果landing
-pad不为0，则表明该函数中有catch语句，但是这些catch能否处理抛出的异常则还要结合action字段，到type
-table中去进一步加以判断：
+如果在call site table中有对应的处理，但landing pad的地址却是0的话，表明当前函数既不存在catch语句，也不需要清理局部变量，这是一种正常情况，unwinder应该继续向上unwind，而
+如果landing pad不为0，则表明该函数中有catch语句，但是这些catch能否处理抛出的异常则还要结合action字段，到type table中去进一步加以判断：
 
-1）如果action字段为0，则表明当前函数没有catch语句，但有局部变量需要清理。
+1. 如果action字段为0，则表明当前函数没有catch语句，但有局部变量需要清理。
 
-2）如果action字段不为0，则表明当前函数中存在catch语句，又因为catch是可能存在多个的，怎么知道哪个能够catch当前的异常呢？因此需要去检查action
-table中的表项。
+2. 如果action字段不为0，则表明当前函数中存在catch语句，又因为catch是可能存在多个的，怎么知道哪个能够catch当前的异常呢？因此需要去检查action table中的表项。
 
-#### 3. Action table
+###### 3. Action table
 
 action
-table中每一条记录是一个二元组，表示一个catch语句所对应的异常，或者表示当前函数所允许抛出的异常(exception
-specification)，该列表每条记录包含两个字段：
+table中每一条记录是一个二元组，表示一个catch语句所对应的异常，或者表示当前函数所允许抛出的异常(exception specification)，该列表每条记录包含两个字段：
 
-1）filter type，这是一个unsigned LEB128的数值，用于指向type
-table中的记录，该值有可能是负数。
+1. filter type，这是一个unsigned LEB128的数值，用于指向type table中的记录，该值有可能是负数。
 
-2）指向下一个action
-table中的下一条记录，这是当函数中有多个catch或exception specification
+2. 指向下一个action table中的下一条记录，这是当函数中有多个catch或exception specification
 有多个时，将各个action 记录链接起来。
 
-#### 4. Type Table
+###### 4. Type Table
 
 type table中存放的是异常类型的指针:
 
@@ -396,10 +377,10 @@ pad：指的是能够catch当前异常的catch语句。这个说法其实不确�
 
 准确来说，landing pad指的是unwinder之外的“用户代码”：
 
-1）用于catch相应的exception，对于一个函数来说，如果该函数中有catch语句，且能够处理当前的异常，则该catch就是landing
+1. 用于catch相应的exception，对于一个函数来说，如果该函数中有catch语句，且能够处理当前的异常，则该catch就是landing
 pad
 
-2）如果当前函数没有catch或者catch不能处理当前exception，则意味着异常还要从当前函数继续往上抛，因而unwind当前函数时有可能要进行相应的清理，此时这些清理局部变量的代码就是landing
+2. 如果当前函数没有catch或者catch不能处理当前exception，则意味着异常还要从当前函数继续往上抛，因而unwind当前函数时有可能要进行相应的清理，此时这些清理局部变量的代码就是landing
 pad。
 
 从名字上来看，顾名思议，landing
@@ -560,9 +541,9 @@ pad返回的代码。test\_func3\_2()中只有3个cs
 说，test\_func3\_2()函数中的landing
 pad就是从地址：400d09开始的，这些代码做了如下事情：
 
-1）先析构c2，然后jump到400d2b析构c.
+1. 先析构c2，然后jump到400d2b析构c.
 
-2）最后调用\_Unwind\_Resume（）
+2. 最后调用\_Unwind\_Resume（）
 
 由此可见当程序中有多个可能抛异常的地方时，landing
 pad也相应地会有多个，该函数的出口将更复杂，这也算是异常处理的一个overhead了。
@@ -576,18 +557,17 @@ ABI，代码放到了github上[这里](https://github.com/kmalloc/SimpleCppExcep
 
  
 
-【引用】：
+## 引用
+- http://www.intel.com/content/dam/www/public/us/en/documents/guides/itanium-software-runtime-architecture-guide.pdf
 
-http://www.intel.com/content/dam/www/public/us/en/documents/guides/itanium-software-runtime-architecture-guide.pdf
+- http://mentorembedded.github.io/cxx-abi/abi-eh.html
 
-http://mentorembedded.github.io/cxx-abi/abi-eh.html
+- http://refspecs.linuxfoundation.org/LSB\_3.0.0/LSB-Core-generic/LSB-Core-generic/ehframechpt.html
 
-http://refspecs.linuxfoundation.org/LSB\_3.0.0/LSB-Core-generic/LSB-Core-generic/ehframechpt.html
+- https://www.opensource.apple.com/source/gcc/gcc-5341/gcc/
 
-https://www.opensource.apple.com/source/gcc/gcc-5341/gcc/
+- http://www.cs.dartmouth.edu/\~sergey/battleaxe/hackito\_2011\_oakley\_bratus.pdf
 
-http://www.cs.dartmouth.edu/\~sergey/battleaxe/hackito\_2011\_oakley\_bratus.pdf
+- http://mentorembedded.github.io/cxx-abi/exceptions.pdf
 
-http://mentorembedded.github.io/cxx-abi/exceptions.pdf
-
-http://www.airs.com/blog/archives/464
+- http://www.airs.com/blog/archives/464
