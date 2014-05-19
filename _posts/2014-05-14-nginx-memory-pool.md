@@ -10,11 +10,6 @@ refer_post_addr:
 ---
 {% include JB/setup %}
 
-nginx内存管理-内存池
-===================
-
-
-
 **Nginx**是一款轻量级的Web
 服务器／反向代理服务器及电子邮件（IMAP/POP3）代理服务器,
 拥有占用内存少，并发性能好，稳定性好等特点，目前应用范围非常广。本文将基于nginx-1.4.7对其内存池进行分析。
@@ -109,23 +104,27 @@ nginx内存池的相关操作主要在文件./src/core/ngx\_palloc.h/c中，以�
 
 ####  申请内存 
 
-     nginx内存申请有好几个函数
+nginx内存申请有好几个函数
 
-	void * ngx_palloc (ngx_pool_t *pool, size_t size )
+从内存池中分配一块大小为size的内存，分配内存的起始地址进行内存对齐。
 	
-	从内存池中分配一块大小为size的内存，分配内存的起始地址进行内存对齐。
+    void * ngx_palloc (ngx_pool_t *pool, size_t size )
 	
+同ngx_palloc 的区别是分配内存的起始地址不进行内存对齐
+
 	void * ngx_pnalloc(ngx_pool_t *pool , size_t size)
 	
-	同ngx_palloc 的区别是分配内存的起始地址不进行内存对齐
 	
+调用ngx_palloc分配内存，并进行清零操作。
+
 	void * ngx_pcalloc (ngx_pool_t *pool, size_t size )
 	
-	调用ngx_palloc分配内存，并进行清零操作。
 	
+调用ngx_palloc分配内存，不论大小都挂在大块内存链表上。
+
 	void * ngx_pmemalign (ngx_pool_t *pool, size_t size , size_t alignment)
 	
-	调用ngx_palloc分配内存，不论大小都挂在大块内存链表上。
+	
 
 
 由于以上几种函数都是ngx\_palloc的变种，我们主要介绍一下ngx\_palloc , nginx内存分配分为小块内存分配和大块内存分配，ngx\_palloc会根据内存大小来选择进行何种分配方式。
