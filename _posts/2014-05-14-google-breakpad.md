@@ -4,7 +4,7 @@ title: Google breakpad介绍
 description: Google breakpad介绍
 category: 工具
 tags: breakpad
-refer_author: miliao
+refer_author: Ming Dong
 refer_blog_addr:
 refer_post_addr:
 ---
@@ -175,6 +175,4 @@ file加载进内存，并解析。
 
    
  工欲善其事必先利其器，对程序开发来说，尤其如此，好的工具常常能对我们的工作起到事半工倍的作用，而对于工具的使用我们不应仅仅满足于知道怎么用，知其然也要能知其所以然，学习和分析别人的工具是怎么做出来的，不仅能帮助我们更好地理解和使用这些工具，更重要的是能帮助我们开阔视野和增长知识。前文对breakpad在linux平台下的实现做了简单介绍，从中我们可以看出一个完善的工具链实现起来是一项浩大的工程，涉及到许多方方面面的知识，里面可以学习的东西很多，需要完善的东西也很多，breakpad作为一个开源项目，现在仍处在开发和完善的过程中，回馈开源的最好方式就是加入其中贡献你的力量，希望本文能对有兴趣的读者有帮助。
-
- 
 
