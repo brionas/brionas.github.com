@@ -20,12 +20,12 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
           ....
         }
              
-            void func_1()
-            {
-                // 这里编译没有任何问题，运行的时候直接Crash。
-                // 因为编译器会把false当成一个空的地址， 然后尝试用这个地址来构造一个string, 导致出错
-                func(false); // 相当于调用func(NULL, 1);
-            }
+        void func_1()
+        {
+            // 这里编译没有任何问题，运行的时候直接Crash。
+            // 因为编译器会把false当成一个空的地址， 然后尝试用这个地址来构造一个string, 导致出错
+            func(false); // 相当于调用func(NULL, 1);
+        }
     
 2. 不要为虚函数设置默认参数。这是因为默认参数值是在编译期决定的，而虚函数的调用是在运行时动态决定的，这样就会出现问题。看下面例子
     
@@ -213,7 +213,7 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
         //!}
     
     其实, 在C++11 里面，已经有了final关键字了。但是不用final关键字也可以实现这一功能。方法有很多  
-     方法一：
+    方法一：
     
         class A0 {
             friend class A;
@@ -245,7 +245,7 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
         class Derived : public Base {}; // This won't compile.
     
 8. 关于虚继承，不管继承体系有多长，被虚继承的类只会有一份，只会被构造一次，而且是最先被构造。  
-     看下面的例子：
+    看下面的例子：
     
         #include <iostream>
          using namespace std;
@@ -521,7 +521,7 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
             _Foo<Trait2<a>> foo2;
         }
     
- 23. \_\_cdecl, \_\_stdcall 以及\_\_thiscall的区别
+23. \_\_cdecl, \_\_stdcall 以及\_\_thiscall的区别
 
         1. \_\_cdecl： 这是C/C++函数的默认调用规范，参数从右向左依次传递并压入堆栈，由调用函数负责堆栈的清退，这种方式可以传递个数可变的参数
         1. \_\_stdcall：这是Win API函数使用的规范，参数从右向左依次传递并压入堆栈，由被调用函数负责堆栈的清退，它生成的函数代码比__cdecl小，但是当参数有可变个数的参数时会转化为\_\_cdecl
@@ -558,25 +558,25 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
     
  25. 浮点数的跨平台问题  
     在一些早期32位的X86机器上，处理器使用用80位拓展精度的寄存器做相关浮点运算，然后再根据是float/double截取成32位或64位。这样就有可能造成一些错误的结果。比如：
+    
+         // test machine information
+         // Linux gopherbc 2.6.9-22.ELsmp #1 SMP Sat Oct 8 19:11:43 CDT 2005 i686 i686 i386 GNU/Linux
+         #include <iostream>
+         using namespace std;
 
-          // test machine information
-          // Linux gopherbc 2.6.9-22.ELsmp #1 SMP Sat Oct 8 19:11:43 CDT 2005 i686 i686 i386 GNU/Linux
-          #include <iostream>
-          using namespace std;
-           
-          int main()
-          {
-              double d_end = 6;
-              double d_step = 0.2;
-           
-              // here will convert a special 80-bit extended-precision format to 32 bit format, it lead issue
-              int n = static_cast<int>(d_end / d_step);
-           
-              cout << "ori:" << d_end/d_step << ", i:" << n << endl;
-              return 0;
-          }
-          // the result is 30, 29
- 
+         int main()
+         {
+             double d_end = 6;
+             double d_step = 0.2;
+
+             // here will convert a special 80-bit extended-precision format to 32 bit format, it lead issue
+             int n = static_cast<int>(d_end / d_step);
+
+             cout << "ori:" << d_end/d_step << ", i:" << n << endl;
+             return 0;
+         }
+         // the result is 30, 29
+
 
 26. 一个多线程下的代码优化实例：  
      优化前：
@@ -670,7 +670,7 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
                 struct _Unwind_Exception * ex,
                 struct _Unwind_Context * context);
          
-            extern "C" _Unwind_Reason_Code __wrap___gxx_personality_v0(
+        extern "C" _Unwind_Reason_Code __wrap___gxx_personality_v0(
                     int version,
                     _Unwind_Action actions,
                     _Unwind_Exception_Class exception_class,
@@ -697,8 +697,8 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
         }
     
 2. 使用boost::bind的时候, 如果想绑定参数的话最好绑定一个引用参数。  
-   boost::bind会创建一个函数对象。如果有绑定参数的话，参数会被copy一份存到函数对象里面去。如果想保存参数的引用的话，就要使用boost::ref 和boost::cref。
-       例如：
+    boost::bind会创建一个函数对象。如果有绑定参数的话，参数会被copy一份存到函数对象里面去。如果想保存参数的引用的话，就要使用boost::ref 和boost::cref。
+        例如：
     
         class  A {
             public:
@@ -743,3 +743,4 @@ int p = false之间没有任何区别， 编译器不会抱怨。但是在一些
         {
             std::cerr << e.what() << std::endl;
         }
+
