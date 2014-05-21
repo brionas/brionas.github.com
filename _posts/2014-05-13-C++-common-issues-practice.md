@@ -1,7 +1,7 @@
 ---
 layout: post
-title: C++问题汇总
-description: C++问题汇总
+title: C++实践中的一些问题
+description: C++实践中的一些问题
 category: C++
 tags: C++
 refer_author: bozhang
