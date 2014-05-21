@@ -13,16 +13,12 @@ refer_post_addr:
 
 ###一  简介 
 
-        Boost Asio ( asynchronous input and
-output)关注异步输入输出。Boost
-Asio库提供了平台无关性的异步数据处理能力（当然它也支持同步数据处理）。一般的数据传输过程需要通过函数的返回值来判断数据传输是否成功。Boost Asio将数据传输分为两个独立的步骤：
+        Boost Asio ( asynchronous input and output)关注异步输入输出。Boost
+Asio库提供了平台无关性的异步数据处理能力（当然它也支持同步数据处理）。一般的数据传输过程需要通过函数的返回值来判断数据传输是否成功。与传统方式相比，Boost Asio优点在于程序在数据传输期间不会阻塞，Boost Asio将数据传输分为两个独立的步骤：
 
+1. 采用异步任务的方式开始数据传输
 
-   1.  采用异步任务的方式开始数据传输
-
-   2.  将传输结果通知调用端
-
-       与传统方式相比，Boost Asio优点在于程序在数据传输期间不会阻塞。
+1. 将传输结果通知调用端
 
 ###二 I/O services and I/O objects
 
@@ -52,17 +48,15 @@ boost::asio::deadline\_timer（用来提供计时器的功能，计时器可以�
 	  io_service.run();
 	}
 
-        首先定义一个boost::asio::io\_service来初始化I/O
+   首先定义一个boost::asio::io\_service来初始化I/O
 objects实例timer. 由于I/O objects对象构造函数的第一个参数都是一个I/O
 service对象，timer也不例外，timer的第二个参数可以是时间点或时间段，上例中是一个时间段。
 
-   async\_wait()表示时间到后调用handler，应用程序可以执行其它操作而不会阻塞在
-sync\_wait处。async\_wait()是一种非阻塞的函数，timer也提供阻塞的函数wait()，由于它在调用结束后返回，因而不需要
-handler作为其参数。
+   async\_wait()表示时间到后调用handler，应用程序可以执行其它操作而不会阻塞在
+sync\_wait处。async\_wait()是一种非阻塞的函数，timer也提供阻塞的函数wait()，由于它在调用结束后返回，因而不需要handler作为其参数。
 
-       可以发现，在调用 async\_wait()之后，I/O
-service调用了run方法。这是必须的，因为我们必须把控制权交给操作系统，以便在5s之后调用handler方法。也就是
-说，async\_wait()在调用后立即返回，run()调用后实际阻塞了。许多操作系统都是通过一个阻塞的函数来实现异步的操作。这令人费解，但是，
+   可以发现，在调用 async\_wait()之后，I/O
+service调用了run方法。这是必须的，因为我们必须把控制权交给操作系统，以便在5s之后调用handler方法。也就是说，async\_wait()在调用后立即返回，run()调用后实际阻塞了。许多操作系统都是通过一个阻塞的函数来实现异步的操作。这令人费解，但是，
 看了下面的例子，你也许就会发现这其实很好理解。
 
    

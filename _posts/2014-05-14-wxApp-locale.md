@@ -165,16 +165,15 @@ Windows下通过setlocale来设置时，locale字符串参数也提供了一定�
 
 对这个小程序稍微解释下：
 
-​1.
-程序第8行和11行之所以注释掉，是因为Windows下没有LC\_MESSAGES这个参数。
+1. 程序第8行和11行之所以注释掉，是因为Windows下没有LC\_MESSAGES这个参数。
 
-​2. line 20： 通过判断setlocale的返回值，可以知道到底当前操作成功没有。
+1. line 20： 通过判断setlocale的返回值，可以知道到底当前操作成功没有。
 
-​3. main函数先后测试在默认locale、系统locale和德语下strtod的运行情况。
+1. main函数先后测试在默认locale、系统locale和德语下strtod的运行情况。
 
-​4. line 37：仅仅修改LC\_NUMERIC，看看strtod是否能正确工作。
+1. line 37：仅仅修改LC\_NUMERIC，看看strtod是否能正确工作。
 
-​5. line 30和33在某些机子上会失败，所以一定要检测setlocale的返回值。
+1. line 30和33在某些机子上会失败，所以一定要检测setlocale的返回值。
 
 测试结果是：
 
