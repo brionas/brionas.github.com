@@ -80,7 +80,7 @@ strftime 、 wcsftime 函数。
 
 输出结果是：
 
-![](/assets/image/2014-05/2014-05-14-wxApp-locale/20140325212540781.jpg)
+![](/assets/image/2014-06/2014-06-14-wxApp-locale/20140325212540781.jpg)
 
 现在可知，**wxApp在Win****dows上的locale默认是C，没有使用系统的locale。这与Linux下的行为截然不同。**  
 
@@ -177,7 +177,7 @@ Windows下通过setlocale来设置时，locale字符串参数也提供了一定�
 
 测试结果是：
 
-![](/assets/image/2014-05/2014-05-14-wxApp-locale/20140325212511359.jpg)  
+![](/assets/image/2014-06/2014-06-14-wxApp-locale/20140325212511359.jpg)  
 
 这说明Windows
 下德语locale也存在同样的问题，同样可以通过修改locale的设置来避免这个问题发生。

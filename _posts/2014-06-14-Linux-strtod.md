@@ -113,7 +113,7 @@ glibc下只能通过setlocale来修改程序的locale设置，所以wx程序肯�
 
 直接gdb下设置setlocale函数断点， 终于找到了出错的位置app.cpp:420
 
-![](/assets/image/2014-05/2014-05-14-linux-strtod/20140324215521078.jpg)  
+![](/assets/image/2014-06/2014-06-14-linux-strtod/20140324215521078.jpg)  
 
 查看gtk中gtk\_set\_locale的[manual](http://developer.gimp.org/api/2.0/gtk/gtk-General.html#gtk-set-locale)
 
