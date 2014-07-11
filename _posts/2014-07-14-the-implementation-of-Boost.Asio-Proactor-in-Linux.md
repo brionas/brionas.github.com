@@ -2,7 +2,7 @@
 layout: post
 title: Linux下Boost.Asio Proactor模式实现分析
 description: Linux下Boost.Asio Proactor模式实现分析
-category: Boost 
+category: procator epoll reactor asynchronous 
 tags: Boost
 refer_author: ithiker
 refer_blog_addr:http://blog.csdn.net/ithiker/article/details/24348047

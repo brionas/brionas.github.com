@@ -14,12 +14,6 @@ refer_post_addr:
 ===========================================================================
 
 
-
-
-Created and last modified by [Peichao
-    Wang](%20%20%20%20/display/~pwang%0A) on [Jun 26,
-    2014](/pages/diffpagesbyversion.action?pageId=17734401&selectedPageVersions=36&selectedPageVersions=37 "Jun 26, 2014 12:41 AM")
-
 本编文章分析了wxSocket在Linux操作系统中的实现，并总结了相关使用方法。 
 
 -   [1. wxSocket 实现](#wxSocket实现分析和使用总结-1.wxSocket实现)
