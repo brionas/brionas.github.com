@@ -1,6 +1,17 @@
-[模板中的名字查找问题](http://www.cnblogs.com/catch/p/3751353.html)
--------------------------------------------------------------------
+---
+layout: post
+title: name lookup in template
+description: name lookup in template
+category: template
+tags: template
+refer_author: twoon
+refer_blog_addr:http://www.cnblogs.com/catch/p/3751353.html
+refer_post_addr:
+---
+{% include JB/setup %}
 
+**模板中的名字查找问题**
+===========================================================================
 
 **问题起源**
 ------------

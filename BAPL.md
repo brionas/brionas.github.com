@@ -1,4 +1,16 @@
-Linux下Boost.Asio Proactor模式实现分析
+---
+layout: post
+title: Linux下Boost.Asio Proactor模式实现分析
+description: Linux下Boost.Asio Proactor模式实现分析
+category: Boost 
+tags: Boost
+refer_author: ithiker
+refer_blog_addr:http://blog.csdn.net/ithiker/article/details/24348047
+refer_post_addr:
+---
+{% include JB/setup %}
+
+**Linux下Boost.Asio Proactor模式实现分析**
 ===========================================================================
 
 
