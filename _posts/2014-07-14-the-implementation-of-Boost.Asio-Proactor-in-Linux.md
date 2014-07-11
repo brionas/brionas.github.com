@@ -5,14 +5,10 @@ description: Linux下Boost.Asio Proactor模式实现分析
 category: Boost 
 tags: procator epoll reactor asynchronous
 refer_author: ithiker
-refer_blog_addr:http://blog.csdn.net/ithiker/article/details/24348047
+refer_blog_addr: http://blog.csdn.net/ithiker/article/details/24348047
 refer_post_addr:
 ---
 {% include JB/setup %}
-
-**Linux下Boost.Asio Proactor模式实现分析**
-===========================================================================
-
 
 **背景：**
 
@@ -426,9 +422,9 @@ reactive\_socket\_recv\_op对象op封装用户回调函数，设置事件状态�
 
 Boost.Asio通过对用户操作、回调函数、epoll的封装，完成了异步IO，从而实现了Proactor模式。
 
-【参考】
+**参考**
 
-1.http://www.cnblogs.com/zhiranok/archive/2011/10/07/boost-asio-proactor.html\
+1.http://www.cnblogs.com/zhiranok/archive/2011/10/07/boost-asio-proactor.html
 
-2.http://www.cnblogs.com/hello-leo/archive/2011/04/12/2013958.html\
+2.http://www.cnblogs.com/hello-leo/archive/2011/04/12/2013958.html
 

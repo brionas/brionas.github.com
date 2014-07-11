@@ -10,10 +10,6 @@ refer_post_addr:
 ---
 {% include JB/setup %}
 
-**wxSocket 实现分析和使用总结**
-===========================================================================
-
-
 本编文章分析了wxSocket在Linux操作系统中的实现，并总结了相关使用方法。 
 
 -   [1. wxSocket 实现](#wxSocket实现分析和使用总结-1.wxSocket实现)
@@ -153,7 +149,8 @@ b. wxSOCKET\_WAITALL
 wxSocket 对 系统socket函数进行封装，内部的socket fd采用非阻塞模式。
 
 src/unix/gsocket.cpp
-<pre><code>m_fd = socket(m_peer->m_realfamily,m_stream?SOCK_STREAM:SOCK_DGRAM,0);
+{% highlight cpp lineno %}
+m_fd = socket(m_peer->m_realfamily,m_stream?SOCK_STREAM:SOCK_DGRAM,0);
 if(m_fd == INVALID_SOCKET)
 {
 	m_error = GSOCKIOERR;
@@ -167,7 +164,7 @@ if(m_fd == INVALID_SOCKET)
 #else
 	ioctl(m_fd,FIONBIO,&arg);
 #endif
-</code></pre>
+{% endhighlight %}
 
 这里arg的值为1，通过ioctl来设置socket fd为非阻塞。
 
@@ -199,7 +196,7 @@ stream （wxSocketInputStream, wxSocketOuputStream）来读写数据。
  这个通过查看wxSocketBase::\_Read的实现(src/common/socket.cpp)，很容易弄清楚。
 
 **wxSocketBase::\_Read**
-
+{% highlight cpp lineno %}
      wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
     {
       // ...
@@ -235,7 +232,7 @@ stream （wxSocketInputStream, wxSocketOuputStream）来读写数据。
       }
       return total;
     }
-
+{% endhighlight %}
 _Read函数内的while循环的启动条件 要求`“``ret > 0 && nbytes > 0 && (m_flags & wxSOCKET_WAITALL)”`，这意味着要求满足如下条件：
 
 1.  **设置 wxSOCKET\_WAITALL**
