@@ -1,24 +1,21 @@
 ---
 layout: post
-title: name lookup in template
-description: name lookup in template
+title: 模板中的名字查找问题
+description: 模板中的名字查找问题
 category: template
 tags: template
 refer_author: twoon
-refer_blog_addr:http://www.cnblogs.com/catch/p/3751353.html
+refer_blog_addr: http://www.cnblogs.com/catch/p/3751353.html
 refer_post_addr:
 ---
 {% include JB/setup %}
-
-**模板中的名字查找问题**
-===========================================================================
 
 **问题起源**
 ------------
 
 先看下面很简单的一小段程序。
 
-<pre><code>
+{% highlight cpp lineno %}
 #include <iostream>
 template <typename T>
 struct Base 
@@ -37,7 +34,8 @@ struct Derived : Base<T>
        std::cout << "Derived::gun" << std::endl;
        fun();
    }
-};</code></pre>
+};
+{% endhighlight %}
 
 
 这段代码在 GCC 下很意外地编译不过，原因竟然是找不到 fun
@@ -61,7 +59,7 @@ GCC 有这样愚蠢的 bug？
 要去除这种错误，解决的方法很简单，只要在调用 fun
 的地方，人为地加上该调用对模板参数的依赖则可。
 
-<pre><code>
+{% highlight cpp lineno %}
 template <typename T>
 struct Derived : Base<T>
 {
@@ -71,7 +69,7 @@ struct Derived : Base<T>
        this->fun();// or Base<T>::fun();
    }
 };
-</code></pre>
+{% endhighlight %}
 
 加上 this 之后，fun 就依赖于当前 Derived
 类，也就间接依赖了模板参数T，因此名字的查找就会被推迟到该类被实例化时才去基类中查找。
@@ -91,7 +89,7 @@ struct Derived : Base<T>
 的定义时，还不能确定它的基类最后是怎样的：Base
 有可能会在后面被特化，使得最后被继承的具体基类中不一定还有 fun() 函数。
 
-``` {.brush:cpp;gutter:true;}
+{% highlight cpp lineno %}
 template <>
 struct Base<int> 
 {
@@ -100,7 +98,7 @@ struct Base<int>
        std::cout << "Specialized, Base::fun2" << std::endl;
    }
 };
-```
+{% endhighlight %}
 
 因此编译器在看到模板类的定义时，还不能判断它的基类最后会被实例化成怎样，所以对依赖于模板参数的符号的查找只能推迟到该模板被实例化时才进行。
 而如果符号不依赖于模板参数，显然没有这个限制，因此可以在看到模板的定义时就直接进行查找，于是就出现了对不同符号的两阶段查找。
@@ -109,7 +107,8 @@ struct Base<int>
 ------------------
 
 对于前面介绍中提到的符号，我们其实默认指的是变量，细心的读者可能会想到，在继承类中引用的符号，还可能会是类型，而由于模板特化的存在，在名字查找的第一阶段编译器也是没法判断出该符号最后到底是怎样的类型，甚至不能知道是不是一个类型。
-<pre><code>
+
+{% highlight cpp lineno %}
 template <typename T>
 struct Base 
 {
@@ -135,7 +134,8 @@ struct Base<float>
 {
    int baseT;
 };
-</code></pre>
+{% endhighlight %}
+
 如上例子，Derived 中 gun() 函数对 Base::baseT
 的引用会造成编译器的迷惑，它在看到 Derided 的定义时，根本无从知道
 Base::baseT 究竟是一个变量名，还是一个类型，以及什么类型？
@@ -148,7 +148,7 @@ Derived 的定义时，它直接把 Base::baseT
 必须得显式地告诉它，因此需要在引用 Base::baseT
 时，显式地加入一个关键字：typename.
 
-<pre><code>
+{% highlight cpp lineno %}
 template <typename T>
 struct Derived : Base<T>
 {
@@ -157,12 +157,12 @@ struct Derived : Base<T>
       typename Base<T>::baseT p = "abc";
    }
 };
-</code></pre>
+{% endhighlight %}
 
 此时，编译器看到有 typename 显式地指明 baseT
 是一个类型，它就不会再把它默认当成是一个变量了，从而使得名字查找的第一个阶段可以继续下去。
 
-### 【引用】
+### 引用
 
 http://gcc.gnu.org/onlinedocs/gcc/Name-lookup.html
 
