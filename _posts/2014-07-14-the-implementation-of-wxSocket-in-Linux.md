@@ -375,7 +375,7 @@ int GSocket::Recv_Stream(char *buffer, int size)
   while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
   return ret;
 }
-{% highlight cpp lineno %}
+{% endhighlight %}
 
 可以通过如下方式来查看socket 默认缓冲区大小：
 
@@ -384,7 +384,7 @@ pwang@p03bc ~$ cat /proc/sys/net/ipv4/tcp_rmem
 4096 87380(85K 340B) 174760 //第一个表示最小值，第二个表示默认值，第三个表示最大值。
 pwang@p03bc ~$ cat /proc/sys/net/ipv4/tcp_wmem
 4096 16384(16k) 131072
-{% highlight cpp lineno %}
+{% endhighlight %}
 
 这里read缓冲区最小4KB，最大170KB，默认约85KB。所以recv函数绝对不可能一次读10MB数据。
 
