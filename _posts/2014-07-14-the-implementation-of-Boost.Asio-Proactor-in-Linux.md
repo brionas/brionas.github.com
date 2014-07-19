@@ -22,7 +22,8 @@ Boost.Asio在Linux下封装epoll这种同步接口是如何做到异步IO的呢�
 **分析：**
 
 Boost.Asio中最重要的一个类是io\_service，io\_service抽象系统I/O接口,提供异步数据传输的能力，它是应用程序和系统I/O接口的桥梁。Boost.Asio主要采用它实现了Proactor模式。io\_service有一个重要的成员，io\_service\_impl，它在不同的系统下有不同的实现。在Windows下是基于IOCP的，在Linux下是基于task\_io\_service，这主要是通过预处理进行区分的：
-<pre><code>// /asio/io_service.hpp
+
+{% highlight cpp lineno %}
 namespace detail {
 #if defined(BOOST_ASIO_HAS_IOCP)
   typedef class win_iocp_io_service io_service_impl;
@@ -32,10 +33,11 @@ namespace detail {
 #endif
   class service_registry;
 } // namespace detail
-</code></pre>
+{% endhighlight %}
 
 io\_service类如下：
-<pre><code>// /asio/io_service.hpp
+
+{% highlight cpp lineno %}
  class io_service: private noncopyable
 {
 private:
@@ -52,15 +54,19 @@ public:
    BOOST_ASIO_DECL std::size_t run();
    // Run the io_service object's event processing loop to execute ready handlers.
    BOOST_ASIO_DECL std::size_t poll();
- };</code></pre>
+ };
+{% endhighlight %}
 
  其中run()函数的具体实现如下：
-<pre><code>{
+
+{% highlight cpp lineno %}
+{
   boost::system::error_code ec;
   std::size_t s = impl_.run(ec);
   boost::asio::detail::throw_error(ec);
   return s;
-}</code></pre>
+}
+{% endhighlight %}
 
 io\_service的run()函数最终是调用了impl\_(task\_io\_service)的run函数，对于poll也类似。
 
@@ -73,7 +79,8 @@ io\_service的run()函数最终是调用了impl\_(task\_io\_service)的run函数
  2. 事件到达后对线程池的统一调度
 
 task\_io\_service如下：
-<pre><code>// /asio/detail/task_io_service.hpp
+
+{% highlight cpp lineno %}
 class task_io_service : public boost::asio::detail::service_base<task_io_service>
 {
 public:
@@ -89,11 +96,14 @@ private:
   atomic_count outstanding_work_;
   // The queue of handlers that are ready to be delivered.
   op_queue<operation> op_queue_;
-} </code></pre>
+} 
+{% endhighlight %}
+
  它有几个比较重要的成员：
 
 1. reactor：这是一个typedef定义的同义词，它在不同平台有不同的实现：
-<pre><code>// asio/detail/reactor_fwd.hpp
+
+{% highlight cpp lineno %}
 #if defined(BOOST_ASIO_WINDOWS_RUNTIME)
 typedef class null_reactor reactor;
 #elif defined(BOOST_ASIO_HAS_IOCP)
@@ -106,10 +116,13 @@ typedef class kqueue_reactor reactor;
 typedef class dev_poll_reactor reactor;
 #else
 typedef class select_reactor reactor;
-#endif</code></pre>
+#endif
+{% endhighlight %}
 
 平台使用的reactor类型可以通过下面的方法得到：
-<pre><code>#include <iostream>
+
+{% highlight cpp lineno %}
+#include <iostream>
 #include <string>
 #include <boost/asio.hpp>
 int main()
@@ -127,13 +140,16 @@ std::string output;
   output = "select" ;
 #endif
     std::cout << output << std::endl;
-}</code></pre>
+}
+{% endhighlight %}
 
 在我的环境中使用的是epoll。通常，Linux下主要采用epoll，对应的实现类是epoll\_reactor
 
 2.
 op\_queue\<operation\>：回调函数对象列表，这里面的每一个operation都会在调用了run函数的用户线程里面执行，每个操作选择一个空闲的线程，关于这点可以看下面的程序：
-<pre><code>#include <boost/asio.hpp>   
+
+{% highlight cpp lineno %}
+#include <boost/asio.hpp>   
 #include <boost/thread.hpp>   
 #include <iostream>   
 
@@ -166,8 +182,9 @@ int main()
     boost::thread thread2(run);   
     thread1.join();   
     thread2.join();   
-}</code></pre>
-        
+}
+{% endhighlight %}
+
 通过使用定义在boost/thread.hpp中的boost::thread类，在main()中创建了两个线程。这两个线程为同一个I/O
 service调用run()。这样做的好处是，一旦独立的异步操作完成，I/O
 service可以有效利用两个线程来执行handler方法
@@ -175,7 +192,8 @@ service可以有效利用两个线程来执行handler方法
 service将会自由选择线程来执行handler2。这可以通过注释掉handler1中的sleep(3)来验证：不注释，handler1和handler2总是不同的线程中执行；注释后，handler1和handler2可能在同一线程中执行，也可能不再，这要取决于整个系统当时的线程调度情况。通过调整timer的时间也可以观察到同样的现象。
 
 task\_io\_service的run函数最终调用的是reactor的run函数，在Linux下是epoll\_reactor的run函数，调用层次为：
-<pre><code>// asio/detail/impl/Task_io_service.ipp
+
+{% highlight cpp lineno %}
 
 std::size_t task_io_service::run(boost::system::error_code& ec)
 {
@@ -186,9 +204,10 @@ std::size_t task_io_service::run(boost::system::error_code& ec)
     if (n != (std::numeric_limits<std::size_t>::max)())
         ++n; 
     return n;
-}</code></pre>
-<pre><code>
-// asio/detail/impl/Task_io_service.ipp
+}
+{% endhighlight %}
+
+{% highlight cpp lineno %}
 std::size_t task_io_service::do_run_one(mutex::scoped_lock& lock,
     task_io_service::thread_info& this_thread,
     const boost::system::error_code& ec)
@@ -226,9 +245,12 @@ std::size_t task_io_service::do_run_one(mutex::scoped_lock& lock,
     }
   }
   return 0;
-}</code></pre>
+}
+{% endhighlight %}
+
 epoll\_reactor的run()方法最终调用的是epoll的epoll\_wait的，通过epoll\_wait，将就绪的事件放入ops，等待处理。
-<pre><code>//asio/detail/impl/epoll_reactor.ipp
+
+{% highlight cpp lineno %}
 void epoll_reactor::run(bool block, op_queue<operation>& ops)
 { 
     ... 
@@ -239,10 +261,12 @@ void epoll_reactor::run(bool block, op_queue<operation>& ops)
    descriptor_state* descriptor_data = static_cast<descriptor_state*>(ptr); 
    descriptor_data->set_ready_events(events[i].events);  
    ops.push(descriptor_data);
-}</code></pre>
+}
+{% endhighlight %}
+
 epoll\_reactor类的定义如下：
-<pre><code>
-// detail/epoll_reactor.hpp
+
+{% highlight cpp lineno %}
 class epoll_reactor : public boost::asio::detail::service_base<epoll_reactor>
 {
   ...
@@ -256,7 +280,8 @@ private:
   io_service_impl& io_service_;
   ...
  
- };</code></pre>
+ };
+{% endhighlight %}
 
 整个调用过程如下图所示：
 
@@ -267,7 +292,8 @@ Boost.Asio是这样使用epoll来进行事件分发的，实际的IO操作是如
 
 
 以TCP为例，Boost.Asio中对TCP类的封装如下：
-<pre><code>//asio/ip/Tcp.hpp
+
+{% highlight cpp lineno %}
 class tcp
 {
 public:
@@ -302,9 +328,12 @@ private:
   }
 
   int family_;
-};</code></pre>
+};
+{% endhighlight %}
+
 basic\_stream\_socket\<tcp\>类似于TCP中的socket，basic\_socket\_acceptor\<tcp\>用于监听套接字，它们均有许多异步方法，如async\_receive，async\_send等。basic\_stream\_socket和basic\_socket\_acceptor都是模板类，以basic\_stream\_socket为例，其async\_receive方法如下：
-<pre><code>// asio/Basic_stream_socket.hpp
+
+{% highlight cpp lineno %}
 template <typename MutableBufferSequence, typename ReadHandler>
   BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
       void (boost::system::error_code, std::size_t))
@@ -318,12 +347,13 @@ template <typename MutableBufferSequence, typename ReadHandler>
 
     return this->get_service().async_receive(this->get_implementation(),
         buffers, flags, BOOST_ASIO_MOVE_CAST(ReadHandler)(handler));
-  }</code></pre>
+  }
+{% endhighlight %}
 
 get-\>service()的原型是什么呢？basic\_stream\_socket继承于basic\_socket\<Protocol,
 stream\_socket\_service\>，而stream\_socket\_service类为：
 
-<pre><code>// boost/asio/stream_socket_service.hpp
+{% highlight cpp lineno %}
 class stream_socket_service
 #if defined(GENERATING_DOCUMENTATION)
   : public boost::asio::io_service::service
@@ -353,9 +383,12 @@ private:
   typedef detail::reactive_socket_service<Protocol> service_impl_type;
 #endif
 
-}</code></pre>
+}
+{% endhighlight %}
+
 从上面可以看出，Linux下，真正干活的类是reactive\_socket\_service，reactive\_socket\_service又继承自reactive\_socket\_service\_base，该类如下：
-<pre><code>// boost/asio/detail/Reactive_socket_service_base.hpp
+
+{% highlight cpp lineno %}
 class reactive_socket_service_base
 {
 public:
@@ -377,15 +410,16 @@ public:
 protected:
   // The selector that performs event demultiplexing for the service.
   reactor& reactor_;
-}</code></pre>
+}
+{% endhighlight %}
+
 基本的继承关系图如下：
 
 ![](http://img.blog.csdn.net/20140424101426140)
 
 通过reactor，将epoll与事件处理联系起来了，在reactive\_socket\_service\_base中，async\_receive的实现为：
-<pre><code>
-// boost/asio/detail/impl/Reactive_socket_service_base.ipp 
 
+{% highlight cpp lineno %}
 // Start an asynchronous receive. The buffer for the data being received
   // must be valid for the lifetime of the asynchronous operation.
   template <typename MutableBufferSequence, typename Handler>
@@ -414,7 +448,8 @@ protected:
           && buffer_sequence_adapter<boost::asio::mutable_buffer,
             MutableBufferSequence>::all_empty(buffers)));
     p.v = p.p = 0;
-  }</code></pre>
+  }
+{% endhighlight %}
 
 reactive\_socket\_recv\_op对象op封装用户回调函数，设置事件状态；start\_op调用epoll\_reactor的start\_op将read\_op操作注册到epoll的文件描述符中。在这两个过程中，op起到了桥梁作用，一方面通过epoll检查对应描述符事件是否就绪，另一方面在就绪后进行数据IO操作，并触发用户注册的回调函数。这样就完成了整个异步IO过程。
 
