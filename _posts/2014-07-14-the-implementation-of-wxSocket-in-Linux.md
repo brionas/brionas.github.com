@@ -12,38 +12,6 @@ refer_post_addr:
 
 本编文章分析了wxSocket在Linux操作系统中的实现，并总结了相关使用方法。 
 
--   [1. wxSocket 实现](#wxSocket实现分析和使用总结-1.wxSocket实现)
-    -   [1.1 主要操作接口](#wxSocket实现分析和使用总结-1.1主要操作接口)
-        -   [1. basic IO](#wxSocket实现分析和使用总结-1.basicIO)
-        -   [2. Socket state](#wxSocket实现分析和使用总结-2.Socketstate)
-        -   [3. Handling socket
-            events](#wxSocket实现分析和使用总结-3.Handlingsocketevents)
-    -   [1.2
-        wxSocketFlags](#wxSocket实现分析和使用总结-1.2wxSocketFlags)
-    -   [1.3 wxSocket实现](#wxSocket实现分析和使用总结-1.3wxSocket实现)
--   [2.
-    wxSocketBase::Read/Write](#wxSocket实现分析和使用总结-2.wxSocketBase::Read/Write)
-    -   [2.1 未设置wxSOCKET\_WAITALL flag时的wxSocketBase::Read](#wxSocket实现分析和使用总结-2.1未设置wxSOCKET_WAITALLflag时的wxSocketBase::Read)
-    -   [2.2 辅助调试类](#wxSocket实现分析和使用总结-2.2辅助调试类)
-    -   [2.3
-        GSocket::Read分析](#wxSocket实现分析和使用总结-2.3GSocket::Read分析)
-    -   [2.4
-        wxSocketBase::Read/Write可能发生的错误](#wxSocket实现分析和使用总结-2.4wxSocketBase::Read/Write可能发生的错误)
-    -   [2.5 wxSOCKET\_TIMEDOUT](#wxSocket实现分析和使用总结-2.5wxSOCKET_TIMEDOUT)
-    -   [2.6
-        wxSocketBase::LastCount函数](#wxSocket实现分析和使用总结-2.6wxSocketBase::LastCount函数)
--   [3.
-    使用wxBufferedInputStream ](#wxSocket实现分析和使用总结-3.使用wxBufferedInputStream)
-    -   [3.1 同时使用wxBufferedInputStream 和wxSOCKET\_WAITALL
-        flag](#wxSocket实现分析和使用总结-3.1同时使用wxBufferedInputStream和wxSOCKET_WAITALLflag)
-    -   [3.2 安全使用socket
-        Read](#wxSocket实现分析和使用总结-3.2安全使用socketRead)
-    -   [3.3 安全使用socket
-        Write](#wxSocket实现分析和使用总结-3.3安全使用socketWrite)
--   [4. reference](#wxSocket实现分析和使用总结-5.reference)
-
- 
-
 wxSocket 属于wxWidgets的wxNet子module。wxSocket是对系统socket
 API的简单封装，对外提供了wxEvent通知机制，屏蔽了操作系统相关的实现细节。用户可以通过wxSocketClient/wxSocketServer来很方便的使用。
 
@@ -51,10 +19,7 @@ Note: 此处使用的wxWidgets 库的版本是
 v2.8.9，主要涉及到代码文件 src/common/sckstrm.cpp， src/common/socket.cpp
 和 src/unix/gsocket.cpp。
 
- 
-
-1. wxSocket 实现 
-----------------
+# 1. wxSocket 实现 
 
 wxSocket相关类UML图：
 
@@ -67,91 +32,83 @@ graph](http://docs.wxwidgets.org/3.0/classwx_socket_base__inherit__graph.png)
 
 wxSocket主要的操作如下：
 
-##### 1. basic IO 
+1. basic IO
 
-Close<br />
-Discard<br />
-Peek<br />
-Unread<br />
-Read<br />
-ReadMsg<br />
-Write<br />
-WriteMsg<br />
+    - Close
+    - Discard
+    - Peek
+    - Unread
+    - Read
+    - ReadMsg
+    - Write
+    - WriteMsg
 
-##### 2. Socket state 
+1. Socket state
 
-a. Functions to retrieve current state and miscellaneous info.<br />
-Error<br />
-GetLocal/GetPeer<br />
-IsData<br />
-IsDisconnected/IsConnected<br />
-LastCount<br />
-LastError<br />
-IsOk<br />
-SaveState/RestoreState
+    2. Functions to retrieve current state and miscellaneous info.
 
-b\. Functions that perform a timed wait on a certain IO condition.\
-InterruptWait<br />
-Wait<br />
-WaitForLost<br />
-WaitForRead/WaitForWrite<br />
-and also:<br />
-wxSocketServer::WaitForAccept<br />
-wxSocketClient::WaitOnConnect<br />
+        - Error
+        - GetLocal/GetPeer
+        - IsData
+        - IsDisconnected/IsConnected
+        - LastCount
+        - LastError
+        - IsOk
+        - SaveState/RestoreState
 
-c\. Functions that allow applications to customize socket IO as needed.<br />
-GetFlags/SetFlags<br />
-SetTimeout<br />
-SetLocal
+    2. Functions that perform a timed wait on a certain IO condition.
 
-##### 3. Handling socket events 
+        - InterruptWait
+        - Wait
+        - WaitForLost
+        - WaitForRead/WaitForWrite
+        - and also:
+            - wxSocketServer::WaitForAccept
+            - wxSocketClient::WaitOnConnect
 
-Notify/SetNotify<br />
-GetClientData/SetClientData<br />
-SetEventHandler
+    2. Functions that allow applications to customize socket IO as needed.
+
+        - GetFlags/SetFlags
+        - SetTimeout
+        - SetLocal
+
+1. Handling socket events 
+
+    - Notify/SetNotify
+    - GetClientData/SetClientData
+    - SetEventHandler
+
 
 用户可以方便的通过SetNotify来订阅想要通知的事件。基于此，可以完全把Read/Write操作事件化。
 
 ### 1.2 wxSocketFlags
-
 wxSocketFlags用来控制socket的运行模式，主要的flag如下：
 <table><tr><td>
 wxSocketFlags</td>
 <td>
 含义
 </td></tr><tr><td>
-wxSOCKET\_BLOCK</td> 
+wxSOCKET_BLOCK</td> 
 <td>
 Block the GUI (do not yield) while reading/writing data. 
 </td></tr><tr><td>
-wxSOCKET\_NOWAIT 
+wxSOCKET_NOWAIT 
 </td><td>
 Read/write as much data as possible and return immediately. 
 </td></tr><tr><td>
-wxSOCKET\_WAITALL 
+wxSOCKET_WAITALL 
 </td><td>
 Wait for all required data to be read/written unless an error occurs.
 </td></tr></table>
 
-a.wxSOCKET\_BLOCK表示在调用wxSocketBase::Read/Write的时候，不会触发yield的操作。
+a. wxSOCKET\_BLOCK表示在调用wxSocketBase::Read/Write的时候，不会触发yield的操作。如果wxSocket本身在main thread里面进行读写操作，程序此时会不响应UI消息。而且由于yield操作本身可能会导致socket相关的操作重入（reentrant），这很可能不是用户代码想要的。所以一般推荐在wxSocket\_BLOCK+thread环境下使用wxSocket，这样socket的读写操作就不会阻塞UI thread。
 
-如果wxSocket本身在main thread里面进行读写操作，程序此时会不响应UI消息。
-
-而且由于yield操作本身可能会导致socket相关的操作重入（reentrant），这很可能不是用户代码想要的。
-
-所以一般推荐在wxSocket\_BLOCK+thread环境下使用wxSocket，这样socket的读写操作就不会阻塞UI
-thread。
-
- 
-
-b. wxSOCKET\_WAITALL
-与wxSOCKET\_NOWAIT正好相反，分别用于同步和异步读写。
+b. wxSOCKET\_WAITALL与wxSOCKET\_NOWAIT正好相反，分别用于同步和异步读写。
 
 ### 1.3 wxSocket实现 
-
 wxSocket 对 系统socket函数进行封装，内部的socket fd采用非阻塞模式。
 
-src/unix/gsocket.cpp
+**src/unix/gsocket.cpp**
 {% highlight cpp lineno %}
 m_fd = socket(m_peer->m_realfamily,m_stream?SOCK_STREAM:SOCK_DGRAM,0);
 if(m_fd == INVALID_SOCKET)
@@ -171,26 +128,21 @@ if(m_fd == INVALID_SOCKET)
 
 这里arg的值为1，通过ioctl来设置socket fd为非阻塞。
 
-2. wxSocketBase::Read/Write 
----------------------------
-
+# 2. wxSocketBase::Read/Write 
 wxSocket本质上是non-blocking
 socket。我们可以通过wxSocketBase::Read/Write直接读写数据。同时wxNet也提供了wxSocket
 stream （wxSocketInputStream, wxSocketOuputStream）来读写数据。
 
-通过wxSocket stream来读写数据和直接通过wxSocket来读写基本一样。
-
-但是wxSocket stream
+通过wxSocket stream来读写数据和直接通过wxSocket来读写基本一样。但是wxSocket stream
 的作用在于，我们可以利用wx库提供的通用的[stream操作类](http://docs.wxwidgets.org/3.0/group__group__class__streams.html)来处理socket相关的读写。比如：
-
 利用wxBufferedInputStream 和 wxBufferedOutputStream来进行带缓冲区的读写。
 
 ### 2.1 未设置wxSOCKET\_WAITALL flag时的wxSocketBase::Read 
 
-**问题：假如直接调用wxSocketBase::Read或者wxSocketInputStream::Read读取一大块数据（e.g.
-10MB），可能会发生什么情况？**
+**问题：** 假如直接调用wxSocketBase::Read或者wxSocketInputStream::Read读取一大块数据（e.g.
+10MB），可能会发生什么情况？
 
-**答案：wxSocketInputStream::Read返回后，实际读取的字节数很随机，跟当前的系统状态有很大关系。**
+**答案：** wxSocketInputStream::Read返回后，实际读取的字节数很随机，跟当前的系统状态有很大关系。
 
 当然这样的行为和直接用系统函数recv(2)或read(2)从non-blocking socket
 读取数据类似。
@@ -198,7 +150,6 @@ stream （wxSocketInputStream, wxSocketOuputStream）来读写数据。
 
  这个通过查看wxSocketBase::\_Read的实现(src/common/socket.cpp)，很容易弄清楚。
 
-**wxSocketBase::\_Read**
 {% highlight cpp lineno %}
      wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
     {
@@ -238,22 +189,18 @@ stream （wxSocketInputStream, wxSocketOuputStream）来读写数据。
 {% endhighlight %}
 _Read函数内的while循环的启动条件 要求`“``ret > 0 && nbytes > 0 && (m_flags & wxSOCKET_WAITALL)”`，这意味着要求满足如下条件：
 
-1.  **设置 wxSOCKET\_WAITALL**
-2.  **上次读到数据**
-3.  **还有数据需要读**
+1.  设置 wxSOCKET\_WAITALL
+2.  上次读到数据
+3.  还有数据需要读
 
-**即使设置了wxSOCKET\_WAITALL， wxSocketBase::\_Read也不能完全保证返回时，请求的nbytes已经完全读出，这是因为
-代码行 “ret = m\_socket-\>Read((char \*)buffer,
-nbytes);”的返回值不能保证 “ret \> 0”条件。**
+即使设置了wxSOCKET\_WAITALL， wxSocketBase::\_Read也不能完全保证返回时，请求的nbytes已经完全读出，这是因为
+代码行 “ret = m\_socket-\>Read((char \*)buffer, nbytes);”的返回值不能保证 “ret \> 0”条件。
 
  
 
 ### 2.2 辅助调试类 
 
 这里通过继承wxSocketInputStream来打印更多调试信息。
-
-
-**SocketInputStream**
 
 {% highlight cpp lineno %}
     class wxGDSSocketInputStream : public wxSocketInputStream
@@ -293,14 +240,11 @@ nbytes);”的返回值不能保证 “ret \> 0”条件。**
 {% endhighlight %}
 
 通过调试发现，wxSocketBase::Read在读取大数据块时，很可能会提前返回，而且此时wxSocket内可能发生了错误（具体错误及原因见2.3节）。
-
  
 
 ### 2.3 GSocket::Read分析
 
 wxSocketBase::Read最终通过GSocket::Read实现读数据（src/unix/gsocket.cpp）。
-
-**GSocket::Read**
 
 {% highlight cpp lineno %}
 int GSocket::Read(char *buffer, int size)
@@ -362,8 +306,6 @@ GSocket::Read主要调用了两个函数：Input\_Timeout和Recv\_Stream。
 
 GSocket::Recv\_Stream 通过调用system 函数 **recv(2)** 实现。
 
-**GSocket::Recv\_Stream**
-
 {% highlight cpp lineno %}
 int GSocket::Recv_Stream(char *buffer, int size)
 {
@@ -389,8 +331,6 @@ pwang@p03bc ~$ cat /proc/sys/net/ipv4/tcp_wmem
 这里read缓冲区最小4KB，最大170KB，默认约85KB。所以recv函数绝对不可能一次读10MB数据。
 
 GSocket::Input\_Timeout函数（src/unix/gsocket.cpp）通过**select(2)**函数来计时。
-
-**GSocket::Input\_Timeout**
 
 {% highlight cpp lineno %}
 GSocketError GSocket::Input_Timeout()
@@ -432,21 +372,19 @@ m\_timeout的默认值是600秒，所以如果没有数据可读，等到timeout
 如果设置了wxSOCKET\_NOWAIT flag，GSocket::Input\_Timeout 就会直接返回。
 
 ### 2.4 wxSocketBase::Read/Write可能发生的错误 
-
 wxSocket 所有可能发生的错误如下：
-
 <table><tr><td>
 error</td><td>               Note</td></tr>
-<tr><td>wxSOCKET\_NOERROR</td><td>   No error happened.</td></tr> 
-<tr><td>wxSOCKET\_INVOP </td><td> Invalid operation.</td></tr>
-<tr><td>wxSOCKET\_IOERR </td><td> Input/Output error.</td></tr>
-<tr><td>wxSOCKET\_INVADDR</td><td>Invalid address passed to wxSocket.</td></tr>
-<tr><td>wxSOCKET\_INVSOCK</td><td>Invalid socket (uninitialized).</td></tr>
-<tr><td>wxSOCKET\_NOHOST</td><td>No corresponding host.</td></tr>
-<tr><td>wxSOCKET\_INVPORT</td><td>Invalid port.</td></tr>
-<tr><td>wxSOCKET\_WOULDBLOCK</td><td>The socket is non-blocking and the operation would block.</td></tr>
-<tr><td>wxSOCKET\_TIMEDOUT</td><td>The timeout for this operation expired.</td></tr>
-<tr><td>wxSOCKET\_MEMERR</td><td>Memory exhausted.</td></tr>
+<tr><td>wxSOCKET_NOERROR</td><td>   No error happened.</td></tr> 
+<tr><td>wxSOCKET_INVOP </td><td> Invalid operation.</td></tr>
+<tr><td>wxSOCKET_IOERR </td><td> Input/Output error.</td></tr>
+<tr><td>wxSOCKET_INVADDR</td><td>Invalid address passed to wxSocket.</td></tr>
+<tr><td>wxSOCKET_INVSOCK</td><td>Invalid socket (uninitialized).</td></tr>
+<tr><td>wxSOCKET_NOHOST</td><td>No corresponding host.</td></tr>
+<tr><td>wxSOCKET_INVPORT</td><td>Invalid port.</td></tr>
+<tr><td>wxSOCKET_WOULDBLOCK</td><td>The socket is non-blocking and the operation would block.</td></tr>
+<tr><td>wxSOCKET_TIMEDOUT</td><td>The timeout for this operation expired.</td></tr>
+<tr><td>wxSOCKET_MEMERR</td><td>Memory exhausted.</td></tr>
  </table>
 
 调用wxSocketBase::Read可能会触发哪些错误呢？
@@ -455,25 +393,21 @@ error</td><td>               Note</td></tr>
 <table><tr><td>
 error </td><td> Note</td></tr>
 
-<tr><td>wxSOCKET\_WOULDBLOCK</td><td>   没有数据可读或者当前socket不可写（buffer已满）。
+<tr><td>wxSOCKET_WOULDBLOCK</td><td>   没有数据可读或者当前socket不可写（buffer已满）。
 
    Recv_Stream函数发生错误，recv(2)返回-1，错误码是 EWOULDBLOCK 或 EAGAIN。</td></tr>
 
-<tr><td>wxSOCKET\_IOERR </td><td>    Recv_Stream函数发生错误，recv(2)返回-1。</td></tr>
+<tr><td>wxSOCKET_IOERR </td><td>    Recv_Stream函数发生错误，recv(2)返回-1。</td></tr>
 
-<tr><td>wxSOCKET\_TIMEDOUT </td><td>一般由GSocket::Input\_Timeout触发。
+<tr><td>wxSOCKET_TIMEDOUT </td><td>一般由GSocket::Input\_Timeout触发。
 
 但并不见得就是真的timeout了，比如系统调用select出错，提前返回。</td></tr>
 </table>
 
-### 2.5 **wxSOCKET\_TIMEDOUT**
+### 2.5 wxSOCKET\_TIMEDOUT
+通过SocketInputStream辅助类，当调用wxSocketBase::Read来读大块数据时，很可能发生wxSOCKET\_TIMEDOUT错误。但是wxSocket的默认timeout是600秒，而Read函数明显没有等待那么长时间，为什么呢？
 
-通过SocketInputStream辅助类，当调用wxSocketBase::Read来读大块数据时，很可能发生wxSOCKET\_TIMEDOUT错误。
-
-但是wxSocket的默认timeout是600秒，而Read函数明显没有等待那么长时间，为什么呢？
-
-
-**下面给出了一个程序发生timeout error时的堆栈：**
+下面给出了一个程序发生timeout error时的堆栈：
 
 {% highlight cpp lineno %}
 Breakpoint 2, GSocket::Input_Timeout (this=0x1599430)
@@ -503,8 +437,8 @@ $10 = 4
 select函数返回值有时是-1， 此时发生系统错误EINTR
 （慢系统调用被中断）。在这种情况下，Input\_Timeout函数会提前返回。
 
-**这说明wxSocketBase::Read来读大块数据时，有可能发生wxSOCKET\_TIMEDOUT错误，但是这个wxSOCKET\_TIMEDOUT
-error并不一定是真实的，很可能是由EINTR引起的。**
+这说明wxSocketBase::Read来读大块数据时，有可能发生wxSOCKET\_TIMEDOUT错误，但是这个wxSOCKET\_TIMEDOUT
+error并不一定是真实的，很可能是由EINTR引起的。
 
 ### 2.6 wxSocketBase::LastCount函数 
 
@@ -515,23 +449,21 @@ Write(), WriteMsg() 都有可能修改LastCount的值。
 
 LastCount函数内通过一个变量来记录所有上述操作中成功的字节数，所以LastCount不是线程安全的。
 
-**因此，禁止对于同一个socket：**
+因此，禁止对于同一个socket：
 
-1.  **一个线程调用Read，另一个线程调用Write**
-2.  **两个线程同时Read或者Write**
+1. 一个线程调用Read，另一个线程调用Write
+2. 两个线程同时Read或者Write
 
 
 wx 3.0提供了接口**wxSocketBase::LastReadCount** 和 **wxSocketBase::LastWriteCount** 来解决这个问题。
 
-3. 使用wxBufferedInputStream 
-----------------------------
+# 3. 使用wxBufferedInputStream 
 
 ### 3.1 同时使用wxBufferedInputStream 和wxSOCKET\_WAITALL flag 
 
 假设我们按照下面的方式初始化wxSocket：
 
 **initialize wxSocket**
-
 {% highlight cpp lineno %}
 m_socket = new wxSocketClient();
 m_is = new wxGDSSocketInputStream(*m_socket);
@@ -547,7 +479,6 @@ m_socket->Notify(true);
 然后利用wxBufferedInputStream 读数据，可能会发生什么？
 
 **read through wxBufferedInputStream** 
-
 {% highlight cpp lineno %}
 char ptr[5];
 memset(ptr, 0x00, 5);
@@ -562,7 +493,7 @@ m_buf_is->Read(ptr,4); 
 
 **call stack**
  
-{% highlight cpp lineno %}
+{% highlight bash lineno %}
  (gdb) bt
  #0 0x00000034cefbef86 in select () from /lib64/tls/libc.so.6
  #1 0x0000002aa65e7233 in GSocket::Input_Timeout (this=0x15ba580) at ./src/unix/gsocket.cpp:1548
@@ -590,9 +521,6 @@ flag，wxSocketBase::\_Read
 可见，wxBufferedInputStream和wxSOCKET\_WAITALL不能同时使用，那我们的代码该怎么写呢？
 
 可行的办法是在wxInputStream外封一个函数，就像下面的代码：
-
-**wxGDSStream::Read**
-
 {% highlight cpp lineno %}
 Uint32 wxGDSStream::Read( void *buffer, Uint32 size )
 {
@@ -615,20 +543,15 @@ Uint32 wxGDSStream::Read( void *buffer, Uint32 size )
 此函数通过一个while循环来实现读取要求大小的数据，同时要考虑socket出错的情况。只要socket没有断开，我们就可以继续循环读取数据。
 
 ### 3.3 安全使用socket Write 
-
 写操作也类似，但略有不同：
-
 1.  对于写操作来说，当前协议要发送的数据的大小是已知的，读操作则一般是在读取的过程中才知道当前协议剩余的数据还有多少。
 2.  我们调用Write的时候，一般都会把所有要发送的数据先按照协议组织好，然后再发送。这样就可以做到尽量少调用Write，进而少进行系统调用。
 
 为了提高socket读写的效率，对于Read操作，我们一般倾向于使用带缓冲区的方式。对于Write操作，则不会使用缓冲区，尽量让数据尽早发送出去，在外部代码里面来控制尽量少调用Write。
 
- 
-
 在Write时不使用缓冲区，所以相对安全的Write操作有两种实现：
 
-1. 利用wxSOCKET\_WAITALL flag.
-
+*1*. 利用wxSOCKET\_WAITALL flag.
 {% highlight cpp lineno %}
 int wxGDSSocket::Write( const void * buffer, Uint32 nbytes)
 {   
@@ -642,17 +565,9 @@ int wxGDSSocket::Write( const void * buffer, Uint32 nbytes)
         nbytes -= length;
     } // while
     m_socket->SetFlags(old_flag);
-} 
-{% endhighlight %}
-
-根据2.1节的结论，这个Write的实现其实也是有潜在问题的（wxSocketBase::Write函数返回值不能完全保证length长度的数据写成功），虽然可能很少发生。
-
- 
-
-2\. 不使用wxSOCKET\_WAITALL 
-
-**wxGDSSocket::Write**
-
+}{% endhighlight %}
+ 根据2.1节的结论，这个Write的实现其实也是有潜在问题的（wxSocketBase::Write函数返回值不能完全保证length长度的数据写成功），虽然可能很少发生
+*2*. 不使用wxSOCKET\_WAITALL
 {% highlight cpp lineno %}
 int wxGDSSocket::Write( const void * buffer, Uint32 nbytes)
 {
@@ -673,8 +588,7 @@ int wxGDSSocket::Write( const void * buffer, Uint32 nbytes)
 {% endhighlight %}
 
 
-4. reference 
-------------
+# 4. reference 
 
 1.  [wx 3.0 wxSocketBase Class
     Reference](http://docs.wxwidgets.org/3.0/classwx_socket_base.html)
