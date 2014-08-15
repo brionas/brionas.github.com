@@ -25,7 +25,7 @@ refer_post_addr:
 3. 遍历table中所有事件表条目，把事件表条目加入哈希表
 4. `table = table->base`,转1继续对父类事件表哈希
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 void wxEventHashTable::InitHashTable()
 {
     // Loop over the event tables and all its base tables.
@@ -93,7 +93,7 @@ void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
 因此两个虚函数分别返回当前类中事件表和事件哈希表。另一个私有的静态成员`sm_eventTableEntries`表示当前类的
 事件条目数组，用于构成事件表。
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
 {
 //..
@@ -111,7 +111,7 @@ protected:
 在类的声明中使用`DECLARE_EVENT_TABLE()`，实际上市覆盖`wxEvtHandler`中的事件表和事件哈希表，并重写返回当前
 类事件表和事件哈希表的虚函数
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 #define DECLARE_EVENT_TABLE() \
     private: \
         static const wxEventTableEntry sm_eventTableEntries[]; \
@@ -126,7 +126,7 @@ protected:
 事件表父指针指向父类事件表，事件表的条目指针事件等于事件条目数组首地址。事件哈希表有事件表生成，
 这里还没有构造，值是分配了31个为0的空间。中间的一堆事件映射宏实际上是用一堆5元组初始化当前类的事件条目表。
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 #define BEGIN_EVENT_TABLE(theClass, baseClass) \
     const wxEventTable theClass::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
@@ -157,14 +157,14 @@ protected:
 
 wx保存了一个全局的指针链表，里面保存当前应用程序所有事件处理类`wxEvtHandler`对象的指针
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 /* code: common/event.cpp:144  */
 wxList *wxPendingEvents = (wxList *)NULL;
 {% endhighlight %}
 
 对于所有事件类的基类`wxEvtHandler`,有个成员`m_pendingEvents`保存当前`wxEvtHandler`对象的未决事件
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
 {
      //..
@@ -175,7 +175,7 @@ class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
 
 遍历全局链表未决事件链表`wxPendingEvents`，取出所有的`wxEvtHandler`，然后调用每个`wxEvtHandler`上的`ProcessPendingEvents()`方法
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 /* code: src/common/Appbase.cpp:267 */
 void wxAppConsole::ProcessPendingEvents()
 {
@@ -206,7 +206,7 @@ void wxAppConsole::ProcessPendingEvents()
 
 `wxEvtHandler`上的`ProcessPendingEvents()`方法中`wxEvtHandler`遍历处理自己未决链表`m_pendingEvents`的事件
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 void wxEvtHandler::ProcessPendingEvents()
 {
      //..
@@ -239,12 +239,12 @@ void wxEvtHandler::ProcessPendingEvents()
 `wxEvtHandler`提供了向自己接未决链表加入事件的方法，`wxEvtHandler:AddPendingEvent`，
 注意这里只是把event clone一份，然后加入未决链表， 并不处理就返回。
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 void wxEvtHandler:AddPendingEvent(wxEvent& event)
 {% endhighlight %}
 
 wxEvtHandler::ProcessEvent用于立即处理这个事件。
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {% endhighlight %}
 
@@ -264,7 +264,7 @@ wx程序启动流程如下：
 * 调用MyApp中重写的虚函数`wxApp::OnInit`完成初始化（主要是创建顶层窗口）,返回false结束
 * 调用`AppBase::OnRun->wxAppBase::MainLoop`进入消息循环
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 /* src/common/appcmn.cpp::357 */
 int wxAppBase::OnRun()
 {
@@ -305,7 +305,7 @@ class WXDLLIMPEXP_CORE wxAppBase : public wxAppConsole
     WinMain -> wxEntry -> wxEntryReal -> wxAppBase::OnRun -> wxAppBase::MainLoop ->
     wxEventLoopManual::Run -> wxEventLoop::Dispatch -> wxEventLoop::ProcessMessage
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 /* src/common.Evtloopcmn.cpp:65 */
 int wxEventLoopManual::Run()
 { 
@@ -324,7 +324,7 @@ int wxEventLoopManual::Run()
 
 程序进入一个无限的循环，如果没消息处理，就处理idle消息，有消息就分发消息
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 bool wxEventLoop::Dispatch()
 {
      // ..
@@ -344,7 +344,7 @@ bool wxEventLoop::Dispatch()
 `typedef struct tagMSG   WXMSG;`
 在Windows程序中，消息是由`MSG`结构体来表示的。MSG结构体的定义如下（参见MSDN）：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 typedef struct tagMSG {     // msg 
    HWND hwnd;               //标识窗口过程接收消息的窗口
    UINT message;          //指定消息号
@@ -357,7 +357,7 @@ typedef struct tagMSG {     // msg
 
 这里的消息就是windows中的消息了
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 void wxEventLoop::ProcessMessage(WXMSG *msg)
 {
     // give us the chance to preprocess the message first
@@ -379,7 +379,7 @@ wx只是完成了跨平台的封装，对用户屏蔽了平台相关的是实现
 
 注册一个窗口类，这个窗口类绑定了窗口处理过程
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 /* src/msw/app.cpp */
 bool wxApp::RegisterWindowClasses()
 {
@@ -412,7 +412,7 @@ bool wxApp::RegisterWindowClasses()
 
 然后里创建窗口
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 /* src/msw/window.cpp */
 bool wxWindowMSW::MSWCreate(const wxChar *wclass,
                             const wxChar *title,
@@ -456,7 +456,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 
 其中，`void wxWindowMSW::SubclassWin(WXHWND hWnd)`用于设置新窗口的窗口处理过程 
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
      //...
@@ -484,7 +484,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 中一直等待，直到事件发生和控制权被传递给相应的函数。`gtk_main()`是在每个GTK应用程序都要调用的函数。
 当程序运行到这里时, Gtk将进入等待态，等候X事件(比如点击按钮或按下键盘的某个按键)、Timeout 或文件输入/输出发生。
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 /* src/gtk/evtloop.cpp */
 int wxEventLoop::Run()
 {

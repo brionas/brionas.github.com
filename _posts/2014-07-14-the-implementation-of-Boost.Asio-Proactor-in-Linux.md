@@ -23,7 +23,7 @@ Boost.Asio在Linux下封装epoll这种同步接口是如何做到异步IO的呢�
 
 Boost.Asio中最重要的一个类是io\_service，io\_service抽象系统I/O接口,提供异步数据传输的能力，它是应用程序和系统I/O接口的桥梁。Boost.Asio主要采用它实现了Proactor模式。io\_service有一个重要的成员，io\_service\_impl，它在不同的系统下有不同的实现。在Windows下是基于IOCP的，在Linux下是基于task\_io\_service，这主要是通过预处理进行区分的：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 namespace detail {
 #if defined(BOOST_ASIO_HAS_IOCP)
   typedef class win_iocp_io_service io_service_impl;
@@ -37,7 +37,7 @@ namespace detail {
 
 io\_service类如下：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
  class io_service: private noncopyable
 {
 private:
@@ -59,7 +59,7 @@ public:
 
  其中run()函数的具体实现如下：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 {
   boost::system::error_code ec;
   std::size_t s = impl_.run(ec);
@@ -80,7 +80,7 @@ io\_service的run()函数最终是调用了impl\_(task\_io\_service)的run函数
 
 task\_io\_service如下：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 class task_io_service : public boost::asio::detail::service_base<task_io_service>
 {
 public:
@@ -103,7 +103,7 @@ private:
 
 1. reactor：这是一个typedef定义的同义词，它在不同平台有不同的实现：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 #if defined(BOOST_ASIO_WINDOWS_RUNTIME)
 typedef class null_reactor reactor;
 #elif defined(BOOST_ASIO_HAS_IOCP)
@@ -121,7 +121,7 @@ typedef class select_reactor reactor;
 
 平台使用的reactor类型可以通过下面的方法得到：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 #include <iostream>
 #include <string>
 #include <boost/asio.hpp>
@@ -148,7 +148,7 @@ std::string output;
 2.
 op\_queue\<operation\>：回调函数对象列表，这里面的每一个operation都会在调用了run函数的用户线程里面执行，每个操作选择一个空闲的线程，关于这点可以看下面的程序：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 #include <boost/asio.hpp>   
 #include <boost/thread.hpp>   
 #include <iostream>   
@@ -193,7 +193,7 @@ service将会自由选择线程来执行handler2。这可以通过注释掉handl
 
 task\_io\_service的run函数最终调用的是reactor的run函数，在Linux下是epoll\_reactor的run函数，调用层次为：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 
 std::size_t task_io_service::run(boost::system::error_code& ec)
 {
@@ -207,7 +207,7 @@ std::size_t task_io_service::run(boost::system::error_code& ec)
 }
 {% endhighlight %}
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 std::size_t task_io_service::do_run_one(mutex::scoped_lock& lock,
     task_io_service::thread_info& this_thread,
     const boost::system::error_code& ec)
@@ -250,7 +250,7 @@ std::size_t task_io_service::do_run_one(mutex::scoped_lock& lock,
 
 epoll\_reactor的run()方法最终调用的是epoll的epoll\_wait的，通过epoll\_wait，将就绪的事件放入ops，等待处理。
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 void epoll_reactor::run(bool block, op_queue<operation>& ops)
 { 
     ... 
@@ -266,7 +266,7 @@ void epoll_reactor::run(bool block, op_queue<operation>& ops)
 
 epoll\_reactor类的定义如下：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 class epoll_reactor : public boost::asio::detail::service_base<epoll_reactor>
 {
   ...
@@ -293,7 +293,7 @@ Boost.Asio是这样使用epoll来进行事件分发的，实际的IO操作是如
 
 以TCP为例，Boost.Asio中对TCP类的封装如下：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 class tcp
 {
 public:
@@ -333,7 +333,7 @@ private:
 
 basic\_stream\_socket\<tcp\>类似于TCP中的socket，basic\_socket\_acceptor\<tcp\>用于监听套接字，它们均有许多异步方法，如async\_receive，async\_send等。basic\_stream\_socket和basic\_socket\_acceptor都是模板类，以basic\_stream\_socket为例，其async\_receive方法如下：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 template <typename MutableBufferSequence, typename ReadHandler>
   BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
       void (boost::system::error_code, std::size_t))
@@ -353,7 +353,7 @@ template <typename MutableBufferSequence, typename ReadHandler>
 get-\>service()的原型是什么呢？basic\_stream\_socket继承于basic\_socket\<Protocol,
 stream\_socket\_service\>，而stream\_socket\_service类为：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 class stream_socket_service
 #if defined(GENERATING_DOCUMENTATION)
   : public boost::asio::io_service::service
@@ -388,7 +388,7 @@ private:
 
 从上面可以看出，Linux下，真正干活的类是reactive\_socket\_service，reactive\_socket\_service又继承自reactive\_socket\_service\_base，该类如下：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 class reactive_socket_service_base
 {
 public:
@@ -419,7 +419,7 @@ protected:
 
 通过reactor，将epoll与事件处理联系起来了，在reactive\_socket\_service\_base中，async\_receive的实现为：
 
-{% highlight cpp linenos %}
+{% highlight cpp  %}
 // Start an asynchronous receive. The buffer for the data being received
   // must be valid for the lifetime of the asynchronous operation.
   template <typename MutableBufferSequence, typename Handler>
