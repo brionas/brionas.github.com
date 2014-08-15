@@ -15,7 +15,7 @@ refer_post_addr:
 
 先看下面很简单的一小段程序。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 #include <iostream>
 template <typename T>
 struct Base 
@@ -59,7 +59,7 @@ GCC 有这样愚蠢的 bug？
 要去除这种错误，解决的方法很简单，只要在调用 fun
 的地方，人为地加上该调用对模板参数的依赖则可。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 template <typename T>
 struct Derived : Base<T>
 {
@@ -89,7 +89,7 @@ struct Derived : Base<T>
 的定义时，还不能确定它的基类最后是怎样的：Base
 有可能会在后面被特化，使得最后被继承的具体基类中不一定还有 fun() 函数。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 template <>
 struct Base<int> 
 {
@@ -108,7 +108,7 @@ struct Base<int>
 
 对于前面介绍中提到的符号，我们其实默认指的是变量，细心的读者可能会想到，在继承类中引用的符号，还可能会是类型，而由于模板特化的存在，在名字查找的第一阶段编译器也是没法判断出该符号最后到底是怎样的类型，甚至不能知道是不是一个类型。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 template <typename T>
 struct Base 
 {
@@ -148,7 +148,7 @@ Derived 的定义时，它直接把 Base::baseT
 必须得显式地告诉它，因此需要在引用 Base::baseT
 时，显式地加入一个关键字：typename.
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 template <typename T>
 struct Derived : Base<T>
 {

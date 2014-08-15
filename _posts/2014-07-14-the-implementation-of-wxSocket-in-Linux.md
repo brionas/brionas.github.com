@@ -109,7 +109,7 @@ b. wxSOCKET\_WAITALL与wxSOCKET\_NOWAIT正好相反，分别用于同步和异�
 wxSocket 对 系统socket函数进行封装，内部的socket fd采用非阻塞模式。
 
 **src/unix/gsocket.cpp**
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 m_fd = socket(m_peer->m_realfamily,m_stream?SOCK_STREAM:SOCK_DGRAM,0);
 if(m_fd == INVALID_SOCKET)
 {
@@ -150,7 +150,7 @@ stream （wxSocketInputStream, wxSocketOuputStream）来读写数据。
 
  这个通过查看wxSocketBase::\_Read的实现(src/common/socket.cpp)，很容易弄清楚。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
      wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
     {
       // ...
@@ -202,7 +202,7 @@ _Read函数内的while循环的启动条件 要求`“``ret > 0 && nbytes > 0 &
 
 这里通过继承wxSocketInputStream来打印更多调试信息。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
     class wxGDSSocketInputStream : public wxSocketInputStream
 	{
 	public:
@@ -246,7 +246,7 @@ _Read函数内的while循环的启动条件 要求`“``ret > 0 && nbytes > 0 &
 
 wxSocketBase::Read最终通过GSocket::Read实现读数据（src/unix/gsocket.cpp）。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 int GSocket::Read(char *buffer, int size)
 {
   int ret;
@@ -306,7 +306,7 @@ GSocket::Read主要调用了两个函数：Input\_Timeout和Recv\_Stream。
 
 GSocket::Recv\_Stream 通过调用system 函数 **recv(2)** 实现。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 int GSocket::Recv_Stream(char *buffer, int size)
 {
   int ret;
@@ -321,7 +321,7 @@ int GSocket::Recv_Stream(char *buffer, int size)
 
 可以通过如下方式来查看socket 默认缓冲区大小：
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 pwang@p03bc ~$ cat /proc/sys/net/ipv4/tcp_rmem
 4096 87380(85K 340B) 174760 //第一个表示最小值，第二个表示默认值，第三个表示最大值。
 pwang@p03bc ~$ cat /proc/sys/net/ipv4/tcp_wmem
@@ -332,7 +332,7 @@ pwang@p03bc ~$ cat /proc/sys/net/ipv4/tcp_wmem
 
 GSocket::Input\_Timeout函数（src/unix/gsocket.cpp）通过**select(2)**函数来计时。
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 GSocketError GSocket::Input_Timeout()
 {
   struct timeval tv;
@@ -409,7 +409,7 @@ error </td><td> Note</td></tr>
 
 下面给出了一个程序发生timeout error时的堆栈：
 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 Breakpoint 2, GSocket::Input_Timeout (this=0x1599430)
     at ./src/unix/gsocket.cpp:1563
 1563 m_error = GSOCK_TIMEDOUT;
@@ -464,7 +464,7 @@ wx 3.0提供了接口**wxSocketBase::LastReadCount** 和 **wxSocketBase::LastW
 假设我们按照下面的方式初始化wxSocket：
 
 **initialize wxSocket**
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 m_socket = new wxSocketClient();
 m_is = new wxGDSSocketInputStream(*m_socket);
 m_buf = new wxStreamBuffer(*m_is, wxStreamBuffer::read);
@@ -479,7 +479,7 @@ m_socket->Notify(true);
 然后利用wxBufferedInputStream 读数据，可能会发生什么？
 
 **read through wxBufferedInputStream** 
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 char ptr[5];
 memset(ptr, 0x00, 5);
 m_buf_is->Read(ptr,4); 
@@ -493,7 +493,7 @@ m_buf_is->Read(ptr,4); 
 
 **call stack**
  
-{% highlight bash lineno %}
+{% highlight bash linenos %}
  (gdb) bt
  #0 0x00000034cefbef86 in select () from /lib64/tls/libc.so.6
  #1 0x0000002aa65e7233 in GSocket::Input_Timeout (this=0x15ba580) at ./src/unix/gsocket.cpp:1548
@@ -521,7 +521,7 @@ flag，wxSocketBase::\_Read
 可见，wxBufferedInputStream和wxSOCKET\_WAITALL不能同时使用，那我们的代码该怎么写呢？
 
 可行的办法是在wxInputStream外封一个函数，就像下面的代码：
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 Uint32 wxGDSStream::Read( void *buffer, Uint32 size )
 {
     wxLogTrace(GDS_STREAM_MASK, "[wxGDSStream::Read] request %u", size);
@@ -552,7 +552,7 @@ Uint32 wxGDSStream::Read( void *buffer, Uint32 size )
 在Write时不使用缓冲区，所以相对安全的Write操作有两种实现：
 
 *1*. 利用wxSOCKET\_WAITALL flag.
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 int wxGDSSocket::Write( const void * buffer, Uint32 nbytes)
 {   
     wxSocketFlags old_flag = m_socket->GetFlags();
@@ -568,7 +568,7 @@ int wxGDSSocket::Write( const void * buffer, Uint32 nbytes)
 }{% endhighlight %}
  根据2.1节的结论，这个Write的实现其实也是有潜在问题的（wxSocketBase::Write函数返回值不能完全保证length长度的数据写成功），虽然可能很少发生
 *2*. 不使用wxSOCKET\_WAITALL
-{% highlight cpp lineno %}
+{% highlight cpp linenos %}
 int wxGDSSocket::Write( const void * buffer, Uint32 nbytes)
 {
     //...
