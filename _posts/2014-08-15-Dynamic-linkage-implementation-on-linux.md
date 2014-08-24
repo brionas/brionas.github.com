@@ -7,7 +7,7 @@ tags: [
         linkage
         cpp
       ]
-refer_author: Tank
+refer_author: Ming-dong
 refer_blog_addr: http://www.cnblogs.com/catch/p/3857964.html
 refer_post_addr:
 ---
