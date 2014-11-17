@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "LevelDB learning"
-description: ""
-category: 
-tags: []
-refer_author: 
+description: "levelDB是Jeff Dean和Sanjay Ghemawat发起的开源key-value DB,支持读、写、删除这些基本功能，也支持快照(通过log file)，数据压缩(snappy compress)。目前有一些开源的数据库是基于levelDB实现的，比如，Tair ldb以及SSDB"
+category: 源码分析
+tags: [LevelDB]
+refer_author: Xuan Zhou
 refer_blog_addr: 
 refer_post_addr: 
 ---
@@ -210,6 +210,7 @@ metainde_block中key为meta_name, value为meta_block_handle
  
 
 为了减小存储容量，TableBuilder会对这些不同类型的block进行压缩(option，压缩和解压缩的过程会降低levelDB的读写速率)，并加入校验码(保证数据的正确性)，形成的block结构为
+
 ![](/assets/image/2014-11/leveldb-3.3-4.png)
 
 
