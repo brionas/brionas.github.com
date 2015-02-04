@@ -1,0 +1,284 @@
+---
+layout: post
+title: "Djangoå­¦ä¹  - Model"
+description : Django éé¢çmodelä¸»è¦æ¯æ°æ®è®¿é®çä¸ä¸ªæ½è±¡å±ï¼éç¦»äºå·ä½çæ°æ®åºæä½ï¼æä¾äºé«å±è®¿é®æ¥å£ï¼ççè¿ä¹ç¨å§ã
+category : Django
+tags : [Django, Python]
+refer_author: Tank
+refer_blog_addr: http://tanklee.github.io
+refer_post_addr: http://tanklee.github.io/2014/07/08/django-model/
+---
+
+##ä¸ãå®è£æ°æ®åºééå¨
+æè¿éç¨çMySQL-python-1.2.3.win32-py2.7.exe
+è¿æ¯ä¸ä¸ªpythonåºï¼å®è£åä½äºï¼$PYTHON_HOME/lib/site-packages/MySQLdb
+è¿æ ·æä»¬å°±å¯ä»¥å¨Pythonä»£ç éé¢éè¿MySQLdbè®¿é®MySQLäº
+
+    C:\Users\tanli>python
+    Python 2.7.3 (default, Apr 10 2012, 23:31:26) [MSC v.1500 32 bit (Intel)] on win
+    32
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import MySQLdb
+    >>> print MySQLdb.__version__
+    1.2.3
+    >>> MySQLdb.connect(user='root', db='test', passwd='', host='localhost')
+    <_mysql.connection open to 'localhost' at 25c62e8>
+
+
+##äºãè®¾ç½®é¡¹ç®æ°æ®åº
+å¨é¡¹ç®çéç½®æä»¶settings.pyä¸­æå®æ°æ®åºå¼æ
+
+    # Database
+    # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+
+    DATABASES = {
+        'default': {
+            #'ENGINE': 'django.db.backends.sqlite3',
+            #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'djangodb',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
+    }
+
+æå¼django project python shellæµè¯æ°æ®åºè¿æ¥
+
+    F:\toycode\django-project\mysite>python manage.py shell
+    Python 2.7.3 (default, Apr 10 2012, 23:31:26) [MSC v.1500 32 bit (Intel)] on win
+    32
+    Type "help", "copyright", "credits" or "license" for more information.
+    (InteractiveConsole)
+    >>> from django.db import connection
+    >>> cursor = connection.cursor()
+    >>>
+
+å¦ææ²¡ææ¾ç¤ºä»ä¹éè¯¯ä¿¡æ¯ï¼é£ä¹ä½ çæ°æ®åºéç½®æ¯æ­£ç¡®çã
+
+##ä¸ãä¸ºé¡¹ç®åå»ºApp
+ç°å¨å·²ç»ç¡®è®¤æ°æ®åºè¿æ¥æ­£å¸¸å·¥ä½äºï¼è®©æä»¬æ¥åå»ºä¸ä¸ª Django app,ä¸ä¸ªåå«æ¨¡åï¼è§å¾åDjangoä»£ç 
+ï¼å¹¶ä¸å½¢å¼ä¸ºç¬ç«Pythonåçå®æ´Djangoåºç¨ï¼ è¿éæä»¬æ°å»ºä¸ä¸ªbooksåºç¨ã
+
+    E:\toycode\django-project\mysite\mysite>manage.py startapp books
+    E:\toycode\django-project\mysite\mysite>
+
+    mysite
+         mysite
+         manage.py
+         books
+              __init.py__
+               admin.py
+              models.py
+              test.py
+              views.py
+
+##åãåå»ºModelç±»
+è¿éç¨ä¹¦ç±-ä½è-åºçåä¸ºä¾è¯´æ,ä¹¦ç±æä¹¦åååºçæ¥æã å®æä¸ä¸ªæå¤ä¸ªä½è
+ï¼åä½èæ¯å¤å¯¹å¤çå³èå³ç³»ï¼ï¼ åªæä¸ä¸ªåºçåï¼ååºçåæ¯ä¸å¯¹å¤çå³èå³ç³»ï¼ä¹è¢«ç§°ä½å¤é®ï¼.ç¼è¾models.py
+
+    from django.db import models
+
+    # Create your models here.
+
+    class Publisher(models.Model):
+        name = models.CharField(max_length=30)
+        address = models.CharField(max_length=50)
+        city = models.CharField(max_length=60)
+        state_province = models.CharField(max_length=30)
+        country = models.CharField(max_length=50)
+        website = models.URLField()
+
+    class Author(models.Model):
+        first_name = models.CharField(max_length=30)
+        last_name = models.CharField(max_length=40)
+        email = models.EmailField()
+
+    class Book(models.Model):
+        title = models.CharField(max_length=100)
+        authors = models.ManyToManyField(Author)
+        publisher = models.ForeignKey(Publisher)
+        publication_date = models.DateField()
+
+æ¯ä¸ªæ¨¡åç¸å½äºåä¸ªæ°æ®åºè¡¨ï¼æ¯ä¸ªå±æ§ä¹æ¯è¿ä¸ªè¡¨ä¸­çä¸ä¸ªå­æ®µã å±æ§åå°±æ¯å­æ®µåï¼
+å®çç±»åï¼ä¾å¦ CharField ï¼ç¸å½äºæ°æ®åºçå­æ®µç±»å ï¼ä¾å¦ varchar ï¼ã
+æ¯ä¸ªæ°æ®åºè¡¨å¯¹åºä¸ä¸ªç±»âè¿æ¡è§åçä¾å¤æåµæ¯å¤å¯¹å¤å³ç³»ã å¨æä»¬çèä¾æ¨¡åä¸­ï¼ 
+Book æä¸ä¸ª å¤å¯¹å¤å­æ®µ å«å authors ã è¯¥å­æ®µè¡¨æä¸æ¬ä¹¦ç±æä¸ä¸ªæå¤ä¸ªä½èï¼
+ä½ Book æ°æ®åºè¡¨å´å¹¶æ²¡æ authors å­æ®µã ç¸åï¼Djangoåå»ºäºä¸ä¸ªé¢å¤çè¡¨ï¼å¤å¯¹å¤è¿æ¥è¡¨ï¼
+æ¥å¤çä¹¦ç±åä½èä¹é´çæ å°å³ç³»ãæåéè¦æ³¨æçæ¯ï¼æä»¬å¹¶æ²¡ææ¾å¼å°ä¸ºè¿äºæ¨¡åå®ä¹ä»»ä½ä¸»é®ã é¤éä½ åç¬ææï¼å¦åDjangoä¼èªå¨ä¸ºæ¯ä¸ªæ¨¡åçæä¸ä¸ªèªå¢é¿çæ´æ°ä¸»é®å­æ®µid,æ¯ä¸ªDjangoæ¨¡åé½è¦æ±æåç¬çä¸»é®.
+
+
+##äºã Modelé¨ç½²å°æ°æ®åº
+
+ä¿®æ¹é¡¹ç®éç½®æä»¶,æ¿æ´»books APP
+
+    INSTALLED_APPS = (
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'mysite.books',
+    )
+
+ç°å¨æä»¬å¯ä»¥åå»ºæ°æ®åºè¡¨äºã é¦åï¼ç¨ä¸é¢çå½ä»¤éªè¯é¡¹ç®æ¨¡åçæææ§ï¼
+
+    F:\toycode\django-project\mysite>python manage.py validate
+    0 errors found
+
+validate å½ä»¤æ£æ¥ä½ çæ¨¡åçè¯­æ³åé»è¾æ¯å¦æ­£ç¡®ã å¦æä¸åæ­£å¸¸ï¼ä½ ä¼çå° 0 errors found æ¶æ¯ã
+å¦æåºéï¼è¯·æ£æ¥ä½ è¾å¥çæ¨¡åä»£ç ãå¦æåºéï¼è¯·æ£æ¥ä½ è¾å¥çæ¨¡åä»£ç ã éè¯¯è¾åºä¼ç»åºéå¸¸æç¨
+çéè¯¯ä¿¡æ¯æ¥å¸®å©ä½ ä¿®æ­£ä½ çæ¨¡åã
+
+æ¨¡åç¡®è®¤æ²¡é®é¢äºï¼è¿è¡ä¸é¢çå½ä»¤æ¥æ¥çDjangoçæçå¯¹åºçsqlè¯­å¥
+
+    F:\toycode\django-project\mysite>python manage.py sqlall books
+    BEGIN;
+    CREATE TABLE `books_publisher` (
+        `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        `name` varchar(30) NOT NULL,
+        `address` varchar(50) NOT NULL,
+        `city` varchar(60) NOT NULL,
+        `state_province` varchar(30) NOT NULL,
+        `country` varchar(50) NOT NULL,
+        `website` varchar(200) NOT NULL
+    )
+    ;
+    CREATE TABLE `books_author` (
+        `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        `first_name` varchar(30) NOT NULL,
+        `last_name` varchar(40) NOT NULL,
+        `email` varchar(75) NOT NULL
+    )
+    ;
+    CREATE TABLE `books_book_authors` (
+        `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        `book_id` integer NOT NULL,
+        `author_id` integer NOT NULL,
+        UNIQUE (`book_id`, `author_id`)
+    )
+    ;
+    ALTER TABLE `books_book_authors` ADD CONSTRAINT `author_id_refs_id_1a0a2829` FOR
+    EIGN KEY (`author_id`) REFERENCES `books_author` (`id`);
+    CREATE TABLE `books_book` (
+        `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        `title` varchar(100) NOT NULL,
+        `publisher_id` integer NOT NULL,
+        `publication_date` date NOT NULL
+    )
+    ;
+    ALTER TABLE `books_book` ADD CONSTRAINT `publisher_id_refs_id_974c2a46` FOREIGN
+    KEY (`publisher_id`) REFERENCES `books_publisher` (`id`);
+    ALTER TABLE `books_book_authors` ADD CONSTRAINT `book_id_refs_id_0a3634f3` FOREI
+    GN KEY (`book_id`) REFERENCES `books_book` (`id`);
+    CREATE INDEX `books_book_authors_36c249d7` ON `books_book_authors` (`book_id`);
+    CREATE INDEX `books_book_authors_e969df21` ON `books_book_authors` (`author_id`)
+    ;
+    CREATE INDEX `books_book_81b79144` ON `books_book` (`publisher_id`);
+
+    COMMIT;
+
+åæ¥django ä¸ºäºæä»¬å¤çå¥½å·ä½çsqlæä½,ç°å¨æè¿äºsqlæäº¤å°æ°æ®åºï¼ä¸ºmodelå»ºè¡¨
+
+    F:\toycode\django-project\mysite>python manage.py syncdb
+    Creating tables ...
+    Creating table django_admin_log
+    Creating table auth_permission
+    Creating table auth_group_permissions
+    Creating table auth_group
+    Creating table auth_user_groups
+    Creating table auth_user_user_permissions
+    Creating table auth_user
+    Creating table django_content_type
+    Creating table django_session
+    Creating table books_publisher
+    Creating table books_author
+    Creating table books_book_authors
+    Creating table books_book
+
+    You just installed Django's auth system, which means you don't have any superuse
+    rs defined.
+    Would you like to create one now? (yes/no): yes
+    Username (leave blank to use 'tanli'): admin
+    Email address: tank.li@asml.com
+    Password:
+    Password (again):
+    Superuser created successfully.
+    Installing custom SQL ...
+    Installing indexes ...
+    Installed 0 object(s) from 0 fixture(s)
+
+syncdb å½ä»¤æ¯åæ­¥ä½ çæ¨¡åå°æ°æ®åºçä¸ä¸ªç®åæ¹æ³ã å®ä¼æ ¹æ® INSTALLED_APPS 
+éè®¾ç½®çappæ¥æ£æ¥æ°æ®åºï¼ å¦æè¡¨ä¸å­å¨ï¼å®å°±ä¼åå»ºå®
+
+
+##å­ãè®¿é®æ°æ®
+æäºDjango çmodelï¼å°±å¯ä»¥ä½¿ç¨è¿äºæ¨¡åçé«çº§çPython APIäºï¼æä»¥çä¸åé½æ¯python 
+objectä¸çæä½ï¼ä¸åå³å¿æ°æ®åºä¸­çå·ä½å­å¨ï¼é£æ¯æ¡æ¶è¯¥åçäºã
+
+    F:\toycode\django-project\mysite>python manage.py shell
+    Python 2.7.3 (default, Apr 10 2012, 23:31:26) [MSC v.1500 32 bit (Intel)] on win
+    32
+    Type "help", "copyright", "credits" or "license" for more information.
+    (InteractiveConsole)
+    >>> from books.models import Publisher
+    >>> p1 = Publisher(name='HUST', address='Hubei', city='Wuhan')
+    >>> p2 = Publisher(name='ECJTU', address='Jiangxi', city='Nanchang')
+    >>> p1.save()
+    >>> p2.save()
+    >>> print p1
+    HUST
+    >>> publisher_list = Publisher.objects.all()
+    >>> publisher_list
+    [<Publisher: HUST>, <Publisher: ECJTU>]
+
+è°ç¨å¯¹è±¡ç save() æ¹æ³ï¼å°å¯¹è±¡ä¿å­å°æ°æ®åºä¸­ã Django ä¼å¨åå°æ§è¡ä¸æ¡ INSERT è¯­å¥ã
+è¿épublisher_listæ¾ç¤ºçè¿ä¹åå¥½æ¯å ä¸ºï¼Publisheræä»¬èªå®ä¹ä¸ä¸ª__unicode__æ¹æ³ï¼
+ç¨äºPublisherå¯¹è±¡çè¾åºãé¤äºsave, è¿æfilter, deleteç­ã
+
+
+##ä¸ãåå»ºæ¨¡æ¿
+åå»ºæ¾ç¤ºåºçåçé¡µé¢æ¨¡æ¿publisherlist.html
+
+
+    <ul>
+        { % for publisher in publishers % }
+            <li> { { publisher.name } } </li>
+        { % endfor % }
+    </ul>
+
+
+ä¿®æ¹é¡¹ç®éç½®æä»¶æå®èªå¨å è½½ç®å½
+
+    TEMPLATE_DIRS = (
+        'F:/toycode/django-project/mysite/templates',
+    )
+
+##å«ãåè§å¾å½æ°
+ç¼è¾ books/views.py
+
+    from django.shortcuts import render
+
+    # Create your views here.
+
+    from django.shortcuts import render_to_response
+    from books.models import Publisher
+
+    def publisherlist(request):
+        list = Publisher.objects.all()
+        return render_to_response('publisherlist.html', {'publishers':list})
+
+##ä¹ãéç½®URL
+
+    urlpatterns = patterns('',
+        # Examples:
+        # url(r'^$', 'mysite.views.home', name='home'),
+        # url(r'^blog/', include('blog.urls')),
+
+        url('^publishers/$','books.views.publisherlist'),
+    )
+
+è³æ­¤å°±æ¯ä¸ä¸ªæ°æ®åºé©±å¨çwebåºç¨äºï¼localhost:8000/publishersé¢è§
