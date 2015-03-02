@@ -71,13 +71,13 @@ namespace boost
 template<class A1> struct storage1
 {
 explicit storage1 (A1 a1) : a1_(a1) {}
-A1 a_;
+A1 a1_;
 };
  
 template<class A1, class A2> struct storage2 : public storage1<A1>
 {
 storage2 (A1 a1, A2 a2) : stroage1<A1>(a1), a2_(a2) {}
-A2 a_;
+A2 a2_;
 };
 ...// 省略storage3... storage9
 {% endhighlight %}
