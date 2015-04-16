@@ -99,9 +99,9 @@ JB :
       # num_posts: 5
       # width: 580
       # colorscheme: light
-    provider : weibo
+    provider : disqus
     disqus :
-      short_name : jekyllbootstrap
+      short_name : brionas
     livefyre :
       site_id : 
     intensedebate :
